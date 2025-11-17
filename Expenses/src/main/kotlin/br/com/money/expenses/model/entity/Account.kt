@@ -14,8 +14,8 @@ data class Account(
     @Column(name = "name", nullable = false)
     val name: String,
 
-    @Column(name = "initial_balance", nullable = false)
-    val initialBalance: Double = 0.0,
+    @Column(name = "balance", nullable = false)
+    val balance: Double,
 
     @Column(name = "is_active", nullable = false)
     val isActive: Boolean = true,

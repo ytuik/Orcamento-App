@@ -52,4 +52,9 @@ class AccountController (
         val account = accountService.deactivateAccount(id)
         return AccountDto.fromModel(account)
     }
+
+    @GetMapping("/health")
+    fun healthCheck(): String {
+        return "Account Service is up and running!"
+    }
 }

@@ -20,7 +20,7 @@ class AccountServiceImpl (
     override fun createAccount(account: CreateAccountRequestDto) : Account {
         val newAccount = Account(
             name = account.name,
-            initialBalance = account.balance,
+            balance = account.balance,
             isActive = true,
         )
         return accountRepository.save(newAccount)
