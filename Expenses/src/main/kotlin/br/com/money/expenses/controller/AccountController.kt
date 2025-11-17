@@ -24,7 +24,10 @@ class AccountController (
     ) : AccountDto {
 
         request.validate()
-        val newAccount = accountService.createAccount(request)
+        val newAccount = accountService.createAccount(
+            request.name,
+            request.balance
+        )
         return AccountDto.fromModel(newAccount)
 
     }

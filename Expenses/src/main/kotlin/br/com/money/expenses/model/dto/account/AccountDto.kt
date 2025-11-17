@@ -9,8 +9,6 @@ data class AccountDto (
     val id: Long,
     @get:JsonProperty("name")
     val name: String,
-    @get:JsonProperty("balance")
-    val balance: Double,
     @get:JsonProperty("isActive")
     val isActive: Boolean,
     @get:JsonProperty("createdAt")
@@ -23,7 +21,6 @@ data class AccountDto (
             return AccountDto(
                 id = account.id,
                 name = account.name,
-                balance = account.balance,
                 isActive = account.isActive,
                 createdAt = account.createdAt.toString(),
                 updatedAt = account.updatedAt.toString()

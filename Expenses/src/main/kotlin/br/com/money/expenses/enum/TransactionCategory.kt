@@ -13,8 +13,9 @@ enum class TransactionCategory (val id : Int) {
     OTHER(10);
 
     companion object {
-        fun fromId(id: Int): TransactionCategory? {
-            return entries.find { it.id == id }
+        fun fromId(id: Int): TransactionCategory {
+            return entries.find { it.id == id } ?:
+                throw IllegalArgumentException("Invalid TransactionCategory id: $id")
         }
     }
 }

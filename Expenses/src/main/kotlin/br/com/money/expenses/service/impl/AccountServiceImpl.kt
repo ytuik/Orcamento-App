@@ -1,7 +1,6 @@
 package br.com.money.expenses.service.impl
 
 import br.com.money.expenses.exceptions.AccountNotFoundException
-import br.com.money.expenses.model.dto.account.CreateAccountRequestDto
 import br.com.money.expenses.model.entity.Account
 import br.com.money.expenses.repository.AccountRepository
 import br.com.money.expenses.service.AccountService
@@ -17,10 +16,10 @@ class AccountServiceImpl (
         AccountNotFoundException(id)
     }
 
-    override fun createAccount(account: CreateAccountRequestDto) : Account {
+    override fun createAccount(name: String, balance: Double) : Account {
         val newAccount = Account(
-            name = account.name,
-            balance = account.balance,
+            name = name,
+            initialBalance = balance,
             isActive = true,
         )
         return accountRepository.save(newAccount)

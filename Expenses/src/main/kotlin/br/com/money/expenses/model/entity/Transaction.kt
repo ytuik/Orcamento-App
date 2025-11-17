@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.Instant
+import java.time.LocalDate
 
 @Entity
 @Table(name = "transaction")
@@ -21,15 +22,17 @@ data class Transaction(
 
     val transactionAmount: Double,
 
-    @Column(name = "is_debit", nullable = false)
-    val isDebit : Boolean,
+    @Column(name = "transaction_type", nullable = false)
+    val transactionType : Int,
 
     @Column(name = "transaction_date", nullable = false)
-    val transactionDate: Instant = Instant.now(),
+    val transactionDate: LocalDate,
 
     @Column(name = "category_id")
-    val categoryId: Int?,
+    val category: Int?,
 
-    val description: String?,
+    val description: String,
     val comment: String?,
+    val createdAt: Instant = Instant.now(),
+    val updatedAt: Instant? = null
 )

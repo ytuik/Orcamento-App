@@ -2,8 +2,25 @@ package br.com.money.expenses.repository
 
 import br.com.money.expenses.model.entity.Transaction
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
 interface TransactionRepository : JpaRepository <Transaction, Int> {
+    fun findByAccountId(accountId: Long): List<Transaction>
+    fun findByCategory(category: Int): List<Transaction>
+    fun findByTransactionType(transactionType: Int): List<Transaction>
+
+    @Query("""
+        SELECT t FROM Transaction t
+        WHERE 
+            (:accountId IS NULL OR t.accountId = :accountId)
+            AND (:categoryId IS NULL OR t.category = :categoryId)
+            AND (:typeId IS NULL OR t.transactionType = :typeId)
+    """)
+    fun findTransactionsFiltered(
+        accountId: Long?,
+        categoryId: Int?,
+        typeId: Int?
+    ): List<Transaction>
 }

@@ -14,15 +14,13 @@ data class Account(
     @Column(name = "name", nullable = false)
     val name: String,
 
-    @Column(name = "balance", nullable = false)
-    val balance: Double,
+    @Column(name = "initial_balance", nullable = false)
+    val initialBalance: Double,
 
     @Column(name = "is_active", nullable = false)
     val isActive: Boolean = true,
 
     @Column(name = "created_at", nullable = false)
     val createdAt: Instant = Instant.now(),
-
-    @Column(name = "updated_at")
     val updatedAt: Instant? = null
 )
