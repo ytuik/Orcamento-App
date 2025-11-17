@@ -32,6 +32,12 @@ class AccountController (
 
     }
 
+    @GetMapping
+    fun getAllAccounts() : List<AccountDto> {
+        val accounts = accountService.getAllAccounts()
+        return accounts.map { AccountDto.fromModel(it) }
+    }
+
     @GetMapping("/{id}")
     fun getAccountById(
         @PathVariable id: Long

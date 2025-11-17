@@ -8,7 +8,7 @@ plugins {
 
 group = "br.com.money"
 version = "0.0.1-SNAPSHOT"
-description = "Expenses"
+description = "Expenses Service"
 
 java {
     toolchain {

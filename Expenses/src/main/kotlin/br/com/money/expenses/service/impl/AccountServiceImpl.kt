@@ -12,6 +12,10 @@ class AccountServiceImpl (
    private val accountRepository : AccountRepository
 ) : AccountService {
 
+    override fun getAllAccounts(): List<Account> {
+        return accountRepository.findAll()
+    }
+
     override fun getAccountById(id: Long): Account = accountRepository.findById(id).orElseThrow{
         AccountNotFoundException(id)
     }
