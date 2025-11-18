@@ -24,18 +24,15 @@ class AccountController (
     ) : AccountDto {
 
         request.validate()
-        val newAccount = accountService.createAccount(
+        return accountService.createAccount(
             request.name,
             request.balance
         )
-        return AccountDto.fromModel(newAccount)
-
     }
 
     @GetMapping
     fun getAllAccounts() : List<AccountDto> {
-        val accounts = accountService.getAllAccounts()
-        return accounts.map { AccountDto.fromModel(it) }
+        return accountService.getAllAccounts()
     }
 
     @GetMapping("/{id}")
@@ -46,8 +43,7 @@ class AccountController (
             throw IllegalArgumentException("Invalid account ID: $id")
         }
 
-        val account = accountService.getAccountById(id)
-        return AccountDto.fromModel(account)
+        return accountService.getAccountById(id)
     }
 
     @PatchMapping("/{id}/deactivate")
@@ -58,8 +54,7 @@ class AccountController (
             throw IllegalArgumentException("Invalid account ID: $id")
         }
 
-        val account = accountService.deactivateAccount(id)
-        return AccountDto.fromModel(account)
+        return accountService.deactivateAccount(id)
     }
 
     @GetMapping("/health")

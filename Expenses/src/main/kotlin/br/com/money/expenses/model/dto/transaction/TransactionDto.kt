@@ -18,7 +18,7 @@ data class TransactionDto(
         fun fromModel(transaction: Transaction): TransactionDto {
             return TransactionDto(
                 id = transaction.id,
-                accountId = transaction.accountId,
+                accountId = transaction.account.id,
                 amount = transaction.transactionAmount,
                 type = TransactionType.fromId(transaction.transactionType),
                 transactionDate = transaction.transactionDate.toString(),

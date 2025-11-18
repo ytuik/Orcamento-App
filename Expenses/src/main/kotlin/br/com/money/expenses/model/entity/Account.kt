@@ -22,5 +22,14 @@ data class Account(
 
     @Column(name = "created_at", nullable = false)
     val createdAt: Instant = Instant.now(),
-    val updatedAt: Instant? = null
+    val updatedAt: Instant? = null,
+
+    @OneToMany(mappedBy = "account", cascade = [CascadeType.ALL])
+    val transactions: List<Transaction> = emptyList(),
+
+    @OneToMany(mappedBy = "originAccount")
+    val transfersOrigin: List<Transfer> = emptyList(),
+
+    @OneToMany(mappedBy = "destinationAccount")
+    val transfersDestination: List<Transfer> = emptyList()
 )

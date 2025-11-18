@@ -27,13 +27,13 @@ class TransactionServiceImpl(
         comment: String?
     ): Transaction {
 
-        if(!accountRepository.existsById(accountId)) {
-            throw AccountNotFoundException(accountId)
+        val account = accountRepository.findById(accountId).orElseThrow {
+            AccountNotFoundException(accountId)
         }
 
         val newTransaction = transactionRepository.save(
             Transaction(
-                accountId = accountId,
+                account = account,
                 transactionAmount = amount,
                 transactionType = transactionType.id,
                 transactionDate = transactionDate ?: LocalDate.now(),
@@ -60,12 +60,16 @@ class TransactionServiceImpl(
             IllegalArgumentException("Transaction with id $id not found")
         }
 
-        if(accountId != existingTransaction.accountId && !accountRepository.existsById(accountId)) {
+        val account = accountRepository.findById(accountId).orElseThrow {
+            AccountNotFoundException(accountId)
+        }
+
+        if(accountId != existingTransaction.account.id) {
             throw AccountNotFoundException(accountId)
         }
 
         val updatedTransaction = existingTransaction.copy(
-            accountId = accountId,
+            account = account,
             transactionAmount = amount,
             transactionType = transactionType.id,
             transactionDate = transactionDate ?: existingTransaction.transactionDate,
