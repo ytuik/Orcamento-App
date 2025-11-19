@@ -5,6 +5,7 @@ import jakarta.persistence.Tuple
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
+import java.time.LocalDate
 
 @Repository
 interface TransactionRepository : JpaRepository <Transaction, Int> {
@@ -43,4 +44,6 @@ interface TransactionRepository : JpaRepository <Transaction, Int> {
         GROUP BY t.account.id
     """)
     fun getSumsByAccountId(): List<Tuple>
+
+    fun findByTransactionDateBetween(startDate: LocalDate, endDate: LocalDate): List<Transaction>
 }

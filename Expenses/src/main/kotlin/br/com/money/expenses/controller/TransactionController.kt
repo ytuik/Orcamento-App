@@ -21,7 +21,7 @@ class TransactionController (
     ) : TransactionDto {
 
         request.validate()
-        val newTransaction = transactionService.createTransaction(
+        return transactionService.createTransaction(
             accountId = request.accountId,
             amount = request.amount,
             transactionType = TransactionType.fromId(request.type),
@@ -30,20 +30,18 @@ class TransactionController (
             description = request.description,
             comment = request.comment
         )
-
-        return TransactionDto.fromModel(newTransaction)
     }
 
     @GetMapping("/{id}")
     fun getTransactionById(
         @PathVariable id: Int
     ) : TransactionDto {
+
         if (id <= 0) {
             throw IllegalArgumentException("Invalid transaction ID: $id")
         }
 
-        val transaction = transactionService.getTransactionById(id)
-        return TransactionDto.fromModel(transaction)
+        return transactionService.getTransactionById(id)
     }
 
     @PatchMapping("/{id}/update")
@@ -52,11 +50,12 @@ class TransactionController (
         @RequestBody
         request: TransactionDto
     ) : TransactionDto {
+
         if (id <= 0) {
             throw IllegalArgumentException("Invalid transaction ID: $id")
         }
 
-        val updatedTransaction = transactionService.updateTransaction(
+        return transactionService.updateTransaction(
             id = id,
             accountId = request.accountId,
             amount = request.amount,
@@ -66,14 +65,13 @@ class TransactionController (
             description = request.description,
             comment = request.comment
         )
-
-        return TransactionDto.fromModel(updatedTransaction)
     }
 
     @DeleteMapping("/{id}/delete")
     fun deleteTransaction(
         @PathVariable id: Int
     ) {
+
         if (id <= 0) {
             throw IllegalArgumentException("Invalid transaction ID: $id")
         }
@@ -91,12 +89,23 @@ class TransactionController (
         val category = categoryId?.let { TransactionCategory.fromId(it) }
         val type = typeId?.let { TransactionType.fromId(it) }
 
-        val transactions = transactionService.findTransactionsFiltered(
+        return transactionService.findTransactionsFiltered(
             accountId = accountId,
             category = category,
             type = type
         )
 
-        return transactions.map { TransactionDto.fromModel(it) }
+    }
+
+    @GetMapping("/period")
+    fun getTransactionsByPeriod(
+        @RequestParam(required = true) startDate: LocalDate,
+        @RequestParam(required = true) endDate: LocalDate
+    ) : List<TransactionDto> {
+
+        return transactionService.findTransactionsByPeriod(
+            startDate = startDate,
+            endDate = endDate
+        )
     }
 }

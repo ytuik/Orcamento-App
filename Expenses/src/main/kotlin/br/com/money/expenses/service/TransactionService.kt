@@ -2,7 +2,7 @@ package br.com.money.expenses.service
 
 import br.com.money.expenses.enum.TransactionCategory
 import br.com.money.expenses.enum.TransactionType
-import br.com.money.expenses.model.entity.Transaction
+import br.com.money.expenses.model.dto.transaction.TransactionDto
 import java.time.LocalDate
 
 interface TransactionService {
@@ -14,7 +14,7 @@ interface TransactionService {
         transactionDate: LocalDate?,
         category: TransactionCategory?,
         comment: String?
-    ): Transaction
+    ): TransactionDto
 
     fun updateTransaction(
         id: Int,
@@ -25,16 +25,21 @@ interface TransactionService {
         transactionDate: LocalDate?,
         category: TransactionCategory?,
         comment: String?
-    ): Transaction
+    ): TransactionDto
 
     fun deleteTransaction(id: Int)
 
-    fun getTransactionById(id: Int): Transaction
+    fun getTransactionById(id: Int): TransactionDto
 
     fun findTransactionsFiltered(
         accountId: Long?,
         category: TransactionCategory?,
         type: TransactionType?,
-    ) : List<Transaction>
+    ) : List<TransactionDto>
+
+    fun findTransactionsByPeriod(
+        startDate: LocalDate,
+        endDate: LocalDate
+    ) : List<TransactionDto>
 
 }

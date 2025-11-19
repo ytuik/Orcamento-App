@@ -3,6 +3,7 @@ package br.com.money.expenses.service.impl
 import br.com.money.expenses.enum.TransactionCategory
 import br.com.money.expenses.enum.TransactionType
 import br.com.money.expenses.exceptions.AccountNotFoundException
+import br.com.money.expenses.model.dto.transaction.TransactionDto
 import br.com.money.expenses.model.entity.Transaction
 import br.com.money.expenses.repository.AccountRepository
 import br.com.money.expenses.repository.TransactionRepository
@@ -25,7 +26,7 @@ class TransactionServiceImpl(
         transactionDate: LocalDate?,
         category: TransactionCategory?,
         comment: String?
-    ): Transaction {
+    ): TransactionDto {
 
         val account = accountRepository.findById(accountId).orElseThrow {
             AccountNotFoundException(accountId)
@@ -43,7 +44,7 @@ class TransactionServiceImpl(
             )
         )
 
-        return newTransaction
+        return TransactionDto.fromModel(newTransaction)
     }
 
     override fun updateTransaction(
@@ -55,7 +56,7 @@ class TransactionServiceImpl(
         transactionDate: LocalDate?,
         category: TransactionCategory?,
         comment: String?
-    ): Transaction {
+    ): TransactionDto {
         val existingTransaction = transactionRepository.findById(id.toInt()).orElseThrow {
             IllegalArgumentException("Transaction with id $id not found")
         }
@@ -68,18 +69,20 @@ class TransactionServiceImpl(
             throw AccountNotFoundException(accountId)
         }
 
-        val updatedTransaction = existingTransaction.copy(
-            account = account,
-            transactionAmount = amount,
-            transactionType = transactionType.id,
-            transactionDate = transactionDate ?: existingTransaction.transactionDate,
-            category = category?.id ?: existingTransaction.category,
-            description = description,
-            comment = comment,
-            updatedAt = Instant.now()
+        val updatedTransaction = transactionRepository.save(
+            existingTransaction.copy(
+                account = account,
+                transactionAmount = amount,
+                transactionType = transactionType.id,
+                transactionDate = transactionDate ?: existingTransaction.transactionDate,
+                category = category?.id ?: existingTransaction.category,
+                description = description,
+                comment = comment,
+                updatedAt = Instant.now()
+            )
         )
 
-        return transactionRepository.save(updatedTransaction)
+        return TransactionDto.fromModel(updatedTransaction)
     }
 
     override fun deleteTransaction(id: Int) {
@@ -89,22 +92,36 @@ class TransactionServiceImpl(
         transactionRepository.delete(existingTransaction)
     }
 
-    override fun getTransactionById(id: Int): Transaction {
-        return transactionRepository.findById(id).orElseThrow {
+    override fun getTransactionById(id: Int): TransactionDto {
+        val transaction = transactionRepository.findById(id).orElseThrow {
             IllegalArgumentException("Transaction with id $id not found")
         }
+
+        return TransactionDto.fromModel(transaction)
     }
 
     override fun findTransactionsFiltered(
         accountId: Long?,
         category: TransactionCategory?,
         type: TransactionType?
-    ): List<Transaction> {
-        return transactionRepository.findTransactionsFiltered(
+    ): List<TransactionDto> {
+        val transactions = transactionRepository.findTransactionsFiltered(
             accountId,
             category?.id,
             type?.id
         )
+
+        return transactions.map {
+            TransactionDto.fromModel(it)
+        }
+    }
+
+    override fun findTransactionsByPeriod(startDate: LocalDate, endDate: LocalDate): List<TransactionDto> {
+        val transactions = transactionRepository.findByTransactionDateBetween(startDate, endDate)
+
+        return transactions.map {
+            TransactionDto.fromModel(it)
+        }
     }
 
 }
