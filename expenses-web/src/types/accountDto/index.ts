@@ -2,8 +2,9 @@ export interface AccountDto {
     id: number;
     name: string;
     isActive: boolean;
+    currentBalance: number;
     createdAt: string;
-    updatedAt: string | undefined;
+    updatedAt: string | null;
 }
 
 export interface CreateAccountDto {

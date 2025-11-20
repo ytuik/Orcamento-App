@@ -1,4 +1,13 @@
 {
+  "compilerOptions": {
+    "allowJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "types": [
+        "vite/client"
+    ]
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

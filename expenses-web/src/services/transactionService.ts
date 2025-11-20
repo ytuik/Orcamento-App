@@ -33,10 +33,20 @@ const getTransactionsFiltered = (
     return apiRequest<TransactionDto[]>(`${API_URL}/filter${queryString}`, 'GET');
 }
 
+const getTransactionsByPeriod = (startDate: string, endDate: string): Promise<TransactionDto[]> => {
+    const queryParams = new URLSearchParams();
+    queryParams.append('startDate', startDate);
+    queryParams.append('endDate', endDate);
+
+    return apiRequest<TransactionDto[]>(`${API_URL}/period?${queryParams.toString()}`, 'GET');
+
+}
+
 export const transactionApi = {
     createTransaction,
     getTransactionById,
     updateTransaction,
     deleteTransaction,
-    getTransactionsFiltered
+    getTransactionsFiltered,
+    getTransactionsByPeriod,
 }

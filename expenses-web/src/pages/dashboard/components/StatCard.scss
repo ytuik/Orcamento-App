@@ -1,0 +1,51 @@
+@use '../../../main' as *;
+
+.dashCard {
+  background-color: #1d1d29;
+  border-radius: 8px;
+
+  .content{
+
+    .header {
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .value {
+      &-green{
+        font-size: 1.875rem;
+        font-weight: 700;
+        line-height: 1.5;
+        color: $emerald-600;
+      }
+      &-red{
+        font-size: 1.875rem;
+        font-weight: 700;
+        line-height: 1.5;
+        color: $red-401;
+      }
+    }
+
+    .description{
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+  }
+
+  .icon {
+    &-green {
+      color: $emerald-600;
+    }
+
+    &-red{
+        color: $red-401;
+    }
+
+    svg {
+      height: 50px;
+        width: 50px;
+    }
+  }
+}
