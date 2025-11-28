@@ -1,0 +1,64 @@
+@use '../../../../styles/variables' as *;
+
+$variants: (
+        'purple': $violet-600,
+        'green': $emerald-600,
+        'red': $red-401
+);
+
+.stat-card {
+  background-color: $zinc-800;
+  border: 1px solid $zinc-700;
+  border-radius: $radius-md;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    border-color: $zinc-600;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $zinc-400;
+  }
+
+  .card-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .card-description {
+    font-size: 0.875rem;
+  }
+
+  .card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 42px;
+      height: 42px;
+      opacity: 0.9;
+    }
+  }
+
+  @each $name, $color in $variants {
+    &.variant-#{$name} {
+      border-left-color: $color;
+
+      .text-#{$name} {
+        color: $color !important;
+      }
+
+      .icon-#{$name} {
+        color: $color;
+      }
+    }
+  }
+}

@@ -20,14 +20,14 @@ const deleteTransaction = (id: number): Promise<void> => {
 }
 
 const getTransactionsFiltered = (
-    accountId : number | null,
-    categoryId : number | null,
-    typeId : number | null,
+    accountId? : number | null,
+    categoryId? : number | null,
+    typeId? : number | null,
 ) : Promise<TransactionDto[]> => {
     const queryParams = new URLSearchParams();
-    if (accountId !== null) queryParams.append('accountId', accountId.toString());
-    if (categoryId !== null) queryParams.append('categoryId', categoryId.toString());
-    if (typeId !== null) queryParams.append('typeId', typeId.toString());
+    if (accountId != null) queryParams.append('accountId', accountId.toString());
+    if (categoryId != null) queryParams.append('categoryId', categoryId.toString());
+    if (typeId != null) queryParams.append('typeId', typeId.toString());
 
     const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
     return apiRequest<TransactionDto[]>(`${API_URL}/filter${queryString}`, 'GET');
@@ -42,7 +42,7 @@ const getTransactionsByPeriod = (startDate: string, endDate: string): Promise<Tr
 
 }
 
-export const transactionApi = {
+export const transactionService = {
     createTransaction,
     getTransactionById,
     updateTransaction,

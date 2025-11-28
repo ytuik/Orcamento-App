@@ -1,13 +1,13 @@
-import type {TransactionType} from "./transactionType.ts";
-import type {TransactionCategory} from "./transactionCategory.ts";
+import type { TransactionTypeString} from "./transactionType.ts";
+import type { TransactionCategoryString} from "./transactionCategory.ts";
 
 export interface TransactionDto {
     id: number;
     accountId: number;
     amount: number;
-    type: TransactionType;
+    type: TransactionTypeString;
     transactionDate: string,
-    category: TransactionCategory,
+    category: TransactionCategoryString,
     description: string;
     comment: string | null;
 }
@@ -15,9 +15,9 @@ export interface TransactionDto {
 export interface CreateTransactionDto {
     accountId: number;
     amount: number;
-    type: number;
-    transactionDate: Date,
-    categoryId: number,
+    type: TransactionTypeString;
+    category: TransactionCategoryString,
+    transactionDate: string,
     description: string;
     comment?: string | null;
 }

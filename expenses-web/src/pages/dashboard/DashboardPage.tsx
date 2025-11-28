@@ -1,73 +1,101 @@
-import {useDashboardData} from "./hooks/useDashboardData.ts";
-import {formatToLocalDate} from "../../utils/formatToLocalDate.ts";
-import {LoadingSpinner} from "../../components/ui/LoadingSpinner/LoadingSpinner.tsx";
-import {TrendingDownIcon, TrendingUpIcon, WalletIcon} from "../../components/icons";
-import {DashboardHeader} from "./components/DashboardHeader.tsx";
-import {formatCurrency} from "../../utils/formatCurrency.ts";
-import './DashboardPage.scss'
-import {StatCard} from "./components/StatCard.tsx";
+import { useDashboardData } from "./hooks/useDashboardData";
+import { formatToLocalDate } from "../../utils/formatToLocalDate";
+import { LoadingSpinner } from "../../components/ui/LoadingSpinner/LoadingSpinner"; // Assumindo que existe
+import { TrendingDownIcon, TrendingUpIcon, WalletIcon } from "../../components/icons";
+import { DashboardHeader } from "./components/DashboardHeader";
+import { StatCard } from "./components/StatCard/StatCard.tsx";
+import { AccountsCarousel } from "./components/AccountsCarousel/AccountsCarrousel.tsx";
+import './DashboardPage.scss';
+import {TransactionList} from "./components/TransactionList/TransactionList.tsx";
 
 function DashboardPage() {
-    const date = new Date()
-    const startDate =formatToLocalDate( new Date(date.getFullYear(), date.getMonth(), 1));
-    const endDate = formatToLocalDate( new Date(date.getFullYear(), date.getMonth() + 1, 0));
-    const {isLoading, isError, data} = useDashboardData(startDate, endDate);
+    const today = new Date();
+    const startDate = formatToLocalDate(new Date(today.getFullYear(), today.getMonth(), 1));
+    const endDate = formatToLocalDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+
+    const { isLoading, isError, data } = useDashboardData(startDate, endDate);
 
     if (isLoading) {
-        return <LoadingSpinner />
+        return (
+            <div className="d-flex justify-content-center align-items-center vh-100 bg-zinc-900">
+                <LoadingSpinner />
+            </div>
+        );
     }
 
     if (isError || !data) {
         return (
-            <div className="flex items-center justify-center h-screen bg-gray-900">
-                <p className="text-red-500 text-lg">Erro ao carregar os dados.</p>
+            <div className="d-flex justify-content-center align-items-center vh-100 bg-zinc-900">
+                <div className="text-center">
+                    <p className="text-red-400 text-lg mb-2">Erro ao carregar dados.</p>
+                    <button onClick={() => window.location.reload()} className="btn btn-outline-light btn-sm">
+                        Tentar Novamente
+                    </button>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="d-flex align-items-center flex-column">
-            <DashboardHeader/>
-            <div className="d-grid col-2 gap-2 mt-3">
+        <div className="dashboard-container py-4">
+            <div className="container">
+                <DashboardHeader/>
 
-              <StatCard title={"Receita"} value={data.monthTotalIncome} icon={<TrendingUpIcon></TrendingUpIcon>} description={"Total de Income"} />
+                <div className="row g-4 mb-5">
+                    <div className="col-12 col-md-4">
+                        <StatCard
+                            title="Saldo Total"
+                            value={data.monthBalance}
+                            icon={<WalletIcon/>}
+                            description="Balanço do mês atual"
+                            colorVariant="purple"
+                            className=''
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <StatCard
+                            title="Receitas"
+                            value={data.monthTotalIncome}
+                            icon={<TrendingUpIcon/>}
+                            description="Entradas este mês"
+                            colorVariant="green"
+                            className=''
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <StatCard
+                            title="Despesas"
+                            value={data.monthTotalExpense}
+                            icon={<TrendingDownIcon/>}
+                            description="Saídas este mês"
+                            colorVariant="red"
+                            className=''
+                        />
+                    </div>
+                </div>
+
+                <div className="row g-4">
+                    <div className="col-12 col-lg-7">
+                        <AccountsCarousel accounts={data.accounts}/>
+
+                        <div
+                            className="p-4 rounded border border-zinc-700 bg-zinc-800 mt-4 text-center text-muted-custom">
+                            Espaço para Gráfico de Despesas
+                        </div>
+                    </div>
+
+
+                    <div className="col-12 col-lg-5">
+                        <TransactionList transactions={data.currentMonthTransactions}
+                                         onViewAll={() => console.log('Ver todas')}
+                                         maxItems={5}
+                        />
+                    </div>
+                </div>
+
             </div>
-
-            {/*<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">*/}
-
-            {/*    <Card>*/}
-            {/*        <CardContent>*/}
-            {/*            <div className="flex items-center space-x-4">*/}
-            {/*                <div className="p-3 rounded-full bg-blue-100 text-blue-700">*/}
-            {/*                    <TrendingUpIcon />*/}
-            {/*                </div>*/}
-            {/*                <div>*/}
-            {/*                    <h4 className="text-lg font-medium">Lucro</h4>*/}
-            {/*                    <p className="text-2xl font-semibold">*/}
-            {/*                        {formatCurrency(data.monthTotalIncome)}*/}
-            {/*                    </p>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </CardContent>*/}
-            {/*    </Card>*/}
-            {/*    <Card>*/}
-            {/*        <CardContent>*/}
-            {/*            <div className="flex items-center space-x-4">*/}
-            {/*                <div className="p-3 rounded-full bg-red-100 text-red-700">*/}
-            {/*                    <TrendingDownIcon />*/}
-            {/*                </div>*/}
-            {/*                <div>*/}
-            {/*                    <h4 className="text-lg font-medium">Despesas</h4>*/}
-            {/*                    <p className="text-2xl font-semibold">*/}
-            {/*                        {formatCurrency(data.monthTotalExpense)}*/}
-            {/*                    </p>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </CardContent>*/}
-            {/*    </Card>*/}
-            {/*</div>*/}
         </div>
     );
 }
 
-export default DashboardPage
+export default DashboardPage;

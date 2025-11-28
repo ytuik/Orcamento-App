@@ -1,0 +1,65 @@
+$zinc-950: #09090b;
+$zinc-900: #18181b;
+$zinc-800: #27272a;
+$zinc-700: #3f3f46;
+$zinc-600: #52525b;
+$zinc-500: #71717a;
+$zinc-400: #a1a1aa;
+$zinc-200: #e4e4e7;
+$zinc-100: #f4f4f5;
+
+$emerald-700: #047857;
+$emerald-600: #059669;
+$emerald-500: #10b981;
+$emerald-400: #34d399;
+$emerald-200: #a7f3d0;
+$emerald-100: #d1fae5;
+
+$red-500: #ef4444;
+$red-401: #f87171;
+$red-200: #fecaca;
+
+$violet-600: #8257e5;
+$violet-700: #6d28d9;
+$violet-100: #ede9fe;
+
+$blue-400: #60a5fa;
+$amber-400: #fbbf24;
+
+$radius-sm: 0.375rem;
+$radius-md: 0.5rem;
+$radius-lg: 0.75rem;
+$radius-full: 9999px;
+
+$sidebar-width: 16rem;
+
+$spacing-1: 0.25rem;
+$spacing-2: 0.5rem;
+$spacing-3: 0.75rem;
+$spacing-4: 1rem;
+$spacing-5: 1.25rem;
+$spacing-6: 1.5rem;
+$spacing-8: 2rem;
+$spacing-10: 2.5rem;
+$spacing-12: 3rem;
+$spacing-16: 4rem;
+$spacing-20: 5rem;
+$spacing-24: 6rem;
+
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: $zinc-900;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $zinc-700;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: $zinc-600;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+@use './variables' as *;
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $zinc-100;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: $zinc-100;
+  margin-bottom: 0.5rem;
+}
+
+h1 { font-size: 1.875rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+p {
+  color: $zinc-400;
+}
+
+.text-purple { color: $violet-600 !important; }
+.text-muted-custom { color: $zinc-400 !important; }

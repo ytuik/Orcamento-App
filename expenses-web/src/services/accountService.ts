@@ -23,7 +23,7 @@ const healthCheck = (): Promise<string> => {
     return apiRequest<string>(`${API_URL}/health`, 'GET');
 }
 
-export const accountApi = {
+export const accountService = {
     getAllAccounts,
     getAccountById,
     createAccount,

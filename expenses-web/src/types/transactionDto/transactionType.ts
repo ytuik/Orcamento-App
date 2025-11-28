@@ -1,6 +1,7 @@
-export const TransactionType ={
-    INCOME : 1,
-    EXPENSE : 2
-} as const
+// @ts-ignore
+export enum TransactionType {
+    INCOME = "INCOME",
+    EXPENSE = "EXPENSE"
+}
 
-export type TransactionType = typeof TransactionType[keyof typeof TransactionType];
+export type TransactionTypeString = 'INCOME' | 'EXPENSE';

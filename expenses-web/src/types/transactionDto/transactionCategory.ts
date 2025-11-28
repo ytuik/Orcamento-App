@@ -1,14 +1,25 @@
-export const TransactionCategory = {
-    FOOD: 1,
-    TRANSPORT: 2,
-    ENTERTAINMENT: 3,
-    UTILITIES: 4,
-    HEALTHCARE: 5,
-    EDUCATION: 6,
-    SHOPPING: 7,
-    SALARY: 8,
-    INVESTMENT: 9,
-    OTHER: 10
-} as const;
+// @ts-ignore
+export enum TransactionCategory {
+    SHOPPING = "SHOPPING",
+    FOOD = "FOOD",
+    TRANSPORT = "TRANSPORT",
+    UTILITIES = "UTILITIES",
+    SALARY = "SALARY",
+    ENTERTAINMENT = "ENTERTAINMENT",
+    HEALTHCARE = "HEALTHCARE",
+    EDUCATION = "EDUCATION",
+    INVESTMENT = "INVESTMENT",
+    OTHER = "OTHER"
+}
 
-export type TransactionCategory = typeof TransactionCategory[keyof typeof TransactionCategory];
+export type TransactionCategoryString =
+    | 'SHOPPING'
+    | 'FOOD'
+    | 'TRANSPORT'
+    | 'UTILITIES'
+    | 'SALARY'
+    | 'ENTERTAINMENT'
+    | 'HEALTHCARE'
+    | 'EDUCATION'
+    | 'INVESTMENT'
+    | 'OTHER';
