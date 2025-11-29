@@ -1,7 +1,6 @@
 package br.com.money.expenses.model.entity
 
 import jakarta.persistence.*
-import java.time.Instant
 import java.time.LocalDate
 
 @Entity

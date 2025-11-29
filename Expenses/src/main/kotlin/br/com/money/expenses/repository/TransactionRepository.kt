@@ -10,19 +10,19 @@ import java.time.LocalDate
 @Repository
 interface TransactionRepository : JpaRepository <Transaction, Int> {
     fun findByAccountId(accountId: Long): List<Transaction>
-    fun findByCategory(category: Int): List<Transaction>
+    fun findByCategoryId(categoryId: Long): List<Transaction>
     fun findByTransactionType(transactionType: Int): List<Transaction>
 
     @Query("""
         SELECT t FROM Transaction t
         WHERE 
             (:accountId IS NULL OR t.account.id = :accountId)
-            AND (:categoryId IS NULL OR t.category = :categoryId)
+            AND (:categoryId IS NULL OR t.category.id = :categoryId)
             AND (:typeId IS NULL OR t.transactionType = :typeId)
     """)
     fun findTransactionsFiltered(
         accountId: Long?,
-        categoryId: Int?,
+        categoryId: Long?,
         typeId: Int?
     ): List<Transaction>
 

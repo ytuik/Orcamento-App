@@ -1,6 +1,5 @@
 package br.com.money.expenses.model.dto.transaction
 
-import br.com.money.expenses.enum.TransactionCategory
 import br.com.money.expenses.enum.TransactionType
 import br.com.money.expenses.model.entity.Transaction
 
@@ -10,7 +9,7 @@ data class TransactionDto(
     val amount: Double,
     val type: TransactionType,
     val transactionDate: String,
-    val category: TransactionCategory?,
+    val category: Long,
     val description: String,
     val comment: String?
 ) {
@@ -22,9 +21,7 @@ data class TransactionDto(
                 amount = transaction.transactionAmount,
                 type = TransactionType.fromId(transaction.transactionType),
                 transactionDate = transaction.transactionDate.toString(),
-                category = transaction.category?.let {
-                    TransactionCategory.fromId(it)
-                },
+                category = transaction.category.id,
                 description = transaction.description,
                 comment = transaction.comment
             )

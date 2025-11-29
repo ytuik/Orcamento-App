@@ -1,19 +1,13 @@
 package br.com.money.expenses.service
 
-import br.com.money.expenses.enum.TransactionCategory
 import br.com.money.expenses.enum.TransactionType
+import br.com.money.expenses.model.dto.transaction.CreateTransactionRequestDto
 import br.com.money.expenses.model.dto.transaction.TransactionDto
 import java.time.LocalDate
 
 interface TransactionService {
     fun createTransaction(
-        accountId: Long,
-        amount: Double,
-        transactionType: TransactionType,
-        description: String,
-        transactionDate: LocalDate?,
-        category: TransactionCategory?,
-        comment: String?
+    transaction: CreateTransactionRequestDto
     ): TransactionDto
 
     fun updateTransaction(
@@ -23,7 +17,7 @@ interface TransactionService {
         transactionType: TransactionType,
         description: String,
         transactionDate: LocalDate?,
-        category: TransactionCategory?,
+        categoryId: Long,
         comment: String?
     ): TransactionDto
 
@@ -33,7 +27,7 @@ interface TransactionService {
 
     fun findTransactionsFiltered(
         accountId: Long?,
-        category: TransactionCategory?,
+        category: Long?,
         type: TransactionType?,
     ) : List<TransactionDto>
 

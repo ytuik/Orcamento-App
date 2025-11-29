@@ -1,5 +1,6 @@
 package br.com.money.expenses.model.dto.transaction
 
+import br.com.money.expenses.enum.TransactionType
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
@@ -9,11 +10,11 @@ data class CreateTransactionRequestDto (
     @get:JsonProperty("amount")
     val amount: Double,
     @get:JsonProperty("type")
-    val type: Int,
+    val type: TransactionType,
     @get:JsonProperty("transactionDate")
     val transactionDate: LocalDate,
     @get:JsonProperty("category")
-    val category: Int?,
+    val categoryId: Long,
     @get:JsonProperty("description")
     val description: String,
     @get:JsonProperty("comment")
@@ -23,7 +24,7 @@ data class CreateTransactionRequestDto (
         fun CreateTransactionRequestDto.validate() {
             require(amount > 0.0) { "Transaction amount must be greater than zero." }
             require(description.isNotBlank()) { "Transaction description must not be blank." }
-            require(transactionDate <= LocalDate.now()) { "Transaction date cannot be in the future." }
+            require(transactionDate <= LocalDate.now().plusDays(1)) { "Transaction date cannot be in the future." }
         }
     }
 }

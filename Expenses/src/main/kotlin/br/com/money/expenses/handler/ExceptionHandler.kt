@@ -1,6 +1,8 @@
 package br.com.money.expenses.handler
 
 import br.com.money.expenses.exceptions.AccountNotFoundException
+import br.com.money.expenses.exceptions.CategoryNotFoundException
+import br.com.money.expenses.exceptions.TransactionNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.ErrorResponse
@@ -13,6 +15,24 @@ class ExceptionHandler {
     @ExceptionHandler(AccountNotFoundException::class)
     fun handleAccountNotFoundException(ex: AccountNotFoundException): ResponseEntity<ErrorResponse> {
         val errorResponse = ErrorResponse.builder(ex, HttpStatus.NOT_FOUND, "ACCOUNT_NOT_FOUND")
+            .build()
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(errorResponse)
+    }
+
+    @ExceptionHandler(TransactionNotFoundException::class)
+    fun handleTransactionNotFoundException(ex: TransactionNotFoundException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse.builder(ex, HttpStatus.NOT_FOUND, "TRANSACTION_NOT_FOUND")
+            .build()
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(errorResponse)
+    }
+
+    @ExceptionHandler(CategoryNotFoundException::class)
+    fun handleCategoryNotFoundException(ex: CategoryNotFoundException): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse.builder(ex, HttpStatus.NOT_FOUND, "CATEGORY_NOT_FOUND")
             .build()
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

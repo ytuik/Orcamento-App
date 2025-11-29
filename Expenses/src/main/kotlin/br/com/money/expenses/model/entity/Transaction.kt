@@ -24,8 +24,9 @@ data class Transaction(
     @Column(name = "transaction_date", nullable = false)
     val transactionDate: LocalDate,
 
-    @Column(name = "category_id")
-    val category: Int?,
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = true)
+    val category: Category,
 
     val description: String,
     val comment: String?,

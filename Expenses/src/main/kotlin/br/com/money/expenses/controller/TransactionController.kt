@@ -1,6 +1,5 @@
 package br.com.money.expenses.controller
 
-import br.com.money.expenses.enum.TransactionCategory
 import br.com.money.expenses.enum.TransactionType
 import br.com.money.expenses.model.dto.transaction.CreateTransactionRequestDto
 import br.com.money.expenses.model.dto.transaction.CreateTransactionRequestDto.Companion.validate
@@ -21,15 +20,7 @@ class TransactionController (
     ) : TransactionDto {
 
         request.validate()
-        return transactionService.createTransaction(
-            accountId = request.accountId,
-            amount = request.amount,
-            transactionType = TransactionType.fromId(request.type),
-            transactionDate = request.transactionDate,
-            category = request.category?.let { TransactionCategory.fromId(it) },
-            description = request.description,
-            comment = request.comment
-        )
+        return transactionService.createTransaction(request)
     }
 
     @GetMapping("/{id}")
@@ -61,7 +52,7 @@ class TransactionController (
             amount = request.amount,
             transactionType = request.type,
             transactionDate = LocalDate.parse(request.transactionDate),
-            category = request.category,
+            categoryId = request.category,
             description = request.description,
             comment = request.comment
         )
@@ -82,16 +73,15 @@ class TransactionController (
     @GetMapping
     fun getTransactions(
         @RequestParam(required = false) accountId: Long?,
-        @RequestParam(required = false) categoryId: Int?,
+        @RequestParam(required = false) categoryId: Long?,
         @RequestParam(required = false) typeId: Int?
     ) : List<TransactionDto> {
 
-        val category = categoryId?.let { TransactionCategory.fromId(it) }
         val type = typeId?.let { TransactionType.fromId(it) }
 
         return transactionService.findTransactionsFiltered(
             accountId = accountId,
-            category = category,
+            category = categoryId,
             type = type
         )
 

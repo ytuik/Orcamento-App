@@ -1,11 +1,14 @@
 package br.com.money.expenses.service.impl
 
-import br.com.money.expenses.enum.TransactionCategory
 import br.com.money.expenses.enum.TransactionType
 import br.com.money.expenses.exceptions.AccountNotFoundException
+import br.com.money.expenses.exceptions.CategoryNotFoundException
+import br.com.money.expenses.exceptions.TransactionNotFoundException
+import br.com.money.expenses.model.dto.transaction.CreateTransactionRequestDto
 import br.com.money.expenses.model.dto.transaction.TransactionDto
 import br.com.money.expenses.model.entity.Transaction
 import br.com.money.expenses.repository.AccountRepository
+import br.com.money.expenses.repository.CategoryRepository
 import br.com.money.expenses.repository.TransactionRepository
 import br.com.money.expenses.service.TransactionService
 import org.springframework.stereotype.Service
@@ -15,32 +18,31 @@ import java.time.LocalDate
 @Service
 class TransactionServiceImpl(
     private val transactionRepository: TransactionRepository,
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val categoryRepository: CategoryRepository
 ) : TransactionService {
 
     override fun createTransaction(
-        accountId: Long,
-        amount: Double,
-        transactionType: TransactionType,
-        description: String,
-        transactionDate: LocalDate?,
-        category: TransactionCategory?,
-        comment: String?
+        transaction: CreateTransactionRequestDto
     ): TransactionDto {
 
-        val account = accountRepository.findById(accountId).orElseThrow {
-            AccountNotFoundException(accountId)
+        val account = accountRepository.findById(transaction.accountId).orElseThrow {
+            AccountNotFoundException(transaction.accountId)
+        }
+
+        val category = categoryRepository.findById(transaction.categoryId).orElseThrow {
+            CategoryNotFoundException(transaction.categoryId)
         }
 
         val newTransaction = transactionRepository.save(
             Transaction(
                 account = account,
-                transactionAmount = amount,
-                transactionType = transactionType.id,
-                transactionDate = transactionDate ?: LocalDate.now(),
-                category = category!!.id,
-                description = description,
-                comment = comment
+                transactionAmount = transaction.amount,
+                transactionType = transaction.type.id,
+                transactionDate = transaction.transactionDate,
+                category = category,
+                description = transaction.description,
+                comment = transaction.comment
             )
         )
 
@@ -54,15 +56,19 @@ class TransactionServiceImpl(
         transactionType: TransactionType,
         description: String,
         transactionDate: LocalDate?,
-        category: TransactionCategory?,
+        categoryId: Long,
         comment: String?
     ): TransactionDto {
         val existingTransaction = transactionRepository.findById(id.toInt()).orElseThrow {
-            IllegalArgumentException("Transaction with id $id not found")
+            TransactionNotFoundException(id)
         }
 
         val account = accountRepository.findById(accountId).orElseThrow {
             AccountNotFoundException(accountId)
+        }
+
+        val category = categoryRepository.findById(categoryId).orElseThrow {
+            CategoryNotFoundException(categoryId)
         }
 
         if(accountId != existingTransaction.account.id) {
@@ -75,7 +81,7 @@ class TransactionServiceImpl(
                 transactionAmount = amount,
                 transactionType = transactionType.id,
                 transactionDate = transactionDate ?: existingTransaction.transactionDate,
-                category = category?.id ?: existingTransaction.category,
+                category = category ?: existingTransaction.category,
                 description = description,
                 comment = comment,
                 updatedAt = Instant.now()
@@ -102,12 +108,12 @@ class TransactionServiceImpl(
 
     override fun findTransactionsFiltered(
         accountId: Long?,
-        category: TransactionCategory?,
+        category: Long?,
         type: TransactionType?
     ): List<TransactionDto> {
         val transactions = transactionRepository.findTransactionsFiltered(
             accountId,
-            category?.id,
+            category,
             type?.id
         )
 
