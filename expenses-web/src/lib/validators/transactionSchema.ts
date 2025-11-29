@@ -15,7 +15,7 @@ export const transactionFormSchema = z.object({
     description: z.string()
         .min(3, 'A Descrição deve ter no mínimo 3 caracteres')
         .max(100, 'A Descrição deve ter no máximo 100 caracteres'),
-    comment: z.string()
+    comment: z.string().optional()
     }
 )
 export type TransactionFormData = z.infer<typeof transactionFormSchema>;

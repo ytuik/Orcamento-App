@@ -7,6 +7,7 @@ import { StatCard } from "./components/StatCard/StatCard.tsx";
 import { AccountsCarousel } from "./components/AccountsCarousel/AccountsCarrousel.tsx";
 import './DashboardPage.scss';
 import {TransactionList} from "./components/TransactionList/TransactionList.tsx";
+import {MonthlySpendingSummary} from "./components/MonthlySpendingSummary/MonthlySpendingSummary.tsx";
 
 function DashboardPage() {
     const today = new Date();
@@ -77,19 +78,25 @@ function DashboardPage() {
                 <div className="row g-4">
                     <div className="col-12 col-lg-7">
                         <AccountsCarousel accounts={data.accounts}/>
-
-                        <div
-                            className="p-4 rounded border border-zinc-700 bg-zinc-800 mt-4 text-center text-muted-custom">
-                            Espaço para Gráfico de Despesas
-                        </div>
                     </div>
 
 
-                    <div className="col-12 col-lg-5">
+
+                </div>
+
+                <div className={"row g-4"}>
+                    <div className={"col-12 col-lg-6"}>
                         <TransactionList transactions={data.currentMonthTransactions}
                                          onViewAll={() => console.log('Ver todas')}
                                          maxItems={5}
                         />
+
+                    </div>
+                    <div className="col-12 col-lg-6">
+                        <div
+                            className="rounded border-zinc-700 bg-zinc-800 text-muted-custom">
+                            <MonthlySpendingSummary expensesByCategory={data.expensesByCategory} summary={data.summary} />
+                        </div>
                     </div>
                 </div>
 

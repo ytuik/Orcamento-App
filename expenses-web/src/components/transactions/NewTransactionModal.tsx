@@ -3,17 +3,16 @@ import clsx from "clsx";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// Separei os imports para evitar erros de parser em versões antigas
 import type { TransactionFormData } from "../../lib/validators/transactionSchema";
 import { transactionFormSchema } from "../../lib/validators/transactionSchema";
 
 import { TransactionType } from "../../types/transactionDto/transactionType";
-import { TransactionCategory } from "../../types/transactionDto/transactionCategory";
 import { Modal } from "../ui/Modal/Modal";
 import { useAccounts } from "../../hooks/useAccounts";
 import { useCreateTransaction } from "../../hooks/useCreateTransactions";
 
 import './NewTransactionModal.scss';
+import {getCategoryOptions} from "../../utils/transactionUtils.tsx";
 
 interface NewTransactionModalProps {
     isOpen: boolean;
@@ -21,6 +20,8 @@ interface NewTransactionModalProps {
 }
 
 export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
+
+    const categoriesLabels = getCategoryOptions();
 
     const {
         register,
@@ -39,9 +40,9 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
 
     const selectedType = useWatch({ control, name: 'type' });
 
-    const { data: accounts, isLoading } = useAccounts();
+    const { data: accounts } = useAccounts();
 
-    const { mutate: createTransaction, isPending } = useCreateTransaction(() => {
+    const { mutate: createTransaction } = useCreateTransaction(() => {
         reset();
         onClose();
     });
@@ -53,114 +54,106 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
     }, [isOpen, reset]);
 
     const onSubmit = (data: TransactionFormData) => {
+        console.log('Submitting transaction:', data)
         createTransaction(data);
     };
 
-    return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Nova Transação">
-            <form onSubmit={handleSubmit(onSubmit)} className="form-transaction">
+    const onError = (errors: any) => {
+        console.log("Erros de validação impedindo o submit:", errors);
+    };
 
-                <div className="d-flex gap-3 mb-4">
-                    <button
-                        type="button"
-                        className={clsx('btn-type income', { active: selectedType === TransactionType.INCOME })}
-                        onClick={() => setValue('type', TransactionType.INCOME)}
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} title={'Nova Transação'}>
+            <form onSubmit={handleSubmit(onSubmit, onError)} className={'form-transaction'}>
+                <div className={'d-flex gap-3 mb-4'}>
+                    <button type={'button'} className={clsx('btn-type income',
+                        {active: selectedType === TransactionType.INCOME})}
+                            onClick={() => setValue('type', TransactionType.INCOME)}
                     >
                         Receita
                     </button>
-                    <button
-                        type="button"
-                        className={clsx('btn-type expense', { active: selectedType === TransactionType.EXPENSE })}
-                        onClick={() => setValue('type', TransactionType.EXPENSE)}
+                    <button type={'button'} className={clsx('btn-type expense',
+                        {active: selectedType === TransactionType.EXPENSE})}
+                            onClick={() => setValue('type', TransactionType.EXPENSE)}
                     >
                         Despesa
                     </button>
                 </div>
-
-                {/* Descrição */}
                 <div className="form-group mb-3">
-                    <label htmlFor="description">Descrição</label>
+                    <label>Descrição</label>
                     <input
-                        id="description"
                         {...register('description')}
                         className={clsx("form-control", { "is-invalid": errors.description })}
-                        placeholder="Ex: Aluguel, Salário"
+                        placeholder="Ex: Aluguel, Salário, Mercado"
                     />
-                    {errors.description && <span className="invalid-feedback">{errors.description.message}</span>}
+                    {errors.description && <span className="text-error">{errors.description.message}</span>}
                 </div>
 
-                {/* Valor */}
                 <div className="form-group mb-3">
-                    <label htmlFor="amount">Valor</label>
+                    <label>Valor</label>
                     <input
-                        id="amount"
                         type="number"
                         step="0.01"
+
                         {...register('amount', { valueAsNumber: true })}
                         className={clsx("form-control", { "is-invalid": errors.amount })}
                         placeholder="0,00"
                     />
-                    {errors.amount && <span className="invalid-feedback">{errors.amount.message}</span>}
+                    {errors.amount && <span className="text-error">{errors.amount.message}</span>}
                 </div>
 
                 <div className="row">
-                    {/* Categoria */}
                     <div className="col-6 mb-3">
-                        <label htmlFor="category">Categoria</label>
+                        <label>Categoria</label>
                         <select
-                            id="category"
                             {...register('category')}
                             className={clsx("form-control", { "is-invalid": errors.category })}
                         >
                             <option value="">Selecione</option>
-                            {Object.values(TransactionCategory).map(value => (
-                                <option key={value} value={value}>{value}</option>
-                            ))}
+                            {Object.values(categoriesLabels).map(it =>
+                                <option key={it.value} value={it.value}>{it.label}</option>
+                            )}
                         </select>
-                        {errors.category && <span className="invalid-feedback">{errors.category.message}</span>}
+                        {errors.category && <span className="text-error">{errors.category.message}</span>}
                     </div>
 
-                    {/* Conta */}
                     <div className="col-6 mb-3">
-                        <label htmlFor="accountId">Conta</label>
+                        <label>Conta</label>
                         <select
-                            id="accountId"
                             {...register('accountId', { valueAsNumber: true })}
                             className={clsx("form-control", { "is-invalid": errors.accountId })}
-                            disabled={isLoading}
                         >
                             <option value="">Selecione</option>
                             {accounts?.map(acc => (
                                 <option key={acc.id} value={acc.id}>{acc.name}</option>
                             ))}
                         </select>
-                        {errors.accountId && <span className="invalid-feedback">{errors.accountId.message}</span>}
+                        {errors.accountId && <span className="text-error">{errors.accountId.message}</span>}
                     </div>
                 </div>
 
-                {/* Data */}
                 <div className="form-group mb-4">
-                    <label htmlFor="date">Data</label>
+                    <label>Data</label>
                     <input
-                        id="date"
                         type="date"
                         {...register('transactionDate')}
-                        className={clsx("form-control", { "is-invalid": errors.transactionDate })}
+                        className="form-control"
                     />
-                    {errors.transactionDate && <span className="invalid-feedback">{errors.transactionDate.message}</span>}
+                    {errors.transactionDate && <span className="text-error">{errors.transactionDate.message}</span>}
                 </div>
 
                 <button
                     type="submit"
-                    disabled={isSubmitting || isPending}
-                    className={clsx("btn w-100 py-2 fw-bold btn-submit", {
-                        'btn-submit--income': selectedType === TransactionType.INCOME,
-                        'btn-submit--expense': selectedType === TransactionType.EXPENSE
-                    })}
+                    disabled={isSubmitting}
+                    className={clsx("btn btn-primary w-100 py-2 fw-bold",
+                        { 'btn-btn-submit--expense': selectedType === TransactionType.EXPENSE},
+                        { 'btn-btn-submit--income': selectedType === TransactionType.INCOME}
+                    )}
+                    style={{ backgroundColor: selectedType === TransactionType.EXPENSE ? '#f87171' : '#059669', border: 'none' }}
                 >
-                    {isPending ? 'Salvando...' : 'Cadastrar'}
+                    {isSubmitting ? 'Salvando...' : 'Cadastrar'}
                 </button>
             </form>
         </Modal>
-    );
-};
+    )
+}

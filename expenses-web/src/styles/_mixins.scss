@@ -1,0 +1,42 @@
+@use 'variables' as *;
+
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $zinc-700;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: $zinc-600;
+    }
+  }
+}
+
+@mixin focus-ring {
+  outline: 2px solid $violet-600;
+  outline-offset: 2px;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}

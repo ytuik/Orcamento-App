@@ -18,7 +18,8 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                                                                     title = "Últimas Transações",
                                                                     emptyStateMessage = "Nenhuma movimentação este mês."
                                                                 }) => {
-    const displayedTransactions = transactions.slice(0, maxItems);
+
+    const displayedTransactions = transactions.slice(transactions.length - maxItems, transactions.length).reverse();
     const hasTransactions = displayedTransactions.length > 0;
 
     return (
@@ -27,7 +28,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
             role="region"
             aria-label="Lista de transações"
         >
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-4 transaction-list-header">
                 <h5 className="text-white fw-bold mb-0">{title}</h5>
 
                 {onViewAll && (

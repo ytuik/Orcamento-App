@@ -4,7 +4,9 @@ import { formatCurrency } from '../../../../utils/formatCurrency';
 import type { TransactionDto } from '../../../../types/transactionDto';
 import { TransactionType } from '../../../../types/transactionDto/transactionType';
 import { CategoryIcon } from '../../../../components/icons/CategoryIcons';
-import { getCategoryLabel } from '../../../../utils/TransactionUtils.tsx';
+import {format} from "date-fns";
+import {ptBR} from "date-fns/locale";
+import {getCategoryConfig} from "../../../../utils/transactionUtils.tsx";
 
 interface TransactionItemProps {
     transaction: TransactionDto;
@@ -12,13 +14,11 @@ interface TransactionItemProps {
 
 export const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
     const isExpense = transaction.type === TransactionType.EXPENSE;
+    const transactionDate = new Date(transaction.transactionDate);
 
-    const formattedDate = new Date(transaction.transactionDate).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: 'short'
-    });
+    const formattedDate = format(transactionDate, "dd 'de' MMM", { locale: ptBR })
 
-    const categoryLabel = getCategoryLabel(transaction.category);
+    const categoryLabel = getCategoryConfig(transaction.category).label
 
     return (
         <div

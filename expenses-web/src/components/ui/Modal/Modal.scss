@@ -17,45 +17,205 @@
 }
 
 .transaction-modal-content {
-  background-color: $zinc-700;
-  border: 1px solid $zinc-800;
-  border-radius: $radius-md;
+  background-color: $zinc-800; // Alterado para combinar com o design
+  border: 1px solid $zinc-700;
+  border-radius: $radius-lg; // Aumentado o border-radius
   width: 100%;
-  max-width: 500px;
+  max-width: 440px; // Largura mais adequada para o formulário
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 
   .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    border-bottom: 1px solid $zinc-800;
+    padding: $spacing-6;
+    border-bottom: 1px solid $zinc-700;
+    background-color: $zinc-800;
 
     .modal-title {
-      color: white;
-      font-weight: 600;
-      font-size: 1.25rem;
+      color: $zinc-100;
+      font-weight: 700; // Mais forte como no design
+      font-size: 1.5rem; // Tamanho maior
       margin: 0;
     }
 
     .btn-close-modal {
+      background: none;
+      border: none;
       color: $zinc-400;
-      font-size: 1.2rem;
-      transition: color 0.2s;
+      font-size: 1.5rem;
+      width: 32px;
+      height: 32px;
+      border-radius: $radius-full;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
 
       &:hover {
-        color: $red-401;
+        background-color: $zinc-700;
+        color: $zinc-100;
       }
     }
   }
 
   .modal-body {
-    padding: 1.5rem;
+    padding: $spacing-6;
     overflow-y: auto;
-    max-height: 80vh;
+    max-height: 70vh;
+  }
+}
+
+// Estilos específicos para o formulário de transação
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+
+  .transaction-type-selector {
+    display: flex;
+    gap: $spacing-3;
+    background-color: $zinc-700;
+    padding: $spacing-1;
+    border-radius: $radius-md;
+
+    .type-option {
+      flex: 1;
+      padding: $spacing-3 $spacing-4;
+      border: none;
+      border-radius: $radius-sm;
+      background: none;
+      color: $zinc-400;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &.active {
+        background-color: $zinc-800;
+        color: $zinc-100;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      // Cores específicas para cada tipo
+      &.income.active {
+        color: $emerald-400;
+      }
+
+      &.expense.active {
+        color: $red-401;
+      }
+    }
+  }
+
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+
+    .section-label {
+      color: $zinc-400;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: $spacing-2;
+    }
+
+    .amount-display {
+      font-size: 2rem;
+      font-weight: 700;
+      color: $zinc-100;
+      text-align: center;
+      padding: $spacing-4;
+      background-color: $zinc-700;
+      border-radius: $radius-md;
+      border: 2px solid $zinc-600;
+    }
+
+    .form-input {
+      background-color: $zinc-700;
+      border: 2px solid $zinc-600;
+      border-radius: $radius-md;
+      padding: $spacing-3 $spacing-4;
+      color: $zinc-100;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+
+      &::placeholder {
+        color: $zinc-500;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $violet-600;
+        background-color: $zinc-700;
+      }
+
+      &.select-input {
+        cursor: pointer;
+
+        option {
+          background-color: $zinc-800;
+          color: $zinc-100;
+        }
+      }
+    }
+
+    .date-display {
+      background-color: $zinc-700;
+      border: 2px solid $zinc-600;
+      border-radius: $radius-md;
+      padding: $spacing-3 $spacing-4;
+      color: $zinc-100;
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: center;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: $spacing-3;
+    margin-top: $spacing-4;
+
+    .btn {
+      flex: 1;
+      padding: $spacing-3 $spacing-6;
+      border: none;
+      border-radius: $radius-md;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &.btn-cancel {
+        background-color: $zinc-700;
+        color: $zinc-400;
+
+        &:hover {
+          background-color: $zinc-600;
+          color: $zinc-100;
+        }
+      }
+
+      &.btn-confirm {
+        background-color: $violet-600;
+        color: $zinc-100;
+        font-weight: 700;
+
+        &:hover {
+          background-color: $violet-700;
+          transform: translateY(-1px);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
   }
 }
 
@@ -65,6 +225,39 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Responsividade
+@media (max-width: 480px) {
+  .transaction-modal-content {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+
+    .modal-header {
+      padding: $spacing-4;
+    }
+
+    .modal-body {
+      padding: $spacing-4;
+    }
+
+    .transaction-form {
+      .amount-display {
+        font-size: 1.75rem;
+        padding: $spacing-3;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  }
 }

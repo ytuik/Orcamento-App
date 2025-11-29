@@ -46,20 +46,18 @@ $spacing-16: 4rem;
 $spacing-20: 5rem;
 $spacing-24: 6rem;
 
-@mixin custom-scrollbar {
-  &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background: $zinc-900;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: $zinc-700;
-    border-radius: 4px;
+:root {
+  --transition-base: 0.2s ease-in-out;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    &:hover {
-      background-color: $zinc-600;
-    }
-  }
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal: 1040;
+  --z-popover: 1050;
+  --z-tooltip: 1060;
 }
