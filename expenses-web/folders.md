@@ -40,7 +40,7 @@ src/
     │   │   ├── TransactionsList.tsx # Lista de transações
     │   │   └── TransactionDialog.tsx # Modal para criar/editar
     │   ├── hooks/           #
-    │   │   ├── useTransactions.ts   # React Query (useQuery) para buscar transações
+    │   │   ├── useCreateTransactions.ts   # React Query (useQuery) para buscar transações
     │   │   └── useCreateTransaction.ts # React Query (useMutation) (RN 1, 2.3, 4.2)
     │   └── TransactionsPage.tsx # A página de transações
     │

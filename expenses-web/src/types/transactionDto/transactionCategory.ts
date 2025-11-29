@@ -12,14 +12,4 @@ export enum TransactionCategory {
     OTHER = "OTHER"
 }
 
-export type TransactionCategoryString =
-    | 'SHOPPING'
-    | 'FOOD'
-    | 'TRANSPORT'
-    | 'UTILITIES'
-    | 'SALARY'
-    | 'ENTERTAINMENT'
-    | 'HEALTHCARE'
-    | 'EDUCATION'
-    | 'INVESTMENT'
-    | 'OTHER';
+export type TransactionCategoryType = `${TransactionCategory}`;

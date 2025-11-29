@@ -11,6 +11,13 @@ const categoryLabelMap: Record<TransactionCategory, string> = {
     [TransactionCategory.EDUCATION]: 'Educação',
     [TransactionCategory.INVESTMENT]: 'Investimentos',
     [TransactionCategory.OTHER]: 'Geral',
+} as const;
+
+export const getCategoryOptions = () => {
+    return Object.values(TransactionCategory).map(value => ({
+        value,
+        label: categoryLabelMap[value]
+    }));
 };
 
 export const getCategoryEnum = (categoryString: string): TransactionCategory => {
@@ -20,8 +27,13 @@ export const getCategoryEnum = (categoryString: string): TransactionCategory => 
 };
 
 export const getCategoryLabel = (categoryString: string): string => {
-    const categoryEnum = getCategoryEnum(categoryString);
-    return categoryLabelMap[categoryEnum];
+    try {
+        const categoryEnum = getCategoryEnum(categoryString);
+        return categoryLabelMap[categoryEnum];
+    } catch (error) {
+        console.error('Error getting category label:', error);
+        return categoryLabelMap[TransactionCategory.OTHER];
+    }
 };
 
 export const formatTransactionDate = (dateString: string): string => {

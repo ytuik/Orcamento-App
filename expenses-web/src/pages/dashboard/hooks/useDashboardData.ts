@@ -1,18 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from 'react';
 
-import { accountService } from "../../../services/accountService.ts";
 import { transactionService } from "../../../services/transactionService.ts";
-import type {AccountDto} from "../../../types/accountDto";
 import type {TransactionDto} from "../../../types/transactionDto";
+import {useAccounts} from "../../../hooks/useAccounts.ts";
 
 export const useDashboardData = (startDate: string, endDate: string) => {
 
-    const accountsQuery = useQuery<AccountDto[]>({
-        queryKey: ['accounts'],
-        queryFn: accountService.getAllAccounts,
-        staleTime: 5 * 60 * 1000,
-    });
+    const accountsQuery = useAccounts()
 
     const currentMonthTransactionsQuery = useQuery<TransactionDto[]>({
         queryKey: ['transactions', {startDate, endDate}],
@@ -20,7 +15,7 @@ export const useDashboardData = (startDate: string, endDate: string) => {
         enabled: !!startDate && !!endDate,
     });
 
-    //Criar a query do cartao de credito
+    //Todo: Criar a query do cartao de credito
 
     const dashboardData = useMemo(() => {
         const accounts = accountsQuery.data ?? [];
@@ -33,7 +28,7 @@ export const useDashboardData = (startDate: string, endDate: string) => {
             .reduce((sum, t) => sum + t.amount, 0);
 
         /*
-        Adicionar os gastos de cartao de credito como despesas
+        Todo: Adicionar os gastos de cartao de credito como despesas
         */
 
         const monthTotalExpense = currentMonthTransactions
@@ -44,11 +39,13 @@ export const useDashboardData = (startDate: string, endDate: string) => {
 
         return {
             accounts,
-            sumAllAccountBalances,
             currentMonthTransactions,
-            monthTotalIncome,
-            monthTotalExpense,
-            monthBalance,
+            summary: {
+                sumAllAccountBalances,
+                monthTotalIncome,
+                monthTotalExpense,
+                monthBalance,
+            }
         };
         },[accountsQuery.data, currentMonthTransactionsQuery.data]);
 
@@ -61,9 +58,11 @@ export const useDashboardData = (startDate: string, endDate: string) => {
                 accountsQuery.isError ||
                 currentMonthTransactionsQuery.isError,
 
-            refetch: () => {
-              accountsQuery.refetch().then(r => r.data);
-                currentMonthTransactionsQuery.refetch().then(r => r.data);
+            refetch: async () => {
+                await Promise.all([
+                    accountsQuery.refetch(),
+                    currentMonthTransactionsQuery.refetch(),
+                ]);
             },
 
             data: dashboardData

@@ -45,7 +45,7 @@ function DashboardPage() {
                     <div className="col-12 col-md-4">
                         <StatCard
                             title="Saldo Total"
-                            value={data.monthBalance}
+                            value={data.summary.monthBalance}
                             icon={<WalletIcon/>}
                             description="Balanço do mês atual"
                             colorVariant="purple"
@@ -55,7 +55,7 @@ function DashboardPage() {
                     <div className="col-12 col-md-4">
                         <StatCard
                             title="Receitas"
-                            value={data.monthTotalIncome}
+                            value={data.summary.monthTotalIncome}
                             icon={<TrendingUpIcon/>}
                             description="Entradas este mês"
                             colorVariant="green"
@@ -65,7 +65,7 @@ function DashboardPage() {
                     <div className="col-12 col-md-4">
                         <StatCard
                             title="Despesas"
-                            value={data.monthTotalExpense}
+                            value={data.summary.monthTotalExpense}
                             icon={<TrendingDownIcon/>}
                             description="Saídas este mês"
                             colorVariant="red"
