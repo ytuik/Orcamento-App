@@ -1,70 +1,93 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from 'react';
 
-import { transactionService } from "../../../services/transactionService.ts";
-import type {TransactionDto} from "../../../types/transactionDto";
-import {useAccounts} from "../../../hooks/useAccounts.ts";
-import type {TransactionCategory} from "../../../types/transactionDto/transactionCategory.ts";
-import {getCategoryEnum} from "../../../utils/transactionUtils.tsx";
+import { transactionService } from "../../../services/transactionService";
+import { categoryService } from "../../../services/categoryService"; // Importe seu serviço de categorias
+import type { TransactionDto } from "../../../types/transactionDto";
+import { useAccounts } from "../../../hooks/useAccounts";
+
+export interface CategoryExpenseSummary {
+    categoryId: number;
+    name: string;
+    color: string;
+    iconKey: string;
+    amount: number;
+    count: number;
+    percentage: number;
+}
 
 export const useDashboardData = (startDate: string, endDate: string) => {
 
-    const accountsQuery = useAccounts()
+    const accountsQuery = useAccounts();
 
     const currentMonthTransactionsQuery = useQuery<TransactionDto[]>({
-        queryKey: ['transactions', {startDate, endDate}],
+        queryKey: ['transactions', { startDate, endDate }],
         queryFn: () => transactionService.getTransactionsByPeriod(startDate, endDate),
         enabled: !!startDate && !!endDate,
     });
 
-    //Todo: Criar a query do cartao de credito
+    const categoriesQuery = useQuery({
+        queryKey: ['categories'],
+        queryFn: categoryService.getAllCategories,
+        staleTime: 1000 * 60 * 30,
+    });
+
+    // Todo: Criar a query do cartao de credito
 
     const dashboardData = useMemo(() => {
         const accounts = accountsQuery.data ?? [];
-        const currentMonthTransactions = currentMonthTransactionsQuery.data ?? [];
+        const transactions = currentMonthTransactionsQuery.data ?? [];
+        const categoriesList = categoriesQuery.data ?? [];
 
-        const sumAllAccountBalances = accounts.reduce((sum, account) => sum + account.currentBalance, 0);
+        const categoriesLookup = new Map(
+            categoriesList.map(c => [c.id, c])
+        );
 
-        const monthTotalIncome = currentMonthTransactions
-            .filter(t => t.type.toString() === "INCOME")
-            .reduce((sum, t) => sum + t.amount, 0);
+        const sumAllAccountBalances = accounts.reduce((sum, acc) => sum + acc.currentBalance, 0);
 
-        /*
-        Todo: Adicionar os gastos de cartao de credito como despesas
-        */
+        const incomeTransactions = transactions.filter(t => t.type === "INCOME");
+        const expenseTransactions = transactions.filter(t => t.type === "EXPENSE");
 
-        const expensesTransactions = currentMonthTransactions.filter(t => t.type.toString() === "EXPENSE");
-        const monthTotalExpense = currentMonthTransactions
-            .filter(t=>t.type.toString() === "EXPENSE")
-            .reduce((sum, t) => sum + t.amount, 0);
+        const monthTotalIncome = incomeTransactions.reduce((sum, t) => sum + t.amount, 0);
+        const monthTotalExpense = expenseTransactions.reduce((sum, t) => sum + t.amount, 0);
 
         const monthBalance = monthTotalIncome - monthTotalExpense;
 
-        const categoryMap = new Map<TransactionCategory, { amount: number; count: number }>();
+        const groupedExpenses = new Map<number, CategoryExpenseSummary>();
 
-        expensesTransactions.forEach(t => {
-            const category = getCategoryEnum(t.category)
-            const existing = categoryMap.get(category);
-            if (existing) {
-                existing.amount += t.amount;
-                existing.count += 1;
-            } else {
-                categoryMap.set(category, { amount: t.amount, count: 1 });
+        expenseTransactions.forEach(t => {
+            if (!groupedExpenses.has(t.categoryId)) {
+                const catDetails = categoriesLookup.get(t.categoryId);
+
+                groupedExpenses.set(t.categoryId, {
+                    categoryId: t.categoryId,
+                    name: catDetails?.name || 'Categoria Desconhecida',
+                    color: catDetails?.color || 'gray',
+                    iconKey: catDetails?.iconKey || 'OTHER',
+                    amount: 0,
+                    count: 0,
+                    percentage: 0
+                });
             }
+
+            // Soma
+            const current = groupedExpenses.get(t.categoryId)!;
+            current.amount += t.amount;
+            current.count += 1;
         });
 
-        const expensesByCategory = Array.from(categoryMap.entries()).map(([category, data]) => ({
-            category,
-            amount: data.amount,
-            count: data.count,
-            percentage: (data.amount / monthTotalExpense) * 100,
-        }) ).sort((a, b) => b.amount - a.amount);
-
-
+        const expensesByCategory = Array.from(groupedExpenses.values())
+            .map(item => ({
+                ...item,
+                percentage: monthTotalExpense > 0
+                    ? (item.amount / monthTotalExpense) * 100
+                    : 0
+            }))
+            .sort((a, b) => b.amount - a.amount);
 
         return {
             accounts,
-            currentMonthTransactions,
+            currentMonthTransactions: transactions,
             expensesByCategory,
             summary: {
                 sumAllAccountBalances,
@@ -74,21 +97,33 @@ export const useDashboardData = (startDate: string, endDate: string) => {
                 activeCategoriesCount: expensesByCategory.length,
             }
         };
-        },[accountsQuery.data, currentMonthTransactionsQuery.data]);
 
-        return {
-            isLoading:
-                accountsQuery.isLoading ||
-                currentMonthTransactionsQuery.isLoading,
+    }, [
+        accountsQuery.data,
+        currentMonthTransactionsQuery.data,
+        categoriesQuery.data
+    ]);
 
-            isError:
-                accountsQuery.isError ||
-                currentMonthTransactionsQuery.isError,
+    return {
+        // Agora o loading depende das 3 requisições
+        isLoading:
+            accountsQuery.isLoading ||
+            currentMonthTransactionsQuery.isLoading ||
+            categoriesQuery.isLoading,
 
-            refetch: async () => {
+        isError:
+            accountsQuery.isError ||
+            currentMonthTransactionsQuery.isError ||
+            categoriesQuery.isError,
 
-            },
+        refetch: async () => {
+            await Promise.all([
+                accountsQuery.refetch(),
+                currentMonthTransactionsQuery.refetch(),
+                categoriesQuery.refetch()
+            ]);
+        },
 
-            data: dashboardData
+        data: dashboardData
     }
 }

@@ -6,7 +6,7 @@ import { TransactionType } from '../../../../types/transactionDto/transactionTyp
 import { CategoryIcon } from '../../../../components/icons/CategoryIcons';
 import {format} from "date-fns";
 import {ptBR} from "date-fns/locale";
-import {getCategoryConfig} from "../../../../utils/transactionUtils.tsx";
+import {useCategory} from "../../../../hooks/useCategory.ts";
 
 interface TransactionItemProps {
     transaction: TransactionDto;
@@ -18,8 +18,8 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({ transaction })
 
     const formattedDate = format(transactionDate, "dd 'de' MMM", { locale: ptBR })
 
-    const categoryLabel = getCategoryConfig(transaction.category).label
-
+    const {allCategories} = useCategory();
+    const categoryLabel = allCategories.find(c => c.id === transaction.categoryId)?.name || 'Categoria Desconhecida';
     return (
         <div
             className="transaction-item d-flex align-items-center justify-content-between py-3"
@@ -27,7 +27,7 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({ transaction })
         >
             <div className="d-flex align-items-center gap-3">
                 <CategoryIcon
-                    category={transaction.category}
+                    categoryId={transaction.categoryId}
                     size="md"
                 />
 

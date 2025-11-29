@@ -8,7 +8,6 @@ export const useCreateTransaction = (onSuccessCallback?: () => void) => {
     return useMutation({
         mutationFn: (data: TransactionFormData) => transactionService.createTransaction(data),
         onSuccess: () => {
-            // A mágica acontece aqui, longe da UI
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
             queryClient.invalidateQueries({ queryKey: ['accounts'] });
 

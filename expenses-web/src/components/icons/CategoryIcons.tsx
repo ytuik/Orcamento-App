@@ -1,19 +1,27 @@
 import React from "react";
 import clsx from "clsx";
-import {getCategoryConfig} from "../../utils/transactionUtils.tsx";
+import { useCategory } from "../../hooks/useCategory"; // Ajuste o path se necessário
+import { getIconByKey } from "../../utils/iconUtils"; // O utilitário que criamos
 
 interface CategoryIconProps {
-    category: string;
+    categoryId: number;
     className?: string;
     size?: 'sm' | 'md' | 'lg';
 }
 
 export const CategoryIcon: React.FC<CategoryIconProps> = ({
-                                                              category,
+                                                              categoryId,
                                                               className,
                                                               size = 'md'
                                                           }) => {
-    const { icon, color, label } = getCategoryConfig(category);
+
+    const { allCategories } = useCategory();
+
+    const category = allCategories?.find(c => c.id === categoryId);
+
+    const displayColor = category?.color || 'gray';
+    const displayName = category?.name || 'Desconhecido';
+    const displayIconKey = category?.iconKey || 'OTHER';
 
     const sizeClasses = {
         sm: 'category-icon-sm', // 32px
@@ -25,14 +33,16 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
         <div
             className={clsx(
                 "category-icon-wrapper",
-                `category-icon-wrapper--${color}`,
+                `category-icon-wrapper--${displayColor}`, // Usa a cor vinda do objeto
                 sizeClasses[size],
                 className
             )}
-            title={label}
-            aria-label={label}
+            title={displayName}
+            aria-label={displayName}
+            role="img"
         >
-            {icon}
+            {/* Usa o utilitário para transformar a string (ex: "FOOD") em Ícone React */}
+            {getIconByKey(displayIconKey)}
         </div>
     );
 };

@@ -4,4 +4,4 @@ export enum TransactionType {
     EXPENSE = "EXPENSE"
 }
 
-export type TransactionTypeString = 'INCOME' | 'EXPENSE';
+export type TransactionTypeString = `${TransactionType}`;

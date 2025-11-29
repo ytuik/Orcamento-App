@@ -12,7 +12,7 @@ import { useAccounts } from "../../hooks/useAccounts";
 import { useCreateTransaction } from "../../hooks/useCreateTransactions";
 
 import './NewTransactionModal.scss';
-import {getCategoryOptions} from "../../utils/transactionUtils.tsx";
+import {useCategory} from "../../hooks/useCategory.ts";
 
 interface NewTransactionModalProps {
     isOpen: boolean;
@@ -20,8 +20,6 @@ interface NewTransactionModalProps {
 }
 
 export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
-
-    const categoriesLabels = getCategoryOptions();
 
     const {
         register,
@@ -41,6 +39,8 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
     const selectedType = useWatch({ control, name: 'type' });
 
     const { data: accounts } = useAccounts();
+
+    const { expenseCategories, incomeCategories} = useCategory()
 
     const { mutate: createTransaction } = useCreateTransaction(() => {
         reset();
@@ -106,15 +106,23 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
                     <div className="col-6 mb-3">
                         <label>Categoria</label>
                         <select
-                            {...register('category')}
-                            className={clsx("form-control", { "is-invalid": errors.category })}
+                            {...register('categoryId', { valueAsNumber: true })}
+                            className={clsx("form-control", { "is-invalid": errors.categoryId })}
                         >
-                            <option value="">Selecione</option>
-                            {Object.values(categoriesLabels).map(it =>
-                                <option key={it.value} value={it.value}>{it.label}</option>
-                            )}
+
+                            <option value={99}>Selecione</option>
+                            {selectedType === TransactionType.EXPENSE && expenseCategories &&
+                                expenseCategories.map(it =>
+                                    <option key={it.id} value={it.id}>{it.name}</option>
+                                )
+                            }
+                            {selectedType === TransactionType.INCOME && incomeCategories &&
+                                incomeCategories.map(it =>
+                                    <option key={it.id} value={it.id}>{it.name}</option>
+                                )
+                            }
                         </select>
-                        {errors.category && <span className="text-error">{errors.category.message}</span>}
+                        {errors.categoryId && <span className="text-error">{errors.categoryId.message}</span>}
                     </div>
 
                     <div className="col-6 mb-3">

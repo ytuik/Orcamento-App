@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import {TransactionType} from "../../types/transactionDto/transactionType";
-import {TransactionCategory} from "../../types/transactionDto/transactionCategory";
 
 
 export const transactionFormSchema = z.object({
@@ -10,7 +9,7 @@ export const transactionFormSchema = z.object({
         'O Valor deve ser no mínimo R$ 0,01'
     ).nonnegative('O Valor não pode ser negativo'),
     type: z.enum(TransactionType),
-    category: z.enum(TransactionCategory),
+    categoryId: z.number().int().positive(),
     transactionDate: z.string().refine((val) => !isNaN(Date.parse(val)), 'Data inválida'),
     description: z.string()
         .min(3, 'A Descrição deve ter no mínimo 3 caracteres')
