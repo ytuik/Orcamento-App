@@ -52,7 +52,7 @@ class TransactionController (
             amount = request.amount,
             transactionType = request.type,
             transactionDate = LocalDate.parse(request.transactionDate),
-            categoryId = request.category,
+            categoryId = request.categoryId,
             description = request.description,
             comment = request.comment
         )

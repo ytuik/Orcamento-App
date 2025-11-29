@@ -9,7 +9,7 @@ data class TransactionDto(
     val amount: Double,
     val type: TransactionType,
     val transactionDate: String,
-    val category: Long,
+    val categoryId: Long,
     val description: String,
     val comment: String?
 ) {
@@ -21,7 +21,7 @@ data class TransactionDto(
                 amount = transaction.transactionAmount,
                 type = TransactionType.fromId(transaction.transactionType),
                 transactionDate = transaction.transactionDate.toString(),
-                category = transaction.category.id,
+                categoryId = transaction.category.id,
                 description = transaction.description,
                 comment = transaction.comment
             )

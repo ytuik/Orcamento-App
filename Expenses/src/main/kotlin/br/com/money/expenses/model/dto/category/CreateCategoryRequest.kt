@@ -12,8 +12,6 @@ data class CreateCategoryRequest (
     val color: String,
     @get:JsonProperty("type")
     val type: TransactionType,
-    @get:JsonProperty("isSystem")
-    val isSystem: Boolean,
     @get:JsonProperty("isActive")
     val budgetLimit: Double?
 ) {

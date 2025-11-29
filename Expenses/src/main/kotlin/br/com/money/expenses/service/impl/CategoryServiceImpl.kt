@@ -27,7 +27,7 @@ class CategoryServiceImpl(
                 iconKey = category.iconKey,
                 color = category.color,
                 type = category.type.id,
-                isSystem = category.isSystem,
+                isSystem = false,
                 isActive = true,
                 budgetLimit = category.budgetLimit
             )

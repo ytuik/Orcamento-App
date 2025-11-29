@@ -13,7 +13,7 @@ data class CreateTransactionRequestDto (
     val type: TransactionType,
     @get:JsonProperty("transactionDate")
     val transactionDate: LocalDate,
-    @get:JsonProperty("category")
+    @get:JsonProperty("categoryId")
     val categoryId: Long,
     @get:JsonProperty("description")
     val description: String,
