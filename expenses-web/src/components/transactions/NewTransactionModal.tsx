@@ -12,7 +12,7 @@ import { useAccounts } from "../../hooks/useAccounts";
 import { useCreateTransaction } from "../../hooks/useCreateTransactions";
 
 import './NewTransactionModal.scss';
-import {useCategory} from "../../hooks/useCategory.ts";
+import {useCategoryData} from "../../hooks/useCategoryData.ts";
 
 interface NewTransactionModalProps {
     isOpen: boolean;
@@ -40,7 +40,7 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
 
     const { data: accounts } = useAccounts();
 
-    const { expenseCategories, incomeCategories} = useCategory()
+    const { expenseCategories, incomeCategories} = useCategoryData()
 
     const { mutate: createTransaction } = useCreateTransaction(() => {
         reset();

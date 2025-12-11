@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { useCategory } from "../../hooks/useCategory"; // Ajuste o path se necessário
+import { useCategoryData } from "../../hooks/useCategoryData.ts"; // Ajuste o path se necessário
 import { getIconByKey } from "../../utils/iconUtils"; // O utilitário que criamos
 
 interface CategoryIconProps {
@@ -15,7 +15,7 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
                                                               size = 'md'
                                                           }) => {
 
-    const { allCategories } = useCategory();
+    const { allCategories } = useCategoryData();
 
     const category = allCategories?.find(c => c.id === categoryId);
 

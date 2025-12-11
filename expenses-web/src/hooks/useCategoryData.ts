@@ -2,7 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import type {CategoryDto} from "../types/categoryDto";
 import {categoryService} from "../services/categoryService.ts";
 
-export const useCategory = () => {
+export const useCategoryData = () => {
     const queryClient = useQueryClient();
     const query = useQuery<CategoryDto[]>({
         queryKey : ['categories'],
