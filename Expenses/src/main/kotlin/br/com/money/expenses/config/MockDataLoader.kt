@@ -19,8 +19,13 @@
 //) : CommandLineRunner {
 //    override fun run(vararg args: String?) {
 //        // Create mock accounts
-//        val account1 = accountRepository.save(Account(name = "Checking", initialBalance = 1000.0))
-//        val account2 = accountRepository.save(Account(name = "Savings", initialBalance = 5000.0))
+//
+//        val accounts = listOf(
+//            Account(name = "Checking", initialBalance = 1000.0),
+//            Account(name = "Savings", initialBalance = 5000.0)
+//        )
+//
+//        accountRepository.saveAll(accounts)
 //
 //        val categories = listOf(
 //            Category(
@@ -124,54 +129,37 @@
 //            )
 //        )
 //
-//        categoryRepository.saveAll(categories)
+//       categoryRepository.saveAll(categories)
 //
 //        // Create mock transactions for account1
-//        transactionRepository.save(
-//            Transaction(
-//                account = account1,
-//                transactionAmount = 100.0,
-//                transactionType = TransactionType.EXPENSE.id,
-//                transactionDate = LocalDate.now().minusDays(2),
-//                category = categories[0],
-//                description = "Groceries",
-//                comment = "Weekly shopping"
-//            )
-//        )
-//        transactionRepository.save(
-//            Transaction(
-//                account = account1,
-//                transactionAmount = 200.0,
-//                transactionType = TransactionType.INCOME.id,
-//                transactionDate = LocalDate.now().minusDays(1),
-//                category = categories[7],
-//                description = "Salary",
-//                comment = null
-//            )
+//
+//        val today = LocalDate.now()
+//        val transactions = listOf(
+//            // Checking account, various categories and types
+//            Transaction(account = accounts[0], transactionAmount = 120.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(1), category = categories[0], description = "Supermarket groceries", comment = "Weekly food"),
+//            Transaction(account = accounts[0], transactionAmount = 50.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(2), category = categories[1], description = "Bus ticket", comment = "Commute"),
+//            Transaction(account = accounts[0], transactionAmount = 300.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(3), category = categories[2], description = "Online shopping", comment = "Electronics"),
+//            Transaction(account = accounts[0], transactionAmount = 80.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(4), category = categories[3], description = "Electricity bill", comment = "Utilities"),
+//            Transaction(account = accounts[0], transactionAmount = 40.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(5), category = categories[4], description = "Movie night", comment = "Cinema"),
+//            Transaction(account = accounts[0], transactionAmount = 2500.0, transactionType = TransactionType.INCOME.id, transactionDate = today.minusDays(6), category = categories[5], description = "Monthly salary", comment = "Salary payment"),
+//            Transaction(account = accounts[0], transactionAmount = 500.0, transactionType = TransactionType.INCOME.id, transactionDate = today.minusDays(7), category = categories[6], description = "Investment return", comment = "Stocks"),
+//            Transaction(account = accounts[0], transactionAmount = 60.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(8), category = categories[7], description = "Pharmacy", comment = "Medicine"),
+//            Transaction(account = accounts[0], transactionAmount = 200.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(9), category = categories[8], description = "Course fee", comment = "Education"),
+//            Transaction(account = accounts[0], transactionAmount = 30.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(10), category = categories[9], description = "Miscellaneous", comment = "General expense"),
+//
+//            // Savings account, mix of income and expenses
+//            Transaction(account = accounts[1], transactionAmount = 1000.0, transactionType = TransactionType.INCOME.id, transactionDate = today.minusDays(1), category = categories[6], description = "Investment income", comment = "Dividends"),
+//            Transaction(account = accounts[1], transactionAmount = 150.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(2), category = categories[0], description = "Restaurant", comment = "Dinner"),
+//            Transaction(account = accounts[1], transactionAmount = 60.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(3), category = categories[1], description = "Taxi", comment = "Airport"),
+//            Transaction(account = accounts[1], transactionAmount = 400.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(4), category = categories[2], description = "Clothes shopping", comment = "Summer sale"),
+//            Transaction(account = accounts[1], transactionAmount = 90.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(5), category = categories[3], description = "Water bill", comment = "Utilities"),
+//            Transaction(account = accounts[1], transactionAmount = 35.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(6), category = categories[4], description = "Concert", comment = "Music event"),
+//            Transaction(account = accounts[1], transactionAmount = 2200.0, transactionType = TransactionType.INCOME.id, transactionDate = today.minusDays(7), category = categories[5], description = "Bonus", comment = "Yearly bonus"),
+//            Transaction(account = accounts[1], transactionAmount = 70.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(8), category = categories[7], description = "Doctor visit", comment = "Health"),
+//            Transaction(account = accounts[1], transactionAmount = 180.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(9), category = categories[8], description = "Book purchase", comment = "Education"),
+//            Transaction(account = accounts[1], transactionAmount = 25.0, transactionType = TransactionType.EXPENSE.id, transactionDate = today.minusDays(10), category = categories[9], description = "Stationery", comment = "General expense")
 //        )
 //
-//        // Create mock transactions for account2
-//        transactionRepository.save(
-//            Transaction(
-//                account = account2,
-//                transactionAmount = 50.0,
-//                transactionType = TransactionType.EXPENSE.id,
-//                transactionDate = LocalDate.now(),
-//                category = categories[4],
-//                description = "Movie",
-//                comment = "Cinema"
-//            )
-//        )
-//        transactionRepository.save(
-//            Transaction(
-//                account = account2,
-//                transactionAmount = 300.0,
-//                transactionType = TransactionType.INCOME.id,
-//                transactionDate = LocalDate.now().minusDays(3),
-//                category = categories[2],
-//                description = "Gift",
-//                comment = "Birthday present"
-//            )
-//        )
+//        transactionRepository.saveAll(transactions)
 //    }
 //}

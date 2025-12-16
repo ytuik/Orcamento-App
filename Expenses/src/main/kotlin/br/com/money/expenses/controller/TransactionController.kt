@@ -32,7 +32,7 @@ class TransactionController (
             throw IllegalArgumentException("Invalid transaction ID: $id")
         }
 
-        return transactionService.getTransactionById(id)
+        return transactionService.getTransactionById(id.toLong())
     }
 
     @PatchMapping("/{id}/update")
@@ -47,7 +47,7 @@ class TransactionController (
         }
 
         return transactionService.updateTransaction(
-            id = id,
+            id = id.toLong(),
             accountId = request.accountId,
             amount = request.amount,
             transactionType = request.type,
@@ -67,35 +67,29 @@ class TransactionController (
             throw IllegalArgumentException("Invalid transaction ID: $id")
         }
 
-        transactionService.deleteTransaction(id)
+        transactionService.deleteTransaction(id.toLong())
     }
 
-    @GetMapping
-    fun getTransactions(
+    @GetMapping("/search")
+    fun searchTransactions(
         @RequestParam(required = false) accountId: Long?,
         @RequestParam(required = false) categoryId: Long?,
-        @RequestParam(required = false) typeId: Int?
+        @RequestParam(required = false) type: String?,
+        @RequestParam(required = false) startDate: LocalDate?,
+        @RequestParam(required = false) endDate: LocalDate?,
+        @RequestParam(name = "searchTerms",required = false) search: String?
     ) : List<TransactionDto> {
-
-        val type = typeId?.let { TransactionType.fromId(it) }
+        val transactionType = type?.let {
+            try { TransactionType.valueOf(it.uppercase()) } catch (e: Exception) { null }
+        }
 
         return transactionService.findTransactionsFiltered(
             accountId = accountId,
-            category = categoryId,
-            type = type
-        )
-
-    }
-
-    @GetMapping("/period")
-    fun getTransactionsByPeriod(
-        @RequestParam(required = true) startDate: LocalDate,
-        @RequestParam(required = true) endDate: LocalDate
-    ) : List<TransactionDto> {
-
-        return transactionService.findTransactionsByPeriod(
+            categoryId = categoryId,
+            type = transactionType,
             startDate = startDate,
-            endDate = endDate
+            endDate = endDate,
+            description = search
         )
     }
 }

@@ -50,7 +50,7 @@ class TransactionServiceImpl(
     }
 
     override fun updateTransaction(
-        id: Int,
+        id: Long,
         accountId: Long,
         amount: Double,
         transactionType: TransactionType,
@@ -59,7 +59,7 @@ class TransactionServiceImpl(
         categoryId: Long,
         comment: String?
     ): TransactionDto {
-        val existingTransaction = transactionRepository.findById(id.toInt()).orElseThrow {
+        val existingTransaction = transactionRepository.findById(id).orElseThrow {
             TransactionNotFoundException(id)
         }
 
@@ -91,14 +91,14 @@ class TransactionServiceImpl(
         return TransactionDto.fromModel(updatedTransaction)
     }
 
-    override fun deleteTransaction(id: Int) {
+    override fun deleteTransaction(id: Long) {
         val existingTransaction = transactionRepository.findById(id).orElseThrow {
             IllegalArgumentException("Transaction with id $id not found")
         }
         transactionRepository.delete(existingTransaction)
     }
 
-    override fun getTransactionById(id: Int): TransactionDto {
+    override fun getTransactionById(id: Long): TransactionDto {
         val transaction = transactionRepository.findById(id).orElseThrow {
             IllegalArgumentException("Transaction with id $id not found")
         }
@@ -108,26 +108,23 @@ class TransactionServiceImpl(
 
     override fun findTransactionsFiltered(
         accountId: Long?,
-        category: Long?,
-        type: TransactionType?
+        categoryId: Long?,
+        type: TransactionType?,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        description: String?
     ): List<TransactionDto> {
         val transactions = transactionRepository.findTransactionsFiltered(
             accountId,
-            category,
-            type?.id
+            categoryId,
+            type?.id,
+            startDate,
+            endDate,
+            description?.lowercase()
         )
 
         return transactions.map {
             TransactionDto.fromModel(it)
         }
     }
-
-    override fun findTransactionsByPeriod(startDate: LocalDate, endDate: LocalDate): List<TransactionDto> {
-        val transactions = transactionRepository.findByTransactionDateBetween(startDate, endDate)
-
-        return transactions.map {
-            TransactionDto.fromModel(it)
-        }
-    }
-
 }

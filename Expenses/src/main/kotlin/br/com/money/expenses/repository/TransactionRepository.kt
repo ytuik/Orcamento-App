@@ -8,22 +8,28 @@ import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
 @Repository
-interface TransactionRepository : JpaRepository <Transaction, Int> {
+interface TransactionRepository : JpaRepository <Transaction, Long> {
     fun findByAccountId(accountId: Long): List<Transaction>
     fun findByCategoryId(categoryId: Long): List<Transaction>
-    fun findByTransactionType(transactionType: Int): List<Transaction>
+    fun findByTransactionType(transactionType: Long): List<Transaction>
 
-    @Query("""
-        SELECT t FROM Transaction t
-        WHERE 
-            (:accountId IS NULL OR t.account.id = :accountId)
-            AND (:categoryId IS NULL OR t.category.id = :categoryId)
-            AND (:typeId IS NULL OR t.transactionType = :typeId)
-    """)
+    @Query(value = """
+    SELECT * FROM transaction t
+    WHERE 
+        (COALESCE(:accountId, t.account_id) = t.account_id)
+        AND (COALESCE(:categoryId, t.category_id) = t.category_id)
+        AND (COALESCE(:typeId, t.transaction_type) = t.transaction_type)
+        AND (COALESCE(:startDate, t.transaction_date) <= t.transaction_date)
+        AND (COALESCE(:endDate, t.transaction_date) >= t.transaction_date)
+        AND (:description IS NULL OR t.description ILIKE '%' || :description || '%')
+""", nativeQuery = true)
     fun findTransactionsFiltered(
         accountId: Long?,
         categoryId: Long?,
-        typeId: Int?
+        typeId: Int?,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        description: String?
     ): List<Transaction>
 
     @Query("""
@@ -44,6 +50,4 @@ interface TransactionRepository : JpaRepository <Transaction, Int> {
         GROUP BY t.account.id
     """)
     fun getSumsByAccountId(): List<Tuple>
-
-    fun findByTransactionDateBetween(startDate: LocalDate, endDate: LocalDate): List<Transaction>
 }

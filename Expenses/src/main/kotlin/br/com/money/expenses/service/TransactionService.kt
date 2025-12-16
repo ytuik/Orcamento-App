@@ -11,7 +11,7 @@ interface TransactionService {
     ): TransactionDto
 
     fun updateTransaction(
-        id: Int,
+        id: Long,
         accountId: Long,
         amount: Double,
         transactionType: TransactionType,
@@ -21,19 +21,17 @@ interface TransactionService {
         comment: String?
     ): TransactionDto
 
-    fun deleteTransaction(id: Int)
+    fun deleteTransaction(id: Long)
 
-    fun getTransactionById(id: Int): TransactionDto
+    fun getTransactionById(id: Long): TransactionDto
 
     fun findTransactionsFiltered(
         accountId: Long?,
-        category: Long?,
+        categoryId: Long?,
         type: TransactionType?,
-    ) : List<TransactionDto>
-
-    fun findTransactionsByPeriod(
-        startDate: LocalDate,
-        endDate: LocalDate
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        description: String?
     ) : List<TransactionDto>
 
 }

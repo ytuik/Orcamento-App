@@ -24,10 +24,11 @@ data class Transaction(
     @Column(name = "transaction_date", nullable = false)
     val transactionDate: LocalDate,
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = true)
     val category: Category,
 
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     val description: String,
     val comment: String?,
     val createdAt: Instant = Instant.now(),
