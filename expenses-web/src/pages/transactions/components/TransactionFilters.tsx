@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, {useMemo} from "react";
 import type {DateFilterType, FilterState, TransactionTypeFilter} from "../../../hooks/useTransactionData.ts";
 import type {CategoryDto} from "../../../types/categoryDto";
-import {Calendar, Search, X} from "lucide-react";
+import {Calendar, Filter, Search, X} from "lucide-react";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../../components/ui/Select/Select.tsx";
+import {format} from "date-fns";
 
 interface TransactionFiltersProps {
     filters : FilterState;
@@ -20,6 +21,29 @@ export const TransactionFilters = ({
     categories,
 }: TransactionFiltersProps) => {
 
+    const parseDateInput = (value: string, type: 'month' | 'date'): Date | null => {
+        if (!value) return null;
+
+        try {
+            if (type === 'month') {
+                // Append "-01" for month inputs: "2024-12" -> "2024-12-01"
+                return new Date(value + '-01');
+            }
+            return new Date(value);
+        } catch {
+            return null;
+        }
+    };
+
+    const activeFilterCount = useMemo(() => {
+        let count = 0;
+        if (filters.type !== 'ALL') count++;
+        if (filters.category) count++;
+        if (filters.dateFilterType !== 'ALL') count++;
+        if (filters.searchTerms.trim()) count++;
+        return count;
+    }, [filters]);
+
     return (
         <div className={"filters-container"}>
             <div className={"search-bar"}>
@@ -33,6 +57,12 @@ export const TransactionFilters = ({
             </div>
 
             <div className={"filters-row"}>
+                {activeFilterCount > 0 && (
+                    <div className="active-filters-badge">
+                        <Filter size={14} />
+                        <span>{activeFilterCount} filtro{activeFilterCount !== 1 ? 's' : ''} ativo{activeFilterCount !== 1 ? 's' : ''}</span>
+                    </div>
+                )}
                 <div className={"filter-item"}>
                     <Select
                         value={filters.type}
@@ -50,7 +80,7 @@ export const TransactionFilters = ({
                 </div>
                 <div className={"filter-item"}>
                     <Select
-                        value={filters.category?.toString() || "ALL"}
+                        value={filters.category?.name?.toString() || "ALL"}
                         onValueChange={(value) => {
                             const cat = value === "ALL" ? null : categories.find(c => c.id.toString() === value) || null;
                             setFilters(prev => ({...prev, category: cat}));
@@ -91,8 +121,19 @@ export const TransactionFilters = ({
                             <input
                                 type={filters.dateFilterType === 'MONTH' ? "month" : "date"}
                                 className="date-input"
-                                value={filters.initialDate ? filters.initialDate.toISOString().split('T')[0].slice(0, filters.dateFilterType === 'MONTH' ? 7 : 10) : ''}
-                                onChange={(e) => setFilters(prev => ({...prev, initialDate: new Date(e.target.value)}))}
+                                value={filters.initialDate ? format(
+                                    filters.initialDate,
+                                    filters.dateFilterType === 'MONTH' ? 'yyyy-MM' : 'yyyy-MM-dd'
+                                ) : ''}
+                                onChange={(e) => {
+                                    const date = parseDateInput(
+                                        e.target.value,
+                                        filters.dateFilterType === 'MONTH' ? 'month' : 'date'
+                                    );
+                                    if (date) {
+                                        setFilters(prev => ({...prev, initialDate: date}));
+                                    }
+                                }}
                             />
 
                             {filters.dateFilterType === 'RANGE' && (
@@ -101,7 +142,7 @@ export const TransactionFilters = ({
                                     <input
                                         type="date"
                                         className="date-input"
-                                        value={filters.endDate ? filters.endDate.toISOString().split('T')[0] : ''}
+                                        value={filters.endDate ? format(filters.endDate, 'yyyy-MM-dd') : ''}
                                         onChange={(e) => setFilters(prev => ({
                                             ...prev,
                                             endDate: new Date(e.target.value)

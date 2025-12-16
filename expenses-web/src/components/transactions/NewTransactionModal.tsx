@@ -9,7 +9,7 @@ import { transactionFormSchema } from "../../lib/validators/transactionSchema";
 import { TransactionType } from "../../types/transactionDto/transactionType";
 import { Modal } from "../ui/Modal/Modal";
 import { useAccounts } from "../../hooks/useAccounts";
-import { useCreateTransaction } from "../../hooks/useCreateTransactions";
+import { useTransactionMutations } from "../../hooks/useTransactionMutations";
 
 import './NewTransactionModal.scss';
 import {useCategoryData} from "../../hooks/useCategoryData.ts";
@@ -42,10 +42,7 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
 
     const { expenseCategories, incomeCategories} = useCategoryData()
 
-    const { mutate: createTransaction } = useCreateTransaction(() => {
-        reset();
-        onClose();
-    });
+    const { mutate: createTransaction } = useTransactionMutations().create;
 
     useEffect(() => {
         if (!isOpen) {
