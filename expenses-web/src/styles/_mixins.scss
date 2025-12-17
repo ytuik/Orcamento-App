@@ -40,3 +40,30 @@
     @content;
   }
 }
+
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin filter-box-base {
+  background-color: $zinc-900;
+  border: 1px solid $zinc-800;
+  border-radius: $radius-lg;
+  height: 3rem;
+  padding: 0 1rem;
+
+  color: $zinc-500;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $zinc-700;
+    background-color: lighten($zinc-900, 2%);
+  }
+}

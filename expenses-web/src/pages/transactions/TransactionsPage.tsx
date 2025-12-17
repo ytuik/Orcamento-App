@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
-import { format, isThisWeek, isToday, isYesterday } from "date-fns";
+import { format, isThisWeek, isToday, isYesterday, parseISO } from "date-fns"; // Importe parseISO
 import { ptBR } from "date-fns/locale";
 
 import { useTransactionData } from "../../hooks/useTransactionData";
@@ -9,6 +9,13 @@ import { TransactionFilters } from "./components/TransactionFilters";
 import { TransactionItem } from "./components/TransactionItem";
 
 import './TransactionsPage.scss';
+import type {TransactionDto} from "../../types/transactionDto";
+import {useAccounts} from "../../hooks/useAccounts.ts";
+
+type TransactionGroup = {
+    title: string;
+    items: TransactionDto[];
+}
 
 export const TransactionsPage = () => {
     const {
@@ -27,6 +34,7 @@ export const TransactionsPage = () => {
     } = useTransactionData();
 
     const { allCategories } = useCategoryData();
+    const {allAccounts} = useAccounts()
 
     const { ref, inView } = useInView({
         threshold: 0.1,
@@ -39,67 +47,63 @@ export const TransactionsPage = () => {
         }
     }, [inView, hasNextPage, isLoading, fetchNextPage]);
 
-    const groupedTransactions = useMemo(() => {
-        const groups: Record<string, typeof transactions> = {};
+    const accountsMap = useMemo(() => {
+        const map = new Map();
+        allAccounts.forEach(acc => map.set(acc.id, acc));
+        return map;
 
-        // Sort by date descending
+    }, [allAccounts])
+
+    const categoryMap = useMemo(() => {
+        const map = new Map();
+        allCategories.forEach(cat => map.set(cat.id, cat));
+        return map;
+    }, [allCategories]);
+
+    const groupedTransactions = useMemo(() => {
         const sortedTransactions = [...transactions].sort((a, b) =>
-            new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime()
+            parseISO(b.transactionDate).getTime() - parseISO(a.transactionDate).getTime()
         );
 
+        const groups: TransactionGroup[] = [];
+
         sortedTransactions.forEach(t => {
-            const date = new Date(t.transactionDate);
-            let groupKey: string;
+            const date = parseISO(t.transactionDate); // Correção Crítica de Fuso
+            let header = "";
 
             if (isToday(date)) {
-                groupKey = 'today';
+                header = 'Hoje';
             } else if (isYesterday(date)) {
-                groupKey = 'yesterday';
+                header = 'Ontem';
             } else if (isThisWeek(date)) {
-                groupKey = `week-${format(date, 'w-yyyy')}`;
+                header = 'Esta Semana';
             } else {
-                groupKey = format(date, 'MM-yyyy');
+                header = format(date, "MMMM yyyy", { locale: ptBR });
             }
 
-            if (!groups[groupKey]) {
-                groups[groupKey] = [];
+            const lastGroup = groups[groups.length - 1];
+
+            if (lastGroup && lastGroup.title === header) {
+                lastGroup.items.push(t);
+            } else {
+                groups.push({ title: header, items: [t] });
             }
-            groups[groupKey].push(t);
         });
 
-        const displayGroups: Record<string, typeof transactions> = {};
-
-        Object.entries(groups).forEach(([key, items]) => {
-            const sampleDate = new Date(items[0].transactionDate);
-            let displayHeader: string;
-
-            if (key === 'today') {
-                displayHeader = 'Hoje';
-            } else if (key === 'yesterday') {
-                displayHeader = 'Ontem';
-            } else if (key.startsWith('week-')) {
-                displayHeader = 'Esta Semana';
-            } else {
-                displayHeader = format(sampleDate, "MMMM yyyy", { locale: ptBR });
-            }
-
-            displayGroups[displayHeader] = items;
-        });
-
-        return displayGroups;
+        return groups;
     }, [transactions]);
 
     if (isError) {
         return (
             <div className="transaction-page container">
-                <div className="error-state">
-                    <h2>Erro ao carregar transações</h2>
-                    <p>{error?.message || "Ocorreu um erro inesperado"}</p>
-                    <div className="error-actions">
-                        <button onClick={() => refetch()} className="button primary">
+                <div className="flex flex-col items-center justify-center py-10 gap-4">
+                    <h2 className="text-xl font-semibold text-zinc-100">Erro ao carregar transações</h2>
+                    <p className="text-zinc-400">{error?.message || "Ocorreu um erro inesperado"}</p>
+                    <div className="flex gap-2">
+                        <button onClick={() => refetch()} className="px-4 py-2 bg-violet-600 rounded text-white hover:bg-violet-700 transition">
                             Tentar novamente
                         </button>
-                        <button onClick={clearFilters} className="button secondary">
+                        <button onClick={clearFilters} className="px-4 py-2 bg-zinc-800 rounded text-zinc-300 hover:bg-zinc-700 transition">
                             Limpar filtros
                         </button>
                     </div>
@@ -125,22 +129,27 @@ export const TransactionsPage = () => {
             />
 
             <div className="list-container">
-                {Object.entries(groupedTransactions).map(([header, items]) => (
-                    <div key={header} className="group-section">
-                        <h3 className="group-header capitalize">{header}</h3>
+                {groupedTransactions.map((group) => (
+                    <div key={group.title} className="group-section">
+                        <h3 className="group-header capitalize">{group.title}</h3>
                         <div className="group-items">
-                            {items.map(t => (
-                                <TransactionItem key={t.id} data={t}/>
+                            {group.items.map(t => (
+                                <TransactionItem
+                                    key={t.id}
+                                    data={t}
+                                    category={categoryMap.get(t.categoryId) || null}
+                                    account={accountsMap.get(t.accountId) || null}
+                                />
                             ))}
                         </div>
                     </div>
                 ))}
 
-                <div ref={ref}
-                     className="loading-sentinel"
-                     role="status"
-                     aria-live="polite"
-                     aria-label="Carregando transações"
+                <div
+                    ref={ref}
+                    className="loading-sentinel"
+                    role="status"
+                    aria-live="polite"
                 >
                     {isLoading && (
                         <div className="flex justify-center py-4">

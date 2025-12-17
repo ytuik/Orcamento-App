@@ -1,5 +1,6 @@
 @use "../../styles/variables" as *;
 @use "../../styles/components" as *;
+@use "../../styles/mixins" as *;
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
@@ -10,8 +11,19 @@ $bg-input: $zinc-800;
 $border-color: $zinc-700;
 $text-primary: $zinc-100;
 $text-secondary: $zinc-400;
-$color-income: $emerald-400; // Mais vibrante como na imagem
+$color-income: $emerald-400;
 $color-expense: $red-401;
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 .transaction-page {
   padding: 1.5rem;
@@ -42,7 +54,6 @@ $color-expense: $red-401;
   }
 }
 
-// 🔍 Filtros - Estilo igual ao primeiro print
 .filters-container {
   display: flex;
   flex-direction: column;
@@ -58,7 +69,7 @@ $color-expense: $red-401;
   .search-bar {
     position: relative;
     flex: 1;
-    max-width: 400px;
+    max-width: 25rem;
 
     .search-icon {
       position: absolute;
@@ -89,7 +100,7 @@ $color-expense: $red-401;
       &:focus {
         border-color: $violet-600;
         background-color: $zinc-900;
-        box-shadow: 0 0 0 3px rgba($violet-600, 0.1);
+        box-shadow: 0 0 0 0.25rem rgba($violet-600, 0.1);
       }
     }
   }
@@ -100,74 +111,112 @@ $color-expense: $red-401;
     flex-wrap: wrap;
     align-items: center;
 
+    .filter-item {
+      .ui-select {
+        width: 11rem !important;
+        min-width: 11rem !important;
+      }
 
-    // 📅 Filtro de Data
+        .ui-select__trigger {
+          @include filter-box-base;
+          width: 100%;
+          justify-content: space-between;
+
+          .ui-select__value {
+            display: block;
+            max-width: 7.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+            margin-right: 0.5rem;
+            color: inherit;
+
+            svg {
+              color: inherit;
+              flex-shrink: 0;
+            }
+          }
+        }
+
+    }
+
     .date-filter-group {
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      position: relative;
 
-      .ui-select__trigger {
-        background-color: $zinc-900;
-        border: 1px solid $zinc-800;
-        color: $zinc-500;
+      .ui-select .ui-select__trigger {
+        @include filter-box-base;
+        width: 11rem !important;
+        min-width: 11rem !important;
+        justify-content: space-between;
+      }
+      .date-inputs-floating {
+        position: absolute;
+        top: 100%;
+        left: -50%;
+        margin-top: 0.5rem;
+        z-index: 50;
+
+        animation: slideDownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        transform-origin: top center;
+
         border-radius: $radius-lg;
-        height: 3rem;
-        min-width: 11rem;
-        padding: 0 1rem;
-        font-size: 0.9rem;
-        font-weight: 500;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
 
-        .ui-select__value {
-          display: flex;
-          align-items: center;
+        .date-inputs {
+          @include filter-box-base;
           gap: 0.5rem;
+          padding: 0 0.75rem;
+          background-color: $zinc-900;
+          border-color: $zinc-700;
 
-          svg {
-            color: $zinc-500;
-          }
-        }
-      }
-
-      .date-inputs {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        background-color: $zinc-900;
-        border: 1px solid $zinc-800;
-        border-radius: $radius-lg;
-        padding: 0 1rem;
-        height: 3rem;
-
-        .date-input {
-          background: transparent;
-          border: none;
-          color: $zinc-100;
-          font-family: inherit;
-          font-size: 0.9rem;
-          outline: none;
-          width: 9rem;
-
-          &::-webkit-calendar-picker-indicator {
-            filter: invert(0.7);
-            opacity: 0.7;
+          button {
+            all: unset;
+            height: 100%;
+            display: flex;
+            align-items: center;
             cursor: pointer;
+            color: inherit;
+
+            &:hover {
+              opacity: 0.8;
+            }
           }
 
-          &::-webkit-datetime-edit-fields-wrapper {
+          .date-input {
+            background: transparent;
+            border: none;
             color: $zinc-100;
-          }
-        }
 
-        .text-muted {
-          color: $zinc-500;
-          font-size: 0.85rem;
-          font-weight: 400;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            outline: none;
+
+            width: auto;
+            min-width: 8rem;
+
+            &::-webkit-calendar-picker-indicator {
+              filter: invert(0.5);
+              opacity: 0.7;
+              cursor: pointer;
+            }
+          }
+
+          .text-muted {
+            color: inherit;
+            font-size: 0.85rem;
+            font-weight: 400;
+            padding: 0 0.25rem;
+          }
         }
       }
+
     }
 
-    // ❌ Botão Limpar
     .clear-btn {
       background-color: $zinc-900;
       border: 1px solid $zinc-800;
@@ -227,7 +276,6 @@ $color-expense: $red-401;
   }
 }
 
-// 💳 Item de Transação - Estilo igual ao print
 .transaction-item {
   display: flex;
   align-items: center;
@@ -243,10 +291,19 @@ $color-expense: $red-401;
     border-color: $zinc-700;
     background-color: lighten($zinc-900, 2%);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+
+    &.variant-purple {
+      border-left-color : $violet-600;
+      border-left-width : 4px;
+    }
+
+    &.variant-amber {
+      border-left-color : $amber-400;
+      border-left-width : 4px;
+    }
   }
 
-  // Ícone com estilo do print
   .icon-wrapper {
     width: 3rem;
     height: 3rem;
@@ -258,7 +315,6 @@ $color-expense: $red-401;
     margin-right: 1rem;
     flex-shrink: 0;
 
-    // Cores baseadas na categoria
     &.variant-red {
       background: linear-gradient(135deg, rgba($red-401, 0.15), rgba($red-401, 0.05));
       color: $red-401;
@@ -290,13 +346,12 @@ $color-expense: $red-401;
     }
   }
 
-  // Informações da transação
   .info-wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    min-width: 0; // Para text-overflow funcionar
+    min-width: 0;
 
     .title {
       font-weight: 600;
@@ -312,9 +367,15 @@ $color-expense: $red-401;
       font-weight: 400;
       line-height: 1.2;
     }
+
+    .account {
+        font-size: 0.8125rem;
+        color: $zinc-400;
+        font-weight: 500;
+        line-height: 1.2;
+    }
   }
 
-  // Valor e data alinhados à direita
   .amount-wrapper {
     display: flex;
     flex-direction: column;
@@ -354,7 +415,6 @@ $color-expense: $red-401;
   }
 }
 
-// 📱 Responsividade
 @include media-breakpoint-down(md) {
   .transaction-page {
     padding: 1rem;
@@ -376,10 +436,6 @@ $color-expense: $red-401;
       .filter-item,
       .date-filter-group {
         width: 100%;
-
-        .ui-select__trigger {
-          width: 100%;
-        }
 
         .date-inputs {
           width: 100%;
@@ -444,11 +500,4 @@ $color-expense: $red-401;
       opacity: 0.5;
     }
   }
-}
-
-// Utilitário para truncar texto
-@mixin text-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

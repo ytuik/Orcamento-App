@@ -1,93 +1,116 @@
-import React, {useMemo} from "react";
-import type {DateFilterType, FilterState, TransactionTypeFilter} from "../../../hooks/useTransactionData.ts";
-import type {CategoryDto} from "../../../types/categoryDto";
-import {Calendar, Filter, Search, X} from "lucide-react";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../../components/ui/Select/Select.tsx";
-import {format} from "date-fns";
+import { useMemo } from "react";
+import { format, parseISO, setMonth, setYear, getMonth, getYear } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Calendar, Search, X } from "lucide-react";
+
+import type { DateFilterType, FilterState, TransactionTypeFilter } from "../../../hooks/useTransactionData.ts";
+import type { CategoryDto } from "../../../types/categoryDto";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/Select/Select.tsx";
 
 interface TransactionFiltersProps {
-    filters : FilterState;
-    setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
+    filters: FilterState;
+    setFilters: (update: Partial<FilterState> | ((prev: FilterState) => FilterState)) => void;
     setDateFilter: (type: DateFilterType) => void;
     clearFilters: () => void;
     categories: CategoryDto[];
 }
 
 export const TransactionFilters = ({
-    filters,
-    setFilters,
-    setDateFilter,
-    clearFilters,
-    categories,
-}: TransactionFiltersProps) => {
+                                       filters,
+                                       setFilters,
+                                       setDateFilter,
+                                       clearFilters,
+                                       categories,
+                                   }: TransactionFiltersProps) => {
 
-    const parseDateInput = (value: string, type: 'month' | 'date'): Date | null => {
-        if (!value) return null;
-
+    const getInputValue = (date: Date | null, type: DateFilterType) => {
+        if (!date) return '';
         try {
-            if (type === 'month') {
-                // Append "-01" for month inputs: "2024-12" -> "2024-12-01"
-                return new Date(value + '-01');
-            }
-            return new Date(value);
-        } catch {
-            return null;
+            return format(date, type === 'MONTH' ? 'yyyy-MM' : 'yyyy-MM-dd');
+        } catch (e) {
+            return '';
         }
     };
 
-    const activeFilterCount = useMemo(() => {
-        let count = 0;
-        if (filters.type !== 'ALL') count++;
-        if (filters.category) count++;
-        if (filters.dateFilterType !== 'ALL') count++;
-        if (filters.searchTerms.trim()) count++;
-        return count;
-    }, [filters]);
+    const handleDateChange = (value: string) => {
+        if (!value) return null;
+        return parseISO(value);
+    };
+
+
+    const months = useMemo(() => {
+        return Array.from({ length: 12 }, (_, i) => {
+            const date = new Date(2000, i, 1);
+            const name = format(date, 'MMMM', { locale: ptBR });
+            return {
+                value: i.toString(),
+                label: name.charAt(0).toUpperCase() + name.slice(1)
+            };
+        });
+    }, []);
+
+    const years = useMemo(() => {
+        const currentYear = new Date().getFullYear();
+        const startYear = currentYear - 5;
+        const endYear = currentYear + 1;
+        return Array.from({ length: endYear - startYear + 1 }, (_, i) => (startYear + i).toString());
+    }, []);
+
+    const updateMonth = (monthIndex: string) => {
+        const currentDate = filters.initialDate || new Date();
+        const newDate = setMonth(currentDate, parseInt(monthIndex));
+        setFilters(prev => ({ ...prev, initialDate: newDate }));
+    };
+
+    const updateYear = (yearStr: string) => {
+        const currentDate = filters.initialDate || new Date();
+        const newDate = setYear(currentDate, parseInt(yearStr));
+        setFilters(prev => ({ ...prev, initialDate: newDate }));
+    };
+
+    const currentMonthIndex = getMonth(filters.initialDate || new Date()).toString();
+    const currentMonthLabel = months.find(m => m.value === currentMonthIndex)?.label;
+    const typeLabel = filters.type === 'INCOME' ? 'Entradas' : filters.type === 'EXPENSE' ? 'Saídas' : 'Todas';
 
     return (
-        <div className={"filters-container"}>
-            <div className={"search-bar"}>
-                <Search className={"search-icon"} size={20}/>
+        <div className="filters-container">
+            <div className="search-bar">
+                <Search className="search-icon" size={20}/>
                 <input
-                    type={"text"}
-                    placeholder={"Buscar Transações..."}
+                    type="text"
+                    placeholder="Buscar Transações..."
                     value={filters.searchTerms}
                     onChange={(e) => setFilters(prev => ({...prev, searchTerms: e.target.value}))}
                 />
             </div>
 
-            <div className={"filters-row"}>
-                {activeFilterCount > 0 && (
-                    <div className="active-filters-badge">
-                        <Filter size={14} />
-                        <span>{activeFilterCount} filtro{activeFilterCount !== 1 ? 's' : ''} ativo{activeFilterCount !== 1 ? 's' : ''}</span>
-                    </div>
-                )}
-                <div className={"filter-item"}>
+            <div className="filters-row">
+                <div className="filter-item">
                     <Select
                         value={filters.type}
                         onValueChange={(value) => setFilters(prev => ({...prev, type: value as TransactionTypeFilter}))}
                     >
-                        <SelectTrigger className="w-[140px]">
-                            <SelectValue placeholder="Tipo"/>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Tipo">{typeLabel}</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="ALL" label="Todas">Todas</SelectItem>
-                            <SelectItem value="INCOME" label="Entradas">Entradas</SelectItem>
-                            <SelectItem value="EXPENSE" label="Saídas">Saídas</SelectItem>
+                            <SelectItem value="ALL">Todas</SelectItem>
+                            <SelectItem value="INCOME">Entradas</SelectItem>
+                            <SelectItem value="EXPENSE">Saídas</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
-                <div className={"filter-item"}>
+
+                <div className="filter-item">
                     <Select
-                        value={filters.category?.name?.toString() || "ALL"}
+                        value={filters.category?.id.toString() || "ALL"}
                         onValueChange={(value) => {
                             const cat = value === "ALL" ? null : categories.find(c => c.id.toString() === value) || null;
                             setFilters(prev => ({...prev, category: cat}));
                         }}
                     >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Todas Categorias"/>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Todas Categorias">{filters.category?.name}</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="ALL">Todas Categorias</SelectItem>
@@ -99,17 +122,18 @@ export const TransactionFilters = ({
                         </SelectContent>
                     </Select>
                 </div>
-                <div className={"date-filter-group"}>
+
+                <div className="date-filter-group">
                     <Select
                         value={filters.dateFilterType}
                         onValueChange={(value) => setDateFilter(value as DateFilterType)}
                     >
-                        <SelectTrigger className="w-[150px]">
+                        <SelectTrigger>
                             <Calendar className="mr-2 h-4 w-4"/>
                             <SelectValue/>
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="ALL" >Tudo Tudinho</SelectItem>
+                            <SelectItem value="ALL">Todo o período</SelectItem>
                             <SelectItem value="MONTH">Por Mês</SelectItem>
                             <SelectItem value="EXACTLY">Data Exata</SelectItem>
                             <SelectItem value="RANGE">Intervalo</SelectItem>
@@ -117,42 +141,79 @@ export const TransactionFilters = ({
                     </Select>
 
                     {filters.dateFilterType !== 'ALL' && (
-                        <div className="date-inputs">
-                            <input
-                                type={filters.dateFilterType === 'MONTH' ? "month" : "date"}
-                                className="date-input"
-                                value={filters.initialDate ? format(
-                                    filters.initialDate,
-                                    filters.dateFilterType === 'MONTH' ? 'yyyy-MM' : 'yyyy-MM-dd'
-                                ) : ''}
-                                onChange={(e) => {
-                                    const date = parseDateInput(
-                                        e.target.value,
-                                        filters.dateFilterType === 'MONTH' ? 'month' : 'date'
-                                    );
-                                    if (date) {
-                                        setFilters(prev => ({...prev, initialDate: date}));
-                                    }
-                                }}
-                            />
+                        <div className={"date-inputs-floating"} style={filters.dateFilterType == 'EXACTLY' ? {left:0} : {}}>
+                            <div className="date-inputs">
 
-                            {filters.dateFilterType === 'RANGE' && (
-                                <>
-                                    <span className="text-muted">até</span>
-                                    <input
-                                        type="date"
-                                        className="date-input"
-                                        value={filters.endDate ? format(filters.endDate, 'yyyy-MM-dd') : ''}
-                                        onChange={(e) => setFilters(prev => ({
-                                            ...prev,
-                                            endDate: new Date(e.target.value)
-                                        }))}
-                                    />
-                                </>
-                            )}
+                                {filters.dateFilterType === 'MONTH' ? (
+                                    <>
+                                        <div>
+                                            <Select
+                                                value={currentMonthIndex}
+                                                onValueChange={updateMonth}
+                                            >
+                                                <SelectTrigger
+                                                    className="h-[30px] border-none bg-transparent focus:ring-0 px-0 ">
+                                                    <SelectValue>{currentMonthLabel}</SelectValue>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {months.map((m) => (
+                                                        <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+                                        <div className="w-[80px] border-l border-zinc-700 pl-2">
+                                            <Select
+                                                value={getYear(filters.initialDate || new Date()).toString()}
+                                                onValueChange={updateYear}
+                                            >
+                                                <SelectTrigger
+                                                    className="h-[30px] border-none bg-transparent focus:ring-0 px-0">
+                                                    <SelectValue/>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {years.map((y) => (
+                                                        <SelectItem key={y} value={y}>{y}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <input
+                                            type="date"
+                                            className="date-input"
+                                            value={getInputValue(filters.initialDate, 'EXACTLY')}
+                                            onChange={(e) => {
+                                                const date = handleDateChange(e.target.value);
+                                                if (date) setFilters(prev => ({...prev, initialDate: date}));
+                                            }}
+                                        />
+
+                                        {filters.dateFilterType === 'RANGE' && (
+                                            <>
+                                                <span className="text-muted">até</span>
+                                                <input
+                                                    type="date"
+                                                    className="date-input"
+                                                    value={getInputValue(filters.endDate, 'RANGE')}
+                                                    onChange={(e) => {
+                                                        const date = handleDateChange(e.target.value);
+                                                        if (date) setFilters(prev => ({...prev, endDate: date}));
+                                                    }}
+                                                />
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </div>
                         </div>
+
                     )}
                 </div>
+
                 <button onClick={clearFilters} className="clear-btn" title="Limpar Filtros">
                     <X size={18}/>
                 </button>

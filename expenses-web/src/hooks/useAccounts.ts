@@ -8,8 +8,10 @@ export const useAccounts = () => {
         staleTime: 1000 * 60 * 5
     });
 
+    const allAccounts = data ?? [];
+
     return {
-        data,
+        allAccounts,
         isLoading,
         isError,
         refetch

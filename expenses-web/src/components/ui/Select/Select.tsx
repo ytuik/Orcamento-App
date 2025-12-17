@@ -81,9 +81,9 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
 
 SelectTrigger.displayName = 'SelectTrigger';
 
-export const SelectValue: React.FC<{ placeholder?: string }> = ({ placeholder }) => {
+export const SelectValue: React.FC<{ placeholder?: string, children?: React.ReactNode }> = ({ placeholder,children }) => {
     const context = useContext(SelectContext);
-    return <span className="ui-select__value">{context?.label || (context?.value ||placeholder)}</span>;
+    return <span className="ui-select__value">{children || context?.label || (context?.value || placeholder)}</span>;
 };
 
 // --- CONTENT (O Dropdown) ---

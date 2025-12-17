@@ -38,7 +38,7 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
 
     const selectedType = useWatch({ control, name: 'type' });
 
-    const { data: accounts } = useAccounts();
+    const { allAccounts: accounts } = useAccounts();
 
     const { expenseCategories, incomeCategories} = useCategoryData()
 

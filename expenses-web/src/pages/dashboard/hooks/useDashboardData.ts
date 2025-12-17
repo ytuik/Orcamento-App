@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from 'react';
 
 import { transactionService } from "../../../services/transactionService";
-import { categoryService } from "../../../services/categoryService"; // Importe seu serviço de categorias
-import type { TransactionDto } from "../../../types/transactionDto";
+import { categoryService } from "../../../services/categoryService";
 import { useAccounts } from "../../../hooks/useAccounts";
+import type { TransactionDto } from "../../../types/transactionDto";
 
 export interface CategoryExpenseSummary {
     categoryId: number;
@@ -35,7 +35,7 @@ export const useDashboardData = (startDate: string, endDate: string) => {
     // Todo: Criar a query do cartao de credito
 
     const dashboardData = useMemo(() => {
-        const accounts = accountsQuery.data ?? [];
+        const accounts = accountsQuery.allAccounts ?? [];
         const transactions = currentMonthTransactionsQuery.data ?? [];
         const categoriesList = categoriesQuery.data ?? [];
 
@@ -99,7 +99,7 @@ export const useDashboardData = (startDate: string, endDate: string) => {
         };
 
     }, [
-        accountsQuery.data,
+        accountsQuery.allAccounts,
         currentMonthTransactionsQuery.data,
         categoriesQuery.data
     ]);
