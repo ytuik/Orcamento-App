@@ -11,15 +11,18 @@ import { Modal } from "../ui/Modal/Modal";
 import { useAccounts } from "../../hooks/useAccounts";
 import { useTransactionMutations } from "../../hooks/useTransactionMutations";
 
-import './NewTransactionModal.scss';
+import './TransactionFormModal.scss';
 import {useCategoryData} from "../../hooks/useCategoryData.ts";
+import type {TransactionDto} from "../../types/transactionDto";
+import {format, parseISO} from "date-fns";
 
 interface NewTransactionModalProps {
     isOpen: boolean;
     onClose: () => void;
+    transactionToEdit?: TransactionDto | null;
 }
 
-export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
+export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: NewTransactionModalProps) => {
 
     const {
         register,
@@ -42,7 +45,12 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
 
     const { expenseCategories, incomeCategories} = useCategoryData()
 
-    const { mutate: createTransaction } = useTransactionMutations().create;
+    const {
+        create: createTransaction,
+        update: updateTransaction
+    } = useTransactionMutations();
+
+    const isEditing = !!transactionToEdit
 
     useEffect(() => {
         if (!isOpen) {
@@ -51,16 +59,59 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
     }, [isOpen, reset]);
 
     const onSubmit = (data: TransactionFormData) => {
-        console.log('Submitting transaction:', data)
-        createTransaction(data);
+        if(isEditing && transactionToEdit?.id) {
+            updateTransaction.mutate({ id: transactionToEdit!.id, data }, {
+                onSuccess: () => {
+                    onClose()
+                }
+            });
+        } else {
+        createTransaction.mutate(data, {
+            onSuccess: () => {
+               onClose()
+            }
+        });
+
+        }
     };
 
     const onError = (errors: any) => {
         console.log("Erros de validação impedindo o submit:", errors);
     };
 
+    useEffect(() => {
+        if(isOpen) {
+            if (isEditing && transactionToEdit) {
+                const dateString = format(parseISO(transactionToEdit.transactionDate), 'yyyy-MM-dd');
+                reset(
+                    {
+                        accountId: transactionToEdit.accountId,
+                        amount: transactionToEdit.amount,
+                        type: transactionToEdit.type as TransactionType,
+                        categoryId: transactionToEdit.categoryId,
+                        transactionDate: dateString,
+                        description: transactionToEdit.description,
+                        comment: transactionToEdit.comment || '',
+                    }
+                )
+            } else {
+                reset({
+                    type: TransactionType.EXPENSE,
+                    transactionDate: new Date().toISOString().split('T')[0],
+                    description: '',
+                    amount: undefined,
+                    categoryId: undefined,
+                    accountId: undefined
+                });
+            }
+        }
+    }, [isEditing ,isOpen, transactionToEdit, reset]);
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={'Nova Transação'}>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={isEditing? 'Editar Transacao' :'Nova Transação'}>
             <form onSubmit={handleSubmit(onSubmit, onError)} className={'form-transaction'}>
                 <div className={'d-flex gap-3 mb-4'}>
                     <button type={'button'} className={clsx('btn-type income',
@@ -149,14 +200,15 @@ export const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProp
 
                 <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || createTransaction.isPending || updateTransaction.isPending}
                     className={clsx("btn btn-primary w-100 py-2 fw-bold",
                         { 'btn-btn-submit--expense': selectedType === TransactionType.EXPENSE},
                         { 'btn-btn-submit--income': selectedType === TransactionType.INCOME}
                     )}
                     style={{ backgroundColor: selectedType === TransactionType.EXPENSE ? '#f87171' : '#059669', border: 'none' }}
                 >
-                    {isSubmitting ? 'Salvando...' : 'Cadastrar'}
+                    {createTransaction.isPending || updateTransaction.isPending ? 'Salvando...'
+                        : (isEditing ? 'Salvar Alterações' : 'Cadastrar')}
                 </button>
             </form>
         </Modal>

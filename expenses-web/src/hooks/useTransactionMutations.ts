@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient, type InfiniteData } from "@tanstack/react-query";
 import { transactionService } from "../services/transactionService";
-import type {TransactionDto} from "../types/transactionDto";
+import type {CreateTransactionDto, TransactionDto} from "../types/transactionDto";
+import {toast} from "sonner";
 
 export const useTransactionMutations = () => {
     const queryClient = useQueryClient();
@@ -39,13 +40,24 @@ export const useTransactionMutations = () => {
                 return { ...oldData, pages: newPages };
             });
 
+            toast.success("Transação removida com sucesso!", {
+                description: "O registro foi apagado permanentemente.",
+                duration: 4000,
+            });
+
             queryClient.invalidateQueries({ queryKey: ['accounts'] });
+        },
+        onError: () => {
+            toast.error("Erro ao remover transação.");
         }
     });
 
     const update = useMutation({
-        mutationFn: ({ id, data }: { id: number, data: TransactionDto }) =>
-            transactionService.updateTransaction(id, data),
+        mutationFn: ({ id, data }: { id: number, data: CreateTransactionDto }) =>{
+            const transactionWithId = {...data, id} as TransactionDto;
+            return transactionService.updateTransaction(id, transactionWithId)
+        },
+
         onSuccess: (updatedTransaction) => {
             queryClient.setQueryData<InfiniteData<TransactionDto[]>>(QUERY_KEY, (oldData) => {
                 if (!oldData) return undefined;

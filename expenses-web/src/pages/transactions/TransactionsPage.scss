@@ -14,6 +14,11 @@ $text-secondary: $zinc-400;
 $color-income: $emerald-400;
 $color-expense: $red-401;
 
+$color-edit-bg: rgba(139, 92, 246, 0.15);
+$color-edit-text: #a78bfa;
+$color-delete-bg: rgba(239, 68, 68, 0.15);
+$color-delete-text: #f87171;
+
 @keyframes slideDownFade {
   from {
     opacity: 0;
@@ -240,7 +245,6 @@ $color-expense: $red-401;
   }
 }
 
-// 📋 Container da Lista
 .list-container {
   display: flex;
   flex-direction: column;
@@ -276,144 +280,6 @@ $color-expense: $red-401;
   }
 }
 
-.transaction-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.25rem;
-  background-color: $zinc-900;
-  border: 1px solid $zinc-800;
-  border-radius: $radius-lg;
-  transition: all 0.2s ease;
-  min-height: 5rem;
-
-  &:hover {
-    border-color: $zinc-700;
-    background-color: lighten($zinc-900, 2%);
-    transform: translateY(-1px);
-    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
-
-    &.variant-purple {
-      border-left-color : $violet-600;
-      border-left-width : 4px;
-    }
-
-    &.variant-amber {
-      border-left-color : $amber-400;
-      border-left-width : 4px;
-    }
-  }
-
-  .icon-wrapper {
-    width: 3rem;
-    height: 3rem;
-    border-radius: $radius-full;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.125rem;
-    margin-right: 1rem;
-    flex-shrink: 0;
-
-    &.variant-red {
-      background: linear-gradient(135deg, rgba($red-401, 0.15), rgba($red-401, 0.05));
-      color: $red-401;
-      border: 1px solid rgba($red-401, 0.2);
-    }
-
-    &.variant-green {
-      background: linear-gradient(135deg, rgba($emerald-400, 0.15), rgba($emerald-400, 0.05));
-      color: $emerald-400;
-      border: 1px solid rgba($emerald-400, 0.2);
-    }
-
-    &.variant-blue {
-      background: linear-gradient(135deg, rgba($blue-400, 0.15), rgba($blue-400, 0.05));
-      color: $blue-400;
-      border: 1px solid rgba($blue-400, 0.2);
-    }
-
-    &.variant-purple {
-      background: linear-gradient(135deg, rgba($violet-600, 0.15), rgba($violet-600, 0.05));
-      color: $violet-600;
-      border: 1px solid rgba($violet-600, 0.2);
-    }
-
-    &.variant-amber {
-      background: linear-gradient(135deg, rgba($amber-400, 0.15), rgba($amber-400, 0.05));
-      color: $amber-400;
-      border: 1px solid rgba($amber-400, 0.2);
-    }
-  }
-
-  .info-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-width: 0;
-
-    .title {
-      font-weight: 600;
-      font-size: 1rem;
-      color: $zinc-100;
-      line-height: 1.3;
-      @include text-truncate;
-    }
-
-    .category {
-      font-size: 0.8125rem;
-      color: $zinc-500;
-      font-weight: 400;
-      line-height: 1.2;
-    }
-
-    .account {
-        font-size: 0.8125rem;
-        color: $zinc-400;
-        font-weight: 500;
-        line-height: 1.2;
-    }
-  }
-
-  .amount-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
-    margin-left: 1rem;
-
-    .amount {
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 0.25rem;
-      letter-spacing: -0.01em;
-
-      &.text-income {
-        color: $color-income;
-
-        &::before {
-          content: '+ ';
-        }
-      }
-
-      &.text-expense {
-        color: $color-expense;
-
-        &::before {
-          content: '- ';
-        }
-      }
-    }
-
-    .date {
-      font-size: 0.75rem;
-      color: $zinc-500;
-      font-weight: 400;
-      white-space: nowrap;
-    }
-  }
-}
 
 @include media-breakpoint-down(md) {
   .transaction-page {
@@ -448,29 +314,8 @@ $color-expense: $red-401;
       }
     }
   }
-
-  .transaction-item {
-    padding: 0.875rem 1rem;
-
-    .info-wrapper {
-      .title {
-        font-size: 0.9375rem;
-      }
-
-      .category {
-        font-size: 0.75rem;
-      }
-    }
-
-    .amount-wrapper {
-      .amount {
-        font-size: 0.9375rem;
-      }
-    }
-  }
 }
 
-// Loading e estados vazios
 .loading-sentinel {
   text-align: center;
   padding: 3rem 1rem;

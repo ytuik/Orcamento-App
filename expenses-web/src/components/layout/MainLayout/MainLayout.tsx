@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Sidebar } from '../Sidebar/Sidebar';
 import { Outlet } from 'react-router-dom';
-import {NewTransactionModal} from "../../transactions/NewTransactionModal.tsx";
+import {TransactionFormModal} from "../../transactions/TransactionFormModal.tsx";
 import './MainLayout.scss';
 
 export const MainLayout = () => {
@@ -19,7 +19,7 @@ export const MainLayout = () => {
             </main>
 
              {isModalOpen && (
-                <NewTransactionModal isOpen={isModalOpen} onClose={handleCloseModal} />
+                <TransactionFormModal isOpen={isModalOpen} onClose={handleCloseModal} />
             )}
         </div>
     );

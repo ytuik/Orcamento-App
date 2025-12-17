@@ -2,6 +2,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {MainLayout} from "../components/layout/MainLayout/MainLayout.tsx";
 import DashboardPage from "../pages/dashboard/DashboardPage.tsx";
 import {TransactionsPage} from "../pages/transactions/TransactionsPage.tsx";
+import {Toaster} from "sonner";
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
                     <Route path="/accounts" element={<div>Página de Contas (Em breve)</div>} />
                 </Route>
             </Routes>
+            <Toaster position="bottom-right" theme="dark" />
         </BrowserRouter>
   )
 }

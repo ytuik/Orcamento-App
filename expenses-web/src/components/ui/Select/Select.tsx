@@ -86,7 +86,6 @@ export const SelectValue: React.FC<{ placeholder?: string, children?: React.Reac
     return <span className="ui-select__value">{children || context?.label || (context?.value || placeholder)}</span>;
 };
 
-// --- CONTENT (O Dropdown) ---
 interface SelectContentProps {
     children: React.ReactNode;
     className?: string;

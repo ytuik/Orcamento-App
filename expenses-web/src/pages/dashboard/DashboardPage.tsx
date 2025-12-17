@@ -5,9 +5,9 @@ import { TrendingDownIcon, TrendingUpIcon, WalletIcon } from "../../components/i
 import { DashboardHeader } from "./components/DashboardHeader";
 import { StatCard } from "./components/StatCard/StatCard.tsx";
 import { AccountsCarousel } from "./components/AccountsCarousel/AccountsCarrousel.tsx";
+import { TransactionList } from "./components/TransactionList/TransactionList.tsx";
+import { MonthlySpendingSummary } from "./components/MonthlySpendingSummary/MonthlySpendingSummary.tsx";
 import './DashboardPage.scss';
-import {TransactionList} from "./components/TransactionList/TransactionList.tsx";
-import {MonthlySpendingSummary} from "./components/MonthlySpendingSummary/MonthlySpendingSummary.tsx";
 
 function DashboardPage() {
     const today = new Date();

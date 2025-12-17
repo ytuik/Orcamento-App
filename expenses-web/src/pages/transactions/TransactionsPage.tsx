@@ -1,16 +1,20 @@
-import { useEffect, useMemo } from "react";
+import {useEffect, useMemo, useState} from "react";
 import { useInView } from "react-intersection-observer";
 import { format, isThisWeek, isToday, isYesterday, parseISO } from "date-fns"; // Importe parseISO
 import { ptBR } from "date-fns/locale";
 
 import { useTransactionData } from "../../hooks/useTransactionData";
 import { useCategoryData } from "../../hooks/useCategoryData";
+import {useTransactionMutations} from "../../hooks/useTransactionMutations.ts";
+import {useAccounts} from "../../hooks/useAccounts.ts";
+
 import { TransactionFilters } from "./components/TransactionFilters";
 import { TransactionItem } from "./components/TransactionItem";
+import {ConfirmDeleteTransactionModal} from "../../components/transactions/ConfirmDeleteTransactionModal.tsx";
+import {TransactionFormModal} from "../../components/transactions/TransactionFormModal.tsx";
 
-import './TransactionsPage.scss';
 import type {TransactionDto} from "../../types/transactionDto";
-import {useAccounts} from "../../hooks/useAccounts.ts";
+import './TransactionsPage.scss';
 
 type TransactionGroup = {
     title: string;
@@ -33,8 +37,10 @@ export const TransactionsPage = () => {
         refetch
     } = useTransactionData();
 
+    const {remove} = useTransactionMutations()
+
     const { allCategories } = useCategoryData();
-    const {allAccounts} = useAccounts()
+    const { allAccounts} = useAccounts()
 
     const { ref, inView } = useInView({
         threshold: 0.1,
@@ -93,6 +99,42 @@ export const TransactionsPage = () => {
         return groups;
     }, [transactions]);
 
+    const [idToDelete, setIdToDelete] = useState<number | null>(null);
+    const handleRequestDelete = (id: number) => {
+        setIdToDelete(id)
+    }
+    const handleConfirmDelete = () => {
+        if (idToDelete !== null) {
+            remove.mutate(
+                idToDelete,
+                {
+                    onSuccess: () => {
+                        setIdToDelete(null)
+                    }
+            }
+            )
+        }
+    }
+    const handleCloseDeleteModal = () => {
+        setIdToDelete(null);
+}
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [transactionToEdit, setTransactionToEdit] = useState<TransactionDto | null>(null);
+
+    const handleEditTransaction = (id: number) => {
+        const transaction = transactions.find(t => t.id === id);
+        if (transaction) {
+            setTransactionToEdit(transaction);
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setTransactionToEdit(null);
+    };
+
     if (isError) {
         return (
             <div className="transaction-page container">
@@ -139,6 +181,8 @@ export const TransactionsPage = () => {
                                     data={t}
                                     category={categoryMap.get(t.categoryId) || null}
                                     account={accountsMap.get(t.accountId) || null}
+                                    onEdit={() => handleEditTransaction(t.id)}
+                                    onDelete={() => handleRequestDelete(t.id)}
                                 />
                             ))}
                         </div>
@@ -169,6 +213,21 @@ export const TransactionsPage = () => {
                     }
                 </div>
             </div>
+
+
+            <TransactionFormModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                transactionToEdit={transactionToEdit}
+            />
+
+            {idToDelete && (
+                <ConfirmDeleteTransactionModal
+                    isOpen={!!idToDelete}
+                    onClose={handleCloseDeleteModal}
+                    onConfirm={handleConfirmDelete}
+                    isLoading={remove.isPending} />
+            )}
         </div>
     );
 };

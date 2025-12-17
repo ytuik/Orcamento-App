@@ -1,18 +1,22 @@
 import { format, parseISO } from "date-fns"; // Adicionado parseISO
 import { ptBR } from "date-fns/locale";
-import { memo } from "react";
+import {memo, useState} from "react";
 import type { TransactionDto } from "../../../types/transactionDto";
 import type { CategoryDto } from "../../../types/categoryDto";
 import { getIconByKey } from "../../../utils/iconUtils.tsx";
 import type {AccountDto} from "../../../types/accountDto";
+import {Pencil, Trash2} from "lucide-react";
+import './TransactionItem.scss';
 
 interface TransactionItemProps {
     data: TransactionDto;
     category?: CategoryDto | null;
     account?: AccountDto | null;
+    onEdit: () => void;
+    onDelete: () => void;
 }
 
-export const TransactionItem = memo(({ data, category, account }: TransactionItemProps) => {
+export const TransactionItem = memo(({ data, category, account, onEdit, onDelete }: TransactionItemProps) => {
     const isIncome = data.type === 'INCOME';
 
     const iconKey = category?.iconKey || 'OTHER';
@@ -28,9 +32,17 @@ export const TransactionItem = memo(({ data, category, account }: TransactionIte
         currency: 'BRL'
     });
 
+    const [isExpanded, setIsExpanded] = useState(false);
+    const handleClick = () => {
+        setIsExpanded(!isExpanded);
+    }
+
     return (
-        <div className={`transaction-item variant-${accountTheme}`}>
-            <div className="d-flex align-items-center gap-4">
+        <div
+            onClick={handleClick}
+            className={`transaction-item variant-${accountTheme} ${isExpanded ? 'is-expanded' : ''}`}
+        >
+            <div className="left-content d-flex align-items-center gap-4">
                 <div className={`icon-wrapper variant-${colorTheme}`}>
                     {getIconByKey(iconKey)}
                 </div>
@@ -42,13 +54,30 @@ export const TransactionItem = memo(({ data, category, account }: TransactionIte
                 </div>
             </div>
 
-            <div className="amount-wrapper">
-                <span className={`amount ${isIncome ? 'text-income' : 'text-expense'}`}>
-                    {formattedAmount}
-                </span>
-                <span className="date">
-                    {formattedDate}
-                </span>
+            <div className={"right-content"} >
+                <div className="amount-wrapper">
+                    <span className={`amount ${isIncome ? 'text-income' : 'text-expense'}`}>
+                        {formattedAmount}
+                    </span>
+                    <span className="date">
+                        {formattedDate}
+                    </span>
+                </div>
+
+                {isExpanded &&
+                    <div className={"action-buttons fade-in"}>
+                        <button className={`action-btn edit-btn`}
+                            onClick={() => {onEdit() }}>
+                            <Pencil size={16}/>
+                        </button>
+                        <button className={`action-btn delete-btn`}
+                            onClick={() => {
+                                onDelete()
+                            }}>
+                            <Trash2 size={16}/>
+                        </button>
+                    </div>
+                }
             </div>
         </div>
     );
