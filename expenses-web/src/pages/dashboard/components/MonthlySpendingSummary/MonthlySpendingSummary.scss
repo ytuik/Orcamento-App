@@ -68,6 +68,7 @@ $cat-colors: (
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    cursor: pointer;
   }
 
   &__row {

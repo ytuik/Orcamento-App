@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { getIconByKey } from "../../../../utils/iconUtils.tsx";
 import type {CategoryExpenseSummary} from "../../hooks/useDashboardData.ts";
 import './MonthlySpendingSummary.scss';
+import {format} from "date-fns";
+import {useNavigate} from "react-router-dom";
 
 interface MonthlySpendingSummaryProps {
     expensesByCategory: CategoryExpenseSummary[];
@@ -15,6 +17,18 @@ interface MonthlySpendingSummaryProps {
 }
 
 export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlySpendingSummaryProps) => {
+
+    const navigate = useNavigate()
+    const searchByCategory = (categoryId: number) => {
+        const params = new URLSearchParams()
+        const initialDate = format(new Date(), 'yyyy-MM-dd');
+        params.append('dateFilterType', 'MONTH')
+        params.append('initialDate', initialDate )
+        params.append('categoryId', categoryId.toString())
+
+        navigate(`/transactions?${params.toString()}`)
+    }
+
     return (
         <div className="category-widget monthly-spending-summary-container">
             {/* Header */}
@@ -40,7 +54,8 @@ export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlyS
                     const catId = item.categoryId || 0
 
                     return (
-                        <div key={catId} className="category-widget__item">
+                        <div key={catId} className="category-widget__item"
+                             onClick={() => searchByCategory(catId)}>
                             <div className="category-widget__row">
                                 <div className="category-widget__info">
                                     <div className={`category-widget__icon-box category-widget__icon-box--${catColor}`}>

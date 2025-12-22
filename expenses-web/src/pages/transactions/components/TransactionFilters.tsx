@@ -103,14 +103,17 @@ export const TransactionFilters = ({
 
                 <div className="filter-item">
                     <Select
-                        value={filters.category?.id.toString() || "ALL"}
+                        value={filters.categoryId? filters.categoryId.toString() : "ALL"}
                         onValueChange={(value) => {
                             const cat = value === "ALL" ? null : categories.find(c => c.id.toString() === value) || null;
-                            setFilters(prev => ({...prev, category: cat}));
+                            setFilters(prev => ({...prev, categoryId: cat?.id || null}));
                         }}
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder="Todas Categorias">{filters.category?.name}</SelectValue>
+                            <SelectValue placeholder="Todas Categorias">{
+                                filters.categoryId ?
+                                categories.find(c=> c.id == filters.categoryId)?.name : "Todas Categorias"
+                            }</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="ALL">Todas Categorias</SelectItem>

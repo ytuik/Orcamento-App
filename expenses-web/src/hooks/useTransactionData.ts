@@ -6,7 +6,7 @@ import {
     subMonths,
     isAfter
 } from "date-fns";
-import type { CategoryDto } from "../types/categoryDto";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { type TransactionFilterParams, transactionService } from "../services/transactionService.ts";
@@ -18,52 +18,61 @@ export type TransactionTypeFilter = 'ALL' | 'INCOME' | 'EXPENSE';
 export type FilterState = {
     type: TransactionTypeFilter,
     dateFilterType: DateFilterType,
-    category: CategoryDto | null,
+    categoryId: number | null,
     initialDate: Date,
     endDate: Date | null
     searchTerms: string,
 }
 
-const STORAGE_KEY = 'transaction-filters';
+const getFiltersFromUrl = (): Partial<FilterState> => {
+    const params = new URLSearchParams(window.location.search);
+    const filters: Partial<FilterState> = {};
 
-const loadFiltersFromStorage = (): Partial<FilterState> | null => {
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) return null;
+    const type = params.get('type') as TransactionTypeFilter;
+    if (type) filters.type = type;
 
-        const parsed = JSON.parse(stored);
-        return {
-            ...parsed,
-            initialDate: parsed.initialDate ? new Date(parsed.initialDate) : new Date(),
-            endDate: parsed.endDate ? new Date(parsed.endDate) : null,
-            category: parsed.category || null,
-        };
-    } catch {
-        return null;
+    const dateFilterType = params.get('dateFilterType') as DateFilterType;
+    if (dateFilterType) filters.dateFilterType = dateFilterType;
+
+    const categoryId = params.get('categoryId');
+    if (categoryId) {
+        filters.categoryId = parseInt(categoryId)
     }
-};
 
-const saveFiltersToStorage = (filters: FilterState) => {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
-            type: filters.type,
-            dateFilterType: filters.dateFilterType,
-            category: filters.category,
-            initialDate: format(filters.initialDate, 'yyyy-MM-dd'),
-            endDate: filters.endDate && format(filters.endDate, 'yyyy-MM-dd') || null,
-            searchTerms: filters.searchTerms,
-        }));
-    } catch (error) {
-        console.warn('Failed to save filters to localStorage', error);
-    }
-};
+    const initialDate = params.get('initialDate');
+    if (initialDate) filters.initialDate = new Date(initialDate);
+
+    const endDate = params.get('endDate');
+    if (endDate) filters.endDate = new Date(endDate);
+
+    const searchTerms = params.get('searchTerms');
+    if (searchTerms) filters.searchTerms = searchTerms;
+
+    return filters;
+
+}
+
+const saveFiltersOnUrl = (filters: FilterState) => {
+    const params = new URLSearchParams();
+
+    if (filters.type !== 'ALL') params.append('type', filters.type);
+    if (filters.dateFilterType !== 'ALL') params.append('dateFilterType', filters.dateFilterType);
+    if (filters.categoryId) params.append('categoryId', filters.categoryId.toString());
+    if (filters.initialDate) params.append('initialDate', format(filters.initialDate, 'yyyy-MM-dd'));
+    if (filters.endDate) params.append('endDate', format(filters.endDate, 'yyyy-MM-dd'));
+    if (filters.searchTerms.trim().length > 0) params.append('searchTerms', filters.searchTerms.trim());
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, '', newUrl);
+
+}
 
 export const useTransactionData = () => {
     const [filters, setFilters] = useState<FilterState>(() => {
-        const storedFilters = loadFiltersFromStorage();
+        const storedFilters = getFiltersFromUrl();
         return {
             type: 'ALL',
-            category: null,
+            categoryId: null,
             dateFilterType: 'ALL',
             initialDate: new Date(),
             endDate: null,
@@ -73,7 +82,7 @@ export const useTransactionData = () => {
     });
 
     useEffect(() => {
-        saveFiltersToStorage(filters);
+        saveFiltersOnUrl(filters);
     }, [filters]);
 
     const debouncedSearch = useDebounce(filters.searchTerms, 500);
@@ -82,7 +91,7 @@ export const useTransactionData = () => {
         return (
             debouncedSearch.trim().length > 0 ||
             filters.type !== 'ALL' ||
-            filters.category !== null ||
+            filters.categoryId !== null ||
             filters.dateFilterType !== 'ALL'
         )
     }, [filters, debouncedSearch]);
@@ -104,7 +113,6 @@ export const useTransactionData = () => {
                 const MAX_MONTHS_BACK = 24;
                 if (allPages.length >= MAX_MONTHS_BACK) return undefined;
 
-                // Calculate next month to fetch
                 return subMonths(new Date(), allPages.length);
             },
             enabled: !isSearchMode,
@@ -118,7 +126,7 @@ export const useTransactionData = () => {
             'transactions',
             'search',
             filters.type,
-            filters.category?.id,
+            filters.categoryId,
             filters.dateFilterType,
             format(filters.initialDate, 'yyyy-MM-dd'),
             filters.endDate ? format(filters.endDate, 'yyyy-MM-dd') : null,
@@ -127,12 +135,10 @@ export const useTransactionData = () => {
         queryFn: async () => {
             const params: TransactionFilterParams = {};
 
-            // Mapped 'searchTerms' to 'search' to match Service/Backend
             if (debouncedSearch) params.searchTerms = debouncedSearch;
             if (filters.type !== 'ALL') params.type = filters.type;
-            if (filters.category) params.categoryId = filters.category.id;
+            if (filters.categoryId) params.categoryId = filters.categoryId;
 
-            // Date Logic
             if (filters.initialDate && isValid(filters.initialDate)) {
                 if (filters.dateFilterType === 'MONTH') {
                     params.startDate = format(startOfMonth(filters.initialDate), 'yyyy-MM-dd');
@@ -146,7 +152,6 @@ export const useTransactionData = () => {
                     const start = filters.initialDate;
                     const end = filters.endDate;
 
-                    // Swap if start is after end
                     if (isAfter(start, end)) {
                         params.startDate = format(end, 'yyyy-MM-dd');
                         params.endDate = format(start, 'yyyy-MM-dd');
@@ -162,7 +167,6 @@ export const useTransactionData = () => {
         enabled: isSearchMode
     });
 
-    // 7. Unify Data
     const transactionsList = useMemo(() => {
         if (isSearchMode) {
             return searchQuery.data || [];
@@ -184,7 +188,7 @@ export const useTransactionData = () => {
     const clearFilters = useCallback(() => {
         setFilters({
             type: 'ALL',
-            category: null,
+            categoryId: null,
             dateFilterType: 'ALL',
             initialDate: new Date(),
             endDate: null,
