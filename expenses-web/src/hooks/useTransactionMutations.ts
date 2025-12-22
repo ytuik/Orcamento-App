@@ -28,6 +28,8 @@ export const useTransactionMutations = () => {
             });
 
             queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+
         },
         onError: () => {
             toast.error("Erro ao criar transação.");
@@ -52,6 +54,7 @@ export const useTransactionMutations = () => {
             });
 
             queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
         },
         onError: () => {
             toast.error("Erro ao remover transação.");
@@ -79,7 +82,8 @@ export const useTransactionMutations = () => {
             });
 
             queryClient.invalidateQueries({ queryKey: ['accounts'] });
-        },
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            },
         onError: () => {
             toast.error("Erro ao editar transação.");
         }
