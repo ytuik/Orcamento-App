@@ -4,8 +4,7 @@ import clsx from "clsx";
 
 interface SelectContextType {
     value: string;
-    label: string;
-    onChange: (value: string, label:string) => void;
+    onChange: (value: string) => void;
     open: boolean;
     setOpen: (open: boolean) => void;
 }
@@ -22,7 +21,6 @@ interface SelectProps {
 export const Select: React.FC<SelectProps> = ({ value, onValueChange, children, className }) => {
     const [open, setOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [label, setLabel] = useState<string>("");
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -45,7 +43,7 @@ export const Select: React.FC<SelectProps> = ({ value, onValueChange, children, 
     }, [open]);
 
     return (
-        <SelectContext.Provider value={{ value, onChange: onValueChange, open, setOpen , label}}>
+        <SelectContext.Provider value={{ value, onChange: onValueChange, open, setOpen}}>
             <div className={clsx("ui-select", className)} ref={containerRef}>
                 {children}
             </div>
@@ -83,7 +81,7 @@ SelectTrigger.displayName = 'SelectTrigger';
 
 export const SelectValue: React.FC<{ placeholder?: string, children?: React.ReactNode }> = ({ placeholder,children }) => {
     const context = useContext(SelectContext);
-    return <span className="ui-select__value">{children || context?.label || (context?.value || placeholder)}</span>;
+    return <span className="ui-select__value">{children || (context?.value || placeholder)}</span>;
 };
 
 interface SelectContentProps {
@@ -96,13 +94,11 @@ interface SelectContentProps {
 export const SelectContent: React.FC<SelectContentProps> = ({
                                                                 children,
                                                                 className,
-                                                                align = "start",
                                                                 sideOffset = 4
                                                             }) => {
     const context = useContext(SelectContext);
     const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
     const contentRef = useRef<HTMLDivElement>(null);
-    const triggerRef = useRef<HTMLButtonElement | null>(null);
 
     const getTriggerElement = useCallback((): HTMLButtonElement | null => {
         const selectContainer = contentRef.current?.closest('.ui-select');
@@ -125,10 +121,8 @@ export const SelectContent: React.FC<SelectContentProps> = ({
         }
     }, [context?.open, sideOffset, getTriggerElement]);
 
-    // Atualiza posição quando abre ou quando window resize
     useEffect(() => {
         if (context?.open) {
-            // Pequeno delay para garantir que o DOM esteja atualizado
             const timer = setTimeout(() => {
                 updatePosition();
             }, 0);
@@ -173,7 +167,6 @@ export const SelectContent: React.FC<SelectContentProps> = ({
 
 interface SelectItemProps {
     value: string;
-    label?: string;
     children: React.ReactNode;
     className?: string;
     disabled?: boolean;
@@ -181,7 +174,6 @@ interface SelectItemProps {
 
 export const SelectItem: React.FC<SelectItemProps> = ({
                                                           value,
-                                                          label,
                                                           children,
                                                           className,
                                                           disabled = false
@@ -194,7 +186,7 @@ export const SelectItem: React.FC<SelectItemProps> = ({
     const handleSelect = (e: React.MouseEvent) => {
         if (disabled) return;
         e.stopPropagation();
-        context.onChange(value,label? label : value)
+        context.onChange(value)
         context.setOpen(false);
     };
 
@@ -224,13 +216,4 @@ interface SelectGroupProps {
 
 export const SelectGroup: React.FC<SelectGroupProps> = ({ children, className }) => {
     return <div className={clsx("ui-select__group", className)}>{children}</div>;
-};
-
-interface SelectLabelProps {
-    children: React.ReactNode;
-    className?: string;
-}
-
-export const SelectLabel: React.FC<SelectLabelProps> = ({ children, className }) => {
-    return <div className={clsx("ui-select__label", className)}>{children}</div>;
 };

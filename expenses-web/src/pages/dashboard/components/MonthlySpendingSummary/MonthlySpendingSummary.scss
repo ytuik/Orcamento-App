@@ -9,6 +9,14 @@ $cat-colors: (
         'blue': $blue-400
 );
 
+.monthly-spending-summary-container {
+  background-color: $zinc-900;
+  border: 1px solid $zinc-700;
+  border-radius: $radius-md;
+  padding: $spacing-6;
+
+}
+
 .category-widget {
   text-align: left;
   background-color: $zinc-900;

@@ -163,7 +163,7 @@ export const TransactionFilters = ({
                                             </Select>
                                         </div>
 
-                                        <div className="w-[80px] border-l border-zinc-700 pl-2">
+                                        <div>
                                             <Select
                                                 value={getYear(filters.initialDate || new Date()).toString()}
                                                 onValueChange={updateYear}

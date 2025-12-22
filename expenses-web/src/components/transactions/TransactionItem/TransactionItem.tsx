@@ -1,4 +1,4 @@
-import { format, parseISO } from "date-fns"; // Adicionado parseISO
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {memo, useState} from "react";
 import type { TransactionDto } from "../../../types/transactionDto";
@@ -14,9 +14,10 @@ interface TransactionItemProps {
     account?: AccountDto | null;
     onEdit: () => void;
     onDelete: () => void;
+    actionButtonsVisible?: boolean;
 }
 
-export const TransactionItem = memo(({ data, category, account, onEdit, onDelete }: TransactionItemProps) => {
+export const TransactionItem = memo(({ data, category, account, onEdit, onDelete, actionButtonsVisible }: TransactionItemProps) => {
     const isIncome = data.type === 'INCOME';
 
     const iconKey = category?.iconKey || 'OTHER';
@@ -34,7 +35,9 @@ export const TransactionItem = memo(({ data, category, account, onEdit, onDelete
 
     const [isExpanded, setIsExpanded] = useState(false);
     const handleClick = () => {
-        setIsExpanded(!isExpanded);
+        if(actionButtonsVisible){
+            setIsExpanded(!isExpanded);
+        }
     }
 
     return (
@@ -64,7 +67,7 @@ export const TransactionItem = memo(({ data, category, account, onEdit, onDelete
                     </span>
                 </div>
 
-                {isExpanded &&
+                {isExpanded && actionButtonsVisible &&
                     <div className={"action-buttons fade-in"}>
                         <button className={`action-btn edit-btn`}
                             onClick={() => {onEdit() }}>

@@ -1,4 +1,4 @@
-import {Modal} from "../ui/Modal/Modal.tsx";
+import {Modal} from "../../ui/Modal/Modal.tsx";
 import {AlertTriangle} from "lucide-react";
 
 interface ConfirmDeleteTransactionModal{

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Sidebar } from '../Sidebar/Sidebar';
 import { Outlet } from 'react-router-dom';
-import {TransactionFormModal} from "../../transactions/TransactionFormModal.tsx";
+import {TransactionFormModal} from "../../transactions/TransactionFormModal/TransactionFormModal.tsx";
 import './MainLayout.scss';
 
 export const MainLayout = () => {

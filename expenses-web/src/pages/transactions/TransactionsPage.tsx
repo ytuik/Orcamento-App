@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useState} from "react";
 import { useInView } from "react-intersection-observer";
-import { format, isThisWeek, isToday, isYesterday, parseISO } from "date-fns"; // Importe parseISO
+import { format, isThisWeek, isToday, isYesterday, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 import { useTransactionData } from "../../hooks/useTransactionData";
@@ -9,9 +9,9 @@ import {useTransactionMutations} from "../../hooks/useTransactionMutations.ts";
 import {useAccounts} from "../../hooks/useAccounts.ts";
 
 import { TransactionFilters } from "./components/TransactionFilters";
-import { TransactionItem } from "./components/TransactionItem";
-import {ConfirmDeleteTransactionModal} from "../../components/transactions/ConfirmDeleteTransactionModal.tsx";
-import {TransactionFormModal} from "../../components/transactions/TransactionFormModal.tsx";
+import { TransactionItem } from "../../components/transactions/TransactionItem/TransactionItem.tsx";
+import {ConfirmDeleteTransactionModal} from "../../components/transactions/ConfirmDeleteTransactionModal/ConfirmDeleteTransactionModal.tsx";
+import {TransactionFormModal} from "../../components/transactions/TransactionFormModal/TransactionFormModal.tsx";
 
 import type {TransactionDto} from "../../types/transactionDto";
 import './TransactionsPage.scss';
@@ -47,12 +47,6 @@ export const TransactionsPage = () => {
         rootMargin: '100px',
     });
 
-    useEffect(() => {
-        if (inView && hasNextPage && !isLoading) {
-            fetchNextPage();
-        }
-    }, [inView, hasNextPage, isLoading, fetchNextPage]);
-
     const accountsMap = useMemo(() => {
         const map = new Map();
         allAccounts.forEach(acc => map.set(acc.id, acc));
@@ -65,6 +59,13 @@ export const TransactionsPage = () => {
         allCategories.forEach(cat => map.set(cat.id, cat));
         return map;
     }, [allCategories]);
+
+    useEffect(() => {
+        if (inView && hasNextPage && !isLoading) {
+            fetchNextPage();
+        }
+    }, [inView, hasNextPage, isLoading, fetchNextPage]);
+
 
     const groupedTransactions = useMemo(() => {
         const sortedTransactions = [...transactions].sort((a, b) =>
@@ -183,6 +184,7 @@ export const TransactionsPage = () => {
                                     account={accountsMap.get(t.accountId) || null}
                                     onEdit={() => handleEditTransaction(t.id)}
                                     onDelete={() => handleRequestDelete(t.id)}
+                                    actionButtonsVisible={true}
                                 />
                             ))}
                         </div>

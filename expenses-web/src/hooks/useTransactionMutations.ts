@@ -23,7 +23,14 @@ export const useTransactionMutations = () => {
                 return { ...oldData, pages: newPages };
             });
 
+            toast.success("Transação criada com sucesso!", {
+                duration: 4000,
+            });
+
             queryClient.invalidateQueries({ queryKey: ['accounts'] });
+        },
+        onError: () => {
+            toast.error("Erro ao criar transação.");
         }
     });
 
@@ -41,7 +48,6 @@ export const useTransactionMutations = () => {
             });
 
             toast.success("Transação removida com sucesso!", {
-                description: "O registro foi apagado permanentemente.",
                 duration: 4000,
             });
 
@@ -68,7 +74,14 @@ export const useTransactionMutations = () => {
                 return { ...oldData, pages: newPages };
             });
 
+            toast.success("Transação editada com sucesso!", {
+                duration: 4000,
+            });
+
             queryClient.invalidateQueries({ queryKey: ['accounts'] });
+        },
+        onError: () => {
+            toast.error("Erro ao editar transação.");
         }
     });
 

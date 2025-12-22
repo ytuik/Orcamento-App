@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import type { TransactionDto } from '../../../../types/transactionDto';
-import { TransactionItem } from './TransactionItem';
+import { TransactionItem } from '../../../../components/transactions/TransactionItem/TransactionItem.tsx';
 import './TransactionList.scss';
+import {useNavigate} from "react-router-dom";
+import {useCategoryData} from "../../../../hooks/useCategoryData.ts";
+import {useAccounts} from "../../../../hooks/useAccounts.ts";
 
 interface TransactionListProps {
     transactions: TransactionDto[];
-    onViewAll?: () => void;
     maxItems?: number;
     title?: string;
     emptyStateMessage?: string;
@@ -13,7 +15,6 @@ interface TransactionListProps {
 
 export const TransactionList: React.FC<TransactionListProps> = ({
                                                                     transactions,
-                                                                    onViewAll,
                                                                     maxItems = 10,
                                                                     title = "Últimas Transações",
                                                                     emptyStateMessage = "Nenhuma movimentação este mês."
@@ -21,6 +22,23 @@ export const TransactionList: React.FC<TransactionListProps> = ({
 
     const displayedTransactions = transactions.slice(transactions.length - maxItems, transactions.length).reverse();
     const hasTransactions = displayedTransactions.length > 0;
+    const navigate = useNavigate()
+
+    const { allCategories } = useCategoryData();
+    const { allAccounts} = useAccounts()
+
+    const accountsMap = useMemo(() => {
+        const map = new Map();
+        allAccounts.forEach(acc => map.set(acc.id, acc));
+        return map;
+
+    }, [allAccounts])
+
+    const categoryMap = useMemo(() => {
+        const map = new Map();
+        allCategories.forEach(cat => map.set(cat.id, cat));
+        return map;
+    }, [allCategories]);
 
     return (
         <div
@@ -30,16 +48,13 @@ export const TransactionList: React.FC<TransactionListProps> = ({
         >
             <div className="d-flex justify-content-between align-items-center mb-4 transaction-list-header">
                 <h5 className="text-white fw-bold mb-0">{title}</h5>
-
-                {onViewAll && (
                     <button
-                        onClick={onViewAll}
+                        onClick={() => navigate('/transactions')}
                         className="btn btn-link text-muted-custom text-decoration-none btn-sm"
                         aria-label="Ver todas as transações"
                     >
                         Ver todas
                     </button>
-                )}
             </div>
 
             <div
@@ -50,8 +65,12 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                 {hasTransactions ? (
                     displayedTransactions.map((transaction) => (
                         <TransactionItem
-                            key={`transaction-${transaction.id}`}
-                            transaction={transaction}
+                            data={transaction}
+                            category={categoryMap.get(transaction.categoryId) || null}
+                            account={accountsMap.get(transaction.accountId) || null}
+                            onDelete={() => {}}
+                            onEdit={() => {}}
+                            actionButtonsVisible={false}
                         />
                     ))
                 ) : (

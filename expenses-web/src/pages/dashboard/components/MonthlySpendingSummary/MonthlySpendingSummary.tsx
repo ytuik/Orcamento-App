@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import './MonthlySpendingSummary.scss';
 import { getIconByKey } from "../../../../utils/iconUtils.tsx";
 import type {CategoryExpenseSummary} from "../../hooks/useDashboardData.ts";
+import './MonthlySpendingSummary.scss';
 
 interface MonthlySpendingSummaryProps {
     expensesByCategory: CategoryExpenseSummary[];
@@ -15,9 +15,8 @@ interface MonthlySpendingSummaryProps {
 }
 
 export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlySpendingSummaryProps) => {
-
     return (
-        <div className="category-widget">
+        <div className="category-widget monthly-spending-summary-container">
             {/* Header */}
             <div className="d-flex justify-content-between align-items-start">
                 <div>
@@ -48,23 +47,19 @@ export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlyS
                                         {getIconByKey(catIconKey)}
                                     </div>
 
-                                    {/* Texto */}
                                     <div>
                                         <h4 className="category-widget__name">{catName}</h4>
                                         <span className="category-widget__percent">
-                                            {/* toFixed(1) é melhor que toPrecision para porcentagem (ex: 12.5%) */}
                                             {item.percentage.toFixed(1)}% do total
                                         </span>
                                     </div>
                                 </div>
 
-                                {/* Valor Monetário */}
                                 <span className={`category-widget__amount category-widget__amount--${catColor}`}>
                                     R$ {item.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                                 </span>
                             </div>
 
-                            {/* Barra de Progresso */}
                             <div className="category-widget__track">
                                 <motion.div
                                     className={`category-widget__bar category-widget__bar--${catColor}`}
