@@ -45,7 +45,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
     return (
         <div
             className={clsx(
-                "bg-zinc-900 border-f border-zinc-700 rounded-md p-6 h-100",
+                "bg-zinc-900 border-f border-zinc-700 rounded-md p-4 h-100",
                 className
             )}
             role="region"
@@ -69,7 +69,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
             >
                 {hasTransactions ? (
                     displayedTransactions.map((transaction) => (
-                        <div className={'pb-1'}>
+                        <div className={'pb-2'}>
                             <TransactionItem
                                 key={transaction.id}
                                 data={transaction}

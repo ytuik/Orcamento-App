@@ -31,7 +31,7 @@ export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlyS
     return (
         <div className="widget-base border-f border-zinc-700">
             {/* Header */}
-            <div className="d-flex justify-content-between align-items-start">
+            <div className="d-flex justify-content-between align-items-start pb-4">
                 <div>
                     <h3 className="widget-title">Gastos por Categoria</h3>
                     <span className="widget-subtitle">Resumo do mês atual</span>

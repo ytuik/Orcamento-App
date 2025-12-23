@@ -20,11 +20,11 @@ export const AccountCard = ({ name, balance, className, onClick, children }: Acc
             onClick={onClick}
         >
             <div className="d-flex flex-column">
-                <h4 className="text-zinc-100 fw-semibold mb-2">{name}</h4>
+                <h4 className="text-zinc-400 fw-semibold mb-2">{name}</h4>
                 <div className="mt-auto">
                     <span className="label-small text-zinc-400">Saldo atual</span>
-                    <p className="text-zinc-100 fw-bold fs-5 mb-0">
-                        {balance.toLocaleString('pt-BR', {
+                    <p className={clsx("fw-bold fs-5 mb-0", onClick ? 'text-zinc-900' : "text-purple") }>
+                        {onClick? name : balance.toLocaleString('pt-BR', {
                             style: 'currency',
                             currency: 'BRL'
                         })}
