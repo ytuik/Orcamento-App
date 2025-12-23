@@ -132,7 +132,7 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
                     </button>
                 </div>
                 <div className="form-group mb-3">
-                    <label className="text-zinc-400 mb-1 text-sm">Descrição</label>
+                    <label className="text-zinc-300 fw-bold mb-1 text-sm">Descrição</label>
                     <input
                         {...register('description')}
                         className={clsx("form-control", {"is-invalid": errors.description})}
@@ -144,7 +144,7 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
                 </div>
 
                 <div className="form-group mb-3">
-                    <label className="text-zinc-400 mb-1 text-sm">Valor</label>
+                    <label className="text-zinc-300 fw-bold mb-1 text-sm">Valor</label>
                     <input
                         type="number"
                         step="0.01"
@@ -158,7 +158,7 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
 
                 <div className="row">
                     <div className="col-6 mb-3">
-                        <label className="text-zinc-400 mb-1 text-sm">Categoria</label>
+                        <label className="text-zinc-300 fw-bold mb-1 text-sm">Categoria</label>
                         <select
                             {...register('categoryId', {valueAsNumber: true})}
                             className={clsx("form-control", {"is-invalid": errors.categoryId})}
@@ -180,7 +180,7 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
                     </div>
 
                     <div className="col-6 mb-3">
-                        <label className="text-zinc-400 mb-1 text-sm">Conta</label>
+                        <label className="text-zinc-300 fw-bold mb-1 text-sm">Conta</label>
                         <select
                             {...register('accountId', {valueAsNumber: true})}
                             className={clsx("form-control", {"is-invalid": errors.accountId})}
@@ -195,7 +195,7 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
                 </div>
 
                 <div className="form-group mb-4">
-                    <label className="text-zinc-400 mb-1 text-sm">Data</label>
+                    <label className="text-zinc-300 fw-bold mb-1 text-sm">Data</label>
                     <input
                         type="date"
                         {...register('transactionDate')}

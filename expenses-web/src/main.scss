@@ -35,6 +35,13 @@ html, body {
 
 .form-control {
   @include custom-scrollbar;
+  background-color: $zinc-950;
+  color:$zinc-200;
+
+  &::placeholder {
+    color: $zinc-500;
+    opacity: 1;
+  }
 }
 
 .category-icon-wrapper {

@@ -72,15 +72,15 @@ export const Modal = ({
         >
             <div
                 className={clsx(
-                    "modal-content bg-zinc-950 border-f border-zinc-700 rounded-lg shadow-lg p-3",
+                    "modal-content bg-zinc-900 border-f border-zinc-700 rounded-5 shadow-lg p-3",
                     sizeClasses,
                     "animate-slide-up",
                     className
                 )}
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="modal-header d-flex justify-content-between align-items-center border-bottom border-zinc-700 pb-4">
-                    <h2 className="ps-2 modal-title text-zinc-100 fw-bold m-0 fs-5">{title}</h2>
+                <div className="modal-header d-flex justify-content-between align-items-center border-bottom border-zinc-700 py-4">
+                    <h2 className="ps-2 modal-title text-zinc-200 fw-bold m-0">{title}</h2>
                     <button
                         type="button"
                         className=" bg-transparent border-0 text-zinc-400 fs-3 hover-bg-zinc-700 hover-text-zinc-100 rounded-circle d-flex align-items-center justify-content-center"
