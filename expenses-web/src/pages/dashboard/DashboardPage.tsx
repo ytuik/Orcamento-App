@@ -10,7 +10,6 @@ import { AccountsCarousel } from "./components/AccountsCarousel/AccountsCarrouse
 import { TransactionList } from "./components/TransactionList/TransactionList.tsx";
 import { MonthlySpendingSummary } from "./components/MonthlySpendingSummary/MonthlySpendingSummary.tsx";
 
-// Hooks
 import { useDashboardData } from "./hooks/useDashboardData";
 
 function DashboardPage() {
@@ -36,9 +35,8 @@ function DashboardPage() {
         return (
             <div className="d-flex justify-content-center align-items-center min-vh-100 bg-zinc-900">
                 <div className="text-center">
-                    <h2 className="text-zinc-100 text-xl mb-2">Ops! Algo deu errado.</h2>
+                    <h2 className="text-zinc-100 fs-1 mb-2">Ops! Algo deu errado.</h2>
                     <p className="text-zinc-400 mb-4">Não conseguimos carregar os dados do dashboard.</p>
-                    {/* Botão suave que tenta buscar apenas os dados novamente */}
                     <button
                         onClick={() => refetch()}
                         className="btn btn-outline-light btn-sm px-4"
@@ -51,7 +49,7 @@ function DashboardPage() {
     }
 
     return (
-        <div className="dashboard-container min-vh-100 py-4 pb-20 bg-zinc-950">
+        <div className="dashboard-container min-vh-100 bg-zinc-950">
             <div className="container">
                 <DashboardHeader/>
 

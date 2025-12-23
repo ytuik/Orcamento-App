@@ -73,7 +73,7 @@ export const TransactionFilters = ({
     const typeLabel = filters.type === 'INCOME' ? 'Entradas' : filters.type === 'EXPENSE' ? 'Saídas' : 'Todas';
 
     return (
-        <div className="filters-container d-flex flex-column gap-4 mb-8 flex-md-row align-items-md-start justify-content-md-between">
+        <div className="filters-container d-flex flex-column gap-4 mb-4 flex-md-row align-items-md-center justify-content-md-between">
             <div className="search-bar input-with-icon-left flex-grow-1 max-w-25rem">
                 <Search className="input-icon" size={20}/>
                 <input

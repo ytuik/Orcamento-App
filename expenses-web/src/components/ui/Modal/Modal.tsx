@@ -2,6 +2,8 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
+import './Modal.scss';
+import {X} from "lucide-react";
 
 interface ModalProps {
     isOpen: boolean;
@@ -63,33 +65,33 @@ export const Modal = ({
     return createPortal(
         <div
             className={clsx(
-                "modal-overlay d-flex align-items-center justify-content-center p-3",
+                "modal-overlay d-flex align-items-center justify-content-center",
                 overlayClassName
             )}
             onClick={closeOnOverlayClick ? onClose : undefined}
         >
             <div
                 className={clsx(
-                    "modal-content bg-zinc-800 border border-zinc-700 rounded-lg shadow-lg",
+                    "modal-content bg-zinc-950 border-f border-zinc-700 rounded-lg shadow-lg p-3",
                     sizeClasses,
-                    "animate-slide-up", // Animação do sistema
+                    "animate-slide-up",
                     className
                 )}
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="modal-header d-flex justify-content-between align-items-center p-6 border-bottom border-zinc-700">
-                    <h2 className="modal-title text-zinc-100 fw-bold m-0 fs-5">{title}</h2>
+                <div className="modal-header d-flex justify-content-between align-items-center border-bottom border-zinc-700 pb-4">
+                    <h2 className="ps-2 modal-title text-zinc-100 fw-bold m-0 fs-5">{title}</h2>
                     <button
                         type="button"
-                        className="modal-close-btn bg-transparent border-0 text-zinc-400 fs-3 hover-bg-zinc-700 hover-text-zinc-100 rounded-circle d-flex align-items-center justify-content-center"
+                        className=" bg-transparent border-0 text-zinc-400 fs-3 hover-bg-zinc-700 hover-text-zinc-100 rounded-circle d-flex align-items-center justify-content-center"
                         aria-label="Close"
                         onClick={onClose}
                         style={{ width: '32px', height: '32px' }}
                     >
-                        ×
+                        <X />
                     </button>
                 </div>
-                <div className="modal-body p-6 overflow-auto" style={{ maxHeight: '70vh' }}>
+                <div className="modal-body py-3" style={{ maxHeight: '70vh' }}>
                     {children}
                 </div>
             </div>

@@ -13,19 +13,7 @@
 }
 
 .modal-content {
-  width: 100%;
+  width: 75%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-}
-
-@media (max-width: 480px) {
-  .modal-content {
-    margin: 1rem;
-  }
-
-  .modal-header,
-  .modal-body {
-    padding: $spacing-4 !important;
-  }
 }

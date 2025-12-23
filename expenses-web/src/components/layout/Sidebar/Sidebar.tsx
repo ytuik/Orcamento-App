@@ -15,7 +15,7 @@ export const Sidebar = ({ onOpenNewTransaction }: SidebarProps) => {
     ];
 
     return (
-        <aside className="position-fixed top-0 start-0 vh-100 w-sidebar bg-zinc-900 border-end border-zinc-800 z-fixed d-none d-md-flex flex-column justify-content-between p-3">
+        <aside className="position-fixed top-0 start-0 vh-100 w-sidebar bg-zinc-900 border-f border-zinc-800 z-fixed d-flex flex-column justify-content-between p-3">
             <nav className="nav flex-column gap-2">
                 {navItems.map((item) => (
                     <NavLink

@@ -1,4 +1,3 @@
-// MainLayout.tsx
 import { useState } from 'react';
 import { Sidebar } from '../Sidebar/Sidebar';
 import { Outlet } from 'react-router-dom';
@@ -14,7 +13,7 @@ export const MainLayout = () => {
         <div className="d-flex min-vh-100 bg-zinc-950">
             <Sidebar onOpenNewTransaction={handleOpenModal} />
 
-            <main className="flex-grow-1 ms-sidebar w-calc-sidebar p-0 pb-20 pb-md-0 transition-smooth">
+            <main className="flex-grow-1 ms-sidebar w-calc-sidebar p-0 pb-20 pb-md-0 transition-smooth py-5">
                 <Outlet />
             </main>
 

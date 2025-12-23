@@ -139,14 +139,14 @@ export const TransactionsPage = () => {
     if (isError) {
         return (
             <div className="transaction-page container">
-                <div className="flex flex-col items-center justify-center py-10 gap-4">
-                    <h2 className="text-xl font-semibold text-zinc-100">Erro ao carregar transações</h2>
+                <div className="d-flex flex-column align-items-center justify-content-center py-5 gap-4">
+                    <h2 className="fs-1 fw-semibold text-zinc-100">Erro ao carregar transações</h2>
                     <p className="text-zinc-400">{error?.message || "Ocorreu um erro inesperado"}</p>
                     <div className="flex gap-2">
-                        <button onClick={() => refetch()} className="px-4 py-2 bg-violet-600 rounded text-white hover:bg-violet-700 transition">
+                        <button onClick={() => refetch()} className="px-4 py-2 bg-violet-600 rounded text-white hover-bg-purple transition">
                             Tentar novamente
                         </button>
-                        <button onClick={clearFilters} className="px-4 py-2 bg-zinc-800 rounded text-zinc-300 hover:bg-zinc-700 transition">
+                        <button onClick={clearFilters} className="px-4 py-2 bg-zinc-800 rounded text-zinc-300 hover-bg-zinc-700 transition">
                             Limpar filtros
                         </button>
                     </div>
@@ -157,8 +157,7 @@ export const TransactionsPage = () => {
 
     return (
         <div className="transaction-page container min-vh-100 bg-zinc-950 text-zinc-100 p-6 p-lg-8">
-
-            <div className="header-section mb-8">
+            <div className="header-section mb-5">
                 <h1 className={'fw-bold text-zinc-100 mb-2'}>Transações</h1>
                 <p className={'text-zinc-500 fs-6'}>Extrato completo de movimentações</p>
             </div>
@@ -171,7 +170,7 @@ export const TransactionsPage = () => {
                 categories={allCategories}
             />
 
-            <div className="list-container d-flex flex-column gap-5">
+            <div className="list-container d-flex flex-column gap-5 py-4">
                 {groupedTransactions.map((group) => (
                     <div key={group.title} className="group-section">
                         <h3 className="group-header group-header-base d-flex align-items-center gap-2 mb-4">{group.title}</h3>
