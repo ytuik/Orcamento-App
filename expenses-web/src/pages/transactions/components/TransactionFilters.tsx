@@ -156,7 +156,7 @@ export const TransactionFilters = ({
                                                 onValueChange={updateMonth}
                                             >
                                                 <SelectTrigger
-                                                    className="h-[30px] border-none bg-transparent focus:ring-0 px-0 ">
+                                                    className="justify-content-center border-none bg-zinc-900 px-0 ">
                                                     <SelectValue>{currentMonthLabel}</SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent>
@@ -173,7 +173,7 @@ export const TransactionFilters = ({
                                                 onValueChange={updateYear}
                                             >
                                                 <SelectTrigger
-                                                    className="h-[30px] border-none bg-transparent focus:ring-0 px-0">
+                                                    className="justify-content-center border-none bg-zinc-900 px-0">
                                                     <SelectValue/>
                                                 </SelectTrigger>
                                                 <SelectContent>
@@ -188,7 +188,7 @@ export const TransactionFilters = ({
                                     <>
                                         <input
                                             type="date"
-                                            className="date-input"
+                                            className="date-input border-none bg-zinc-900 "
                                             value={getInputValue(filters.initialDate, 'EXACTLY')}
                                             onChange={(e) => {
                                                 const date = handleDateChange(e.target.value);
@@ -201,7 +201,7 @@ export const TransactionFilters = ({
                                                 <span className="text-muted-custom">até</span>
                                                 <input
                                                     type="date"
-                                                    className="date-input"
+                                                    className="date-input border-none bg-zinc-900 "
                                                     value={getInputValue(filters.endDate, 'RANGE')}
                                                     onChange={(e) => {
                                                         const date = handleDateChange(e.target.value);

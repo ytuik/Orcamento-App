@@ -13,7 +13,7 @@ export const MainLayout = () => {
         <div className="d-flex min-vh-100 bg-zinc-950">
             <Sidebar onOpenNewTransaction={handleOpenModal} />
 
-            <main className="flex-grow-1 ms-sidebar w-calc-sidebar p-0 pb-20 pb-md-0 transition-smooth py-5">
+            <main className="flex-grow-1 ms-sidebar w-calc-sidebar p-0 mb-5 pb-md-0 transition-smooth py-5">
                 <Outlet />
             </main>
 

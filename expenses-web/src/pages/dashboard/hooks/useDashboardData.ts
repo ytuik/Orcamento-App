@@ -5,11 +5,12 @@ import { transactionService } from "../../../services/transactionService";
 import { categoryService } from "../../../services/categoryService";
 import { useAccounts } from "../../../hooks/useAccounts";
 import type { TransactionDto } from "../../../types/transactionDto";
+import type {CategoryColorTypeString} from "../../../types/categoryDto/categoryColorType.ts";
 
 export interface CategoryExpenseSummary {
     categoryId: number;
     name: string;
-    color: string;
+    color: CategoryColorTypeString;
     iconKey: string;
     amount: number;
     count: number;
@@ -105,7 +106,6 @@ export const useDashboardData = (startDate: string, endDate: string) => {
     ]);
 
     return {
-        // Agora o loading depende das 3 requisições
         isLoading:
             accountsQuery.isLoading ||
             currentMonthTransactionsQuery.isLoading ||

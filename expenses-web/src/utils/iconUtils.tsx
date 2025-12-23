@@ -41,7 +41,7 @@ export const ICON_LIBRARY: Record<string, React.ReactNode> = {
 
 export const getIconByKey = (key: string): React.ReactNode => {
     const safeKey = key?.toUpperCase();
-    return ICON_LIBRARY[safeKey] || ICON_LIBRARY.OTHER;
+    return ICON_LIBRARY[safeKey] || ICON_LIBRARY.HOME;
 };
 
 export const getIconOptions = () => Object.keys(ICON_LIBRARY);

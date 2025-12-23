@@ -5,7 +5,7 @@ export const DashboardHeader = () => {
     const dateNow = new Date
     return (
         <div
-            className={"d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4"}>
+            className={"d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center"}>
             <div className={"mb-3 mb-md-0"}>
                 <h1 className={"text-white fw-bold"}>
                     Dashboard

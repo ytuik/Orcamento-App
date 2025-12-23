@@ -64,36 +64,6 @@ $color-delete-text: #f87171;
       font-size: 1.125rem;
       margin-right: 1rem;
       flex-shrink: 0;
-
-      &.variant-red {
-        background: linear-gradient(135deg, rgba($red-401, 0.15), rgba($red-401, 0.05));
-        color: $red-401;
-        border: 1px solid rgba($red-401, 0.2);
-      }
-
-      &.variant-green {
-        background: linear-gradient(135deg, rgba($emerald-400, 0.15), rgba($emerald-400, 0.05));
-        color: $emerald-400;
-        border: 1px solid rgba($emerald-400, 0.2);
-      }
-
-      &.variant-blue {
-        background: linear-gradient(135deg, rgba($blue-400, 0.15), rgba($blue-400, 0.05));
-        color: $blue-400;
-        border: 1px solid rgba($blue-400, 0.2);
-      }
-
-      &.variant-purple {
-        background: linear-gradient(135deg, rgba($violet-600, 0.15), rgba($violet-600, 0.05));
-        color: $violet-600;
-        border: 1px solid rgba($violet-600, 0.2);
-      }
-
-      &.variant-amber {
-        background: linear-gradient(135deg, rgba($amber-400, 0.15), rgba($amber-400, 0.05));
-        color: $amber-400;
-        border: 1px solid rgba($amber-400, 0.2);
-      }
     }
 
     .info-wrapper {

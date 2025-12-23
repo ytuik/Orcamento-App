@@ -5,6 +5,7 @@ import type {CategoryExpenseSummary} from "../../hooks/useDashboardData.ts";
 import {format} from "date-fns";
 import {useNavigate} from "react-router-dom";
 import clsx from "clsx";
+import {MonthlySpendingChart} from "./MonthlySpendingChart.tsx";
 
 interface MonthlySpendingSummaryProps {
     expensesByCategory: CategoryExpenseSummary[];
@@ -44,6 +45,8 @@ export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlyS
                 </div>
             </div>
 
+            <MonthlySpendingChart data={expensesByCategory} searchByCategory={searchByCategory}/>
+
             <div className="d-flex flex-column gap-5 mt-6">
                 {expensesByCategory.map((item) => {
                     const catName = item.name || 'Desconhecida';
@@ -54,7 +57,7 @@ export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlyS
                     return (
                         <div
                             key={catId}
-                            className="d-flex flex-column gap-2 cursor-pointer"
+                            className="d-flex flex-column gap-3 cursor-pointer"
                             onClick={() => searchByCategory(catId)}
                         >
                             <div className="d-flex justify-content-between align-items-center">

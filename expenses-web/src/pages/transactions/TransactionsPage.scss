@@ -34,13 +34,19 @@
       @include filter-box-base;
       gap: 0.5rem;
       padding: 0 0.75rem;
-      background-color: $zinc-900;
-      border-color: $zinc-700;
+      background-color: transparent;
+      border: none;
+
+      &:hover {
+        border-color: transparent;
+        background-color: transparent;
+      }
 
       .date-input {
-        background: transparent;
-        border: none;
-        color: $zinc-100;
+        @include filter-box-base;
+        background-color: $zinc-900;
+        border-color: $zinc-700;
+        color: $zinc-400;
 
         font-family: inherit;
         font-size: 0.9rem;
@@ -61,16 +67,6 @@
 }
 
 .group-header {
-  //font-size: 0.875rem;
-  //font-weight: 600;
-  //color: $zinc-500;
-  //margin-bottom: 1rem;
-  //text-transform: uppercase;
-  //letter-spacing: 0.05em;
-  //display: flex;
-  //align-items: center;
-  //gap: 0.5rem;
-
   &::before {
     content: '';
     display: block;

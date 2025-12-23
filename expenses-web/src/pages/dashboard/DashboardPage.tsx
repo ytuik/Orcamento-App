@@ -53,7 +53,7 @@ function DashboardPage() {
             <div className="container">
                 <DashboardHeader/>
 
-                <div className="row g-4 mb-4">
+                <div className="row g-4 my-4">
                     <div className="col-12 col-md-4">
                         <StatCard
                             className=''
@@ -70,7 +70,7 @@ function DashboardPage() {
                             title="Receitas"
                             value={data.summary.monthTotalIncome}
                             icon={<TrendingUpIcon/>}
-                            description="Entradas este mês"
+                            description="Entradas do mês"
                             colorVariant="green"
                         />
                     </div>
@@ -80,18 +80,17 @@ function DashboardPage() {
                             title="Despesas"
                             value={data.summary.monthTotalExpense}
                             icon={<TrendingDownIcon/>}
-                            description="Saídas este mês"
+                            description="Saídas do mês"
                             colorVariant="red"
                         />
                     </div>
                 </div>
-                <div className="row mb-4">
+                <div className="row g-4 my-4">
                     <div className="col-12">
                         <AccountsCarousel accounts={data.accounts}/>
                     </div>
                 </div>
-
-                <div className="row g-4">
+                <div className="row g-4 my-4">
                     <div className="col-12 col-xl-6">
                         <TransactionList
                             transactions={data.currentMonthTransactions}

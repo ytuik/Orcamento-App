@@ -25,6 +25,8 @@ $violet-100: #ede9fe;
 
 $blue-400: #60a5fa;
 $amber-400: #fbbf24;
+$pink : #ec4899;
+$orange: #fd7e14;
 
 $primary: $violet-600;
 $secondary: $zinc-700;
@@ -73,10 +75,11 @@ $theme-colors: (
         'purple': $violet-600,
         'red': $red-401,
         'green': $emerald-600,
-        'pink': #ec4899,
+        'pink': $pink,
         'yellow': $amber-400,
         'blue': $blue-400,
         'gray': $zinc-500,
+        'orange': $orange,
         'primary': $primary,
         'secondary': $secondary,
         'success': $success,

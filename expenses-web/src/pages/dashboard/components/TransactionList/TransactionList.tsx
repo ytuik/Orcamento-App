@@ -45,7 +45,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
     return (
         <div
             className={clsx(
-                "bg-zinc-900 border-f border-zinc-700 rounded-md p-4 h-100",
+                "bg-zinc-900 border-f border-zinc-700 rounded-md p-4",
                 className
             )}
             role="region"
@@ -55,7 +55,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                 <h5 className="text-white fw-bold mb-0">{title}</h5>
                 <button
                     onClick={() => navigate('/transactions')}
-                    className="btn btn-link text-zinc-400 text-decoration-none btn-sm hover-text-zinc-100"
+                    className="btn btn-outline-secondary text-zinc-400 text-decoration-none btn-sm hover-text-zinc-100"
                     aria-label="Ver todas as transações"
                 >
                     Ver todas
@@ -63,7 +63,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
             </div>
 
             <div
-                className="scroll-container scroll-container-md pe-2"
+                className="scroll-container scroll-container-xl pe-2"
                 role="list"
                 aria-label="Itens da transação"
             >

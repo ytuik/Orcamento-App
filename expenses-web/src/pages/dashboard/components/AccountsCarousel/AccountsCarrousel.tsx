@@ -7,7 +7,7 @@ interface AccountsCarouselProps {
 
 export const AccountsCarousel = ({ accounts }: AccountsCarouselProps) => {
     return (
-        <div className="mb-5">
+        <div>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="text-white fw-bold mb-0">Minhas Contas</h5>
             </div>
