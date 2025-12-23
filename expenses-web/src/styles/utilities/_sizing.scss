@@ -1,0 +1,9 @@
+@use '../core/variables' as v;
+
+.ms-sidebar {
+  margin-left: v.$sidebar-width;
+}
+
+.w-calc-sidebar {
+  width: calc(100% - #{v.$sidebar-width});
+}

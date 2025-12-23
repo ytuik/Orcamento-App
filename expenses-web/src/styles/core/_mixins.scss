@@ -1,0 +1,71 @@
+@use 'variables' as v;
+
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: v.$zinc-700;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: v.$zinc-600;
+    }
+  }
+}
+
+@mixin focus-ring {
+  outline: 2px solid v.$violet-600;
+  outline-offset: 2px;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-truncate {
+  @include truncate;
+}
+
+@mixin filter-box-base {
+  background-color: v.$zinc-900;
+  border: 1px solid v.$zinc-800;
+  border-radius: v.$radius-lg;
+  height: 3rem;
+  padding: 0 1rem;
+
+  color: v.$zinc-500;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: v.$zinc-700;
+    background-color: lighten(v.$zinc-900, 2%);
+  }
+}
+
+@mixin fade-in {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@mixin slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@mixin slide-down-fade {
+  animation: slideDownFade 0.3s ease-out;
+}
+
+@mixin select-slide-down {
+  animation: selectSlideDown 0.2s ease-out;
+}

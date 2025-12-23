@@ -1,0 +1,81 @@
+@use '../core/variables' as v;
+
+@each $shade, $color in (
+        100: v.$zinc-100,
+        200: v.$zinc-200,
+        400: v.$zinc-400,
+        500: v.$zinc-500,
+        600: v.$zinc-600,
+        700: v.$zinc-700,
+        800: v.$zinc-800,
+        900: v.$zinc-900,
+        950: v.$zinc-950
+) {
+  .hover-bg-zinc-#{$shade}:hover {
+    background-color: $color !important;
+  }
+
+  .hover-text-zinc-#{$shade}:hover {
+    color: $color !important;
+  }
+
+  .hover-border-zinc-#{$shade}:hover {
+    border-color: $color !important;
+  }
+}
+
+.hover-bg-emerald-700:hover {
+  background-color: darken(v.$emerald-600, 5%) !important;
+}
+
+.hover-shadow-custom-sm:hover { box-shadow: var(--shadow-sm) !important; }
+.hover-shadow-custom-md:hover { box-shadow: var(--shadow-md) !important; }
+.hover-shadow-custom-lg:hover { box-shadow: var(--shadow-lg) !important; }
+
+@each $shade, $color in (
+        950: v.$zinc-950,
+        900: v.$zinc-900,
+        800: v.$zinc-800,
+        700: v.$zinc-700,
+        600: v.$zinc-600,
+        500: v.$zinc-500,
+        400: v.$zinc-400,
+        200: v.$zinc-200,
+        100: v.$zinc-100
+) {
+  .bg-zinc-#{$shade} { background-color: $color !important; }
+  .text-zinc-#{$shade} { color: $color !important; }
+  .border-zinc-#{$shade} { border-color: $color !important; }
+}
+
+@each $name, $color in v.$theme-colors {
+  .bg-#{$name}-light {
+    background-color: rgba($color, 0.15) !important;
+  }
+
+  .bg-#{$name} {
+    background-color: $color !important;
+  }
+
+  .text-#{$name} {
+    color: $color !important;
+  }
+
+  .border-#{$name} {
+    border-color: $color !important;
+  }
+}
+
+@each $name, $color in v.$theme-colors {
+  .hover-bg-#{$name}:hover {
+    background-color: $color !important;
+  }
+
+  .hover-bg-#{$name}-dark:hover {
+    background-color: darken($color, 5%) !important;
+  }
+
+  .hover-bg-#{$name}-light:hover {
+    background-color: lighten($color, 10%) !important;
+  }
+}

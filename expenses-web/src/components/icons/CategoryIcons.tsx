@@ -32,8 +32,8 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
     return (
         <div
             className={clsx(
-                "category-icon-wrapper",
-                `category-icon-wrapper--${displayColor}`, // Usa a cor vinda do objeto
+                "category-icon-wrapper d-flex align-items-md-center justify-content-center",
+                `category-icon-wrapper--${displayColor}`,
                 sizeClasses[size],
                 className
             )}

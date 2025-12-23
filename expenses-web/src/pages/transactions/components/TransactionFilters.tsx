@@ -73,18 +73,19 @@ export const TransactionFilters = ({
     const typeLabel = filters.type === 'INCOME' ? 'Entradas' : filters.type === 'EXPENSE' ? 'Saídas' : 'Todas';
 
     return (
-        <div className="filters-container">
-            <div className="search-bar">
-                <Search className="search-icon" size={20}/>
+        <div className="filters-container d-flex flex-column gap-4 mb-8 flex-md-row align-items-md-start justify-content-md-between">
+            <div className="search-bar input-with-icon-left flex-grow-1 max-w-25rem">
+                <Search className="input-icon" size={20}/>
                 <input
                     type="text"
                     placeholder="Buscar Transações..."
                     value={filters.searchTerms}
                     onChange={(e) => setFilters(prev => ({...prev, searchTerms: e.target.value}))}
+                    className={'form-control search-input'}
                 />
             </div>
 
-            <div className="filters-row">
+            <div className="filters-row filters-row d-flex flex-wrap align-items-center gap-3">
                 <div className="filter-item">
                     <Select
                         value={filters.type}
@@ -197,7 +198,7 @@ export const TransactionFilters = ({
 
                                         {filters.dateFilterType === 'RANGE' && (
                                             <>
-                                                <span className="text-muted">até</span>
+                                                <span className="text-muted-custom">até</span>
                                                 <input
                                                     type="date"
                                                     className="date-input"
@@ -217,7 +218,7 @@ export const TransactionFilters = ({
                     )}
                 </div>
 
-                <button onClick={clearFilters} className="clear-btn" title="Limpar Filtros">
+                <button onClick={clearFilters} className="btn-clear-filters" title="Limpar Filtros">
                     <X size={18}/>
                 </button>
             </div>

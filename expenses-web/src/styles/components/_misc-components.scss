@@ -1,0 +1,69 @@
+@use '../core/variables' as v;
+@use '../core/mixins' as *;
+
+.loading-sentinel {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: v.$zinc-500;
+  font-size: 0.9rem;
+
+  p {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .end-text {
+    color: v.$zinc-600;
+    font-size: 0.875rem;
+  }
+
+  .empty-text {
+    color: v.$zinc-500;
+    padding: 2rem;
+    font-size: 0.95rem;
+
+    &::before {
+      content: '📄';
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+  }
+}
+
+
+.carousel-horizontal {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(v.$zinc-900, 0.5);
+    border-radius: v.$radius-lg;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: v.$zinc-600;
+    border-radius: v.$radius-lg;
+
+    &:hover {
+      background: v.$zinc-500;
+    }
+  }
+}
+
+.scroll-container {
+  overflow-y: auto;
+  @include custom-scrollbar;
+
+  &.scroll-container-sm { max-height: 300px; }
+  &.scroll-container-md { max-height: 400px; }
+  &.scroll-container-lg { max-height: 500px; }
+  &.scroll-container-xl { max-height: 600px; }
+}

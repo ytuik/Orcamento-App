@@ -1,0 +1,51 @@
+@use '../core/variables' as v;
+
+.ui-card {
+  background-color: hsl(var(--theme-card, 240 10% 3.9%));
+  color: hsl(var(--theme-foreground, 0 0% 98%));
+  border-radius: v.$radius-lg;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  &--interactive {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.hover-card-lift {
+  transition: transform 0.2s, border-color 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: v.$zinc-500 !important;
+  }
+}
+
+.stat-title {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: v.$zinc-400 !important;
+  display: block !important;
+}
+
+.stat-value {
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+.stat-description {
+  font-size: 0.875rem !important;
+  color: rgba(v.$zinc-100, 0.5) !important;
+}
+
+.icon-opacity-90 svg {
+  opacity: 0.9 !important;
+}
+

@@ -1,0 +1,71 @@
+@use '../core/variables' as v;
+
+.btn-type-base {
+  flex: 1 !important;
+  gap: 0.5rem !important;
+  padding: 1rem !important;
+  border-radius: v.$radius-md !important;
+  border: 1px solid v.$zinc-800 !important;
+  background: transparent !important;
+  color: v.$zinc-400 !important;
+  transition: all 0.2s !important;
+  font-weight: 500 !important;
+
+  &:hover {
+    background-color: v.$zinc-800 !important;
+  }
+}
+
+.btn-active-success {
+  background-color: rgba(v.$emerald-600, 0.1) !important;
+  color: v.$emerald-600 !important;
+  border-color: v.$emerald-600 !important;
+}
+
+.btn-active-danger {
+  background-color: rgba(v.$red-401, 0.1) !important;
+  color: v.$red-401 !important;
+  border-color: v.$red-401 !important;
+}
+
+.btn-clear-filters {
+  background-color: v.$zinc-900 !important;
+  border: 1px solid v.$zinc-800 !important;
+  border-radius: v.$radius-lg !important;
+  color: v.$zinc-500 !important;
+  padding: 0.875rem !important;
+  height: 3rem !important;
+  width: 3rem !important;
+  transition: all 0.2s ease !important;
+
+  &:hover {
+    background-color: v.$zinc-800 !important;
+    border-color: v.$zinc-700 !important;
+  }
+}
+
+.btn-submit-success {
+  @extend .btn-active-success;
+}
+
+.btn-submit-danger {
+  @extend .btn-active-danger;
+}
+
+.hover-btn-primary:hover {
+  background-color: darken(v.$violet-600, 5%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(v.$violet-600, 0.3);
+}
+
+.hover-btn-success:hover {
+  background-color: darken(v.$emerald-600, 5%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(v.$emerald-600, 0.3);
+}
+
+.hover-btn-danger:hover {
+  background-color: darken(v.$red-401, 5%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(v.$red-401, 0.3);
+}

@@ -26,10 +26,33 @@ $violet-100: #ede9fe;
 $blue-400: #60a5fa;
 $amber-400: #fbbf24;
 
+$primary: $violet-600;
+$secondary: $zinc-700;
+$success: $emerald-600;
+$info: $blue-400;
+$warning: $amber-400;
+$danger: $red-401;
+$light: $zinc-100;
+$dark: $zinc-900;
+
+$body-bg: $zinc-900;
+$body-color: $zinc-100;
+$border-color: $zinc-700;
+
+$input-bg: $zinc-800;
+$input-border-color: $zinc-700;
+$input-color: $zinc-100;
+$input-focus-border-color: $violet-600;
+$input-focus-box-shadow: 0 0 0 0.25rem rgba($violet-600, 0.25);
+
 $radius-sm: 0.375rem;
 $radius-md: 0.5rem;
 $radius-lg: 0.75rem;
 $radius-full: 9999px;
+
+$border-radius: $radius-md;
+$border-radius-sm: $radius-sm;
+$border-radius-lg: $radius-lg;
 
 $sidebar-width: 16rem;
 
@@ -45,6 +68,24 @@ $spacing-12: 3rem;
 $spacing-16: 4rem;
 $spacing-20: 5rem;
 $spacing-24: 6rem;
+
+$theme-colors: (
+        'purple': $violet-600,
+        'red': $red-401,
+        'green': $emerald-600,
+        'pink': #ec4899,
+        'yellow': $amber-400,
+        'blue': $blue-400,
+        'gray': $zinc-500,
+        'primary': $primary,
+        'secondary': $secondary,
+        'success': $success,
+        'danger': $danger,
+        'warning': $warning,
+        'info': $info,
+        'light': $light,
+        'dark': $dark,
+);
 
 :root {
   --transition-base: 0.2s ease-in-out;

@@ -1,9 +1,10 @@
+// MonthlySpendingSummary.tsx
 import { motion } from "framer-motion";
 import { getIconByKey } from "../../../../utils/iconUtils.tsx";
 import type {CategoryExpenseSummary} from "../../hooks/useDashboardData.ts";
-import './MonthlySpendingSummary.scss';
 import {format} from "date-fns";
 import {useNavigate} from "react-router-dom";
+import clsx from "clsx";
 
 interface MonthlySpendingSummaryProps {
     expensesByCategory: CategoryExpenseSummary[];
@@ -17,67 +18,68 @@ interface MonthlySpendingSummaryProps {
 }
 
 export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlySpendingSummaryProps) => {
-
     const navigate = useNavigate()
     const searchByCategory = (categoryId: number) => {
         const params = new URLSearchParams()
         const initialDate = format(new Date(), 'yyyy-MM-dd');
         params.append('dateFilterType', 'MONTH')
-        params.append('initialDate', initialDate )
+        params.append('initialDate', initialDate)
         params.append('categoryId', categoryId.toString())
-
         navigate(`/transactions?${params.toString()}`)
     }
 
     return (
-        <div className="category-widget monthly-spending-summary-container">
+        <div className="widget-base border-f border-zinc-700">
             {/* Header */}
             <div className="d-flex justify-content-between align-items-start">
                 <div>
-                    <h3 className="category-widget__title">Gastos por Categoria</h3>
-                    <span className="category-widget__subtitle">Resumo do mês atual</span>
+                    <h3 className="widget-title">Gastos por Categoria</h3>
+                    <span className="widget-subtitle">Resumo do mês atual</span>
                 </div>
                 <div className="text-end">
-                    <span className="category-widget__total-label">Total Gasto</span>
-                    <h2 className="category-widget__total-value">
+                    <span className="widget-total-label">Total Gasto</span>
+                    <h2 className="widget-total-value text-red">
                         R$ {summary.monthTotalExpense.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </h2>
                 </div>
             </div>
 
-            <div className="category-widget__list">
+            <div className="d-flex flex-column gap-5 mt-6">
                 {expensesByCategory.map((item) => {
                     const catName = item.name || 'Desconhecida';
                     const catColor = item.color || 'gray';
                     const catIconKey = item.iconKey || 'OTHER';
-                    console.log(catIconKey)
-                    const catId = item.categoryId || 0
+                    const catId = item.categoryId || 0;
 
                     return (
-                        <div key={catId} className="category-widget__item"
-                             onClick={() => searchByCategory(catId)}>
-                            <div className="category-widget__row">
-                                <div className="category-widget__info">
-                                    <div className={`category-widget__icon-box category-widget__icon-box--${catColor}`}>
+                        <div
+                            key={catId}
+                            className="d-flex flex-column gap-2 cursor-pointer"
+                            onClick={() => searchByCategory(catId)}
+                        >
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div className="d-flex align-items-start gap-3">
+                                    <div className={clsx(
+                                        "category-icon-wrapper d-flex align-items-md-center justify-content-center category-icon-md",
+                                        `category-icon-wrapper--${catColor}`
+                                    )}>
                                         {getIconByKey(catIconKey)}
                                     </div>
-
                                     <div>
-                                        <h4 className="category-widget__name">{catName}</h4>
-                                        <span className="category-widget__percent">
+                                        <h4 className="text-zinc-100 fw-medium fs-6 mb-0">{catName}</h4>
+                                        <span className="text-zinc-500 fs-8">
                                             {item.percentage.toFixed(1)}% do total
                                         </span>
                                     </div>
                                 </div>
-
-                                <span className={`category-widget__amount category-widget__amount--${catColor}`}>
+                                <span className={clsx(`text-${catColor}`, "fw-semibold fs-6")}>
                                     R$ {item.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                                 </span>
                             </div>
 
-                            <div className="category-widget__track">
+                            <div className="progress-track">
                                 <motion.div
-                                    className={`category-widget__bar category-widget__bar--${catColor}`}
+                                    className={clsx("progress-bar", `progress-bar-${catColor}`)}
                                     initial={{ width: 0 }}
                                     animate={{ width: `${item.percentage}%` }}
                                     transition={{ duration: 0.8, ease: "easeOut" }}

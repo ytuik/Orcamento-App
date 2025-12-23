@@ -1,25 +1,37 @@
-import { formatCurrency } from '../../../utils/formatCurrency';
 import clsx from 'clsx';
+import React from "react";
 
 interface AccountCardProps {
     name: string;
     balance: number;
     className?: string;
     onClick?: () => void;
+    children?: React.ReactNode
 }
 
-export const AccountCard = ({ name, balance, className, onClick }: AccountCardProps) => (
-    <div className={clsx("account-card p-3 d-flex flex-column justify-content-between", className)} onClick={onClick}>
-        <div className="mb-3 text-warning">
-            { onClick ? <i className="bi bi-plus-circle fs-4"/> : <i className="bi bi-wallet2 fs-4"/>}
+export const AccountCard = ({ name, balance, className, onClick, children }: AccountCardProps) => {
+    return (
+        <div
+            className={clsx(
+                "bg-zinc-900 border-f border-zinc-700 rounded-lg min-w-220 p-4 cursor-pointer",
+                "hover-card-lift",
+                className
+            )}
+            onClick={onClick}
+        >
+            <div className="d-flex flex-column">
+                <h4 className="text-zinc-100 fw-semibold mb-2">{name}</h4>
+                <div className="mt-auto">
+                    <span className="label-small text-zinc-400">Saldo atual</span>
+                    <p className="text-zinc-100 fw-bold fs-5 mb-0">
+                        {balance.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        })}
+                    </p>
+                </div>
+            </div>
+            {children}
         </div>
-        <div>
-            <small className="text-white-50 d-block mb-1 text-uppercase fw-bold label-small">
-                {name}
-            </small>
-            <h5 className="text-white mb-0 value">
-                {onClick? name : formatCurrency(balance)}
-            </h5>
-        </div>
-    </div>
-);
+    );
+}

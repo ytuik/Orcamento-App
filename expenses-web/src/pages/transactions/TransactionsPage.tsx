@@ -156,11 +156,11 @@ export const TransactionsPage = () => {
     }
 
     return (
-        <div className="transaction-page container">
+        <div className="transaction-page container min-vh-100 bg-zinc-950 text-zinc-100 p-6 p-lg-8">
 
-            <div className="header-section">
-                <h1>Transações</h1>
-                <p>Extrato completo de movimentações</p>
+            <div className="header-section mb-8">
+                <h1 className={'fw-bold text-zinc-100 mb-2'}>Transações</h1>
+                <p className={'text-zinc-500 fs-6'}>Extrato completo de movimentações</p>
             </div>
 
             <TransactionFilters
@@ -171,11 +171,11 @@ export const TransactionsPage = () => {
                 categories={allCategories}
             />
 
-            <div className="list-container">
+            <div className="list-container d-flex flex-column gap-5">
                 {groupedTransactions.map((group) => (
                     <div key={group.title} className="group-section">
-                        <h3 className="group-header capitalize">{group.title}</h3>
-                        <div className="group-items">
+                        <h3 className="group-header group-header-base d-flex align-items-center gap-2 mb-4">{group.title}</h3>
+                        <div className="group-items d-flex flex-column gap-3">
                             {group.items.map(t => (
                                 <TransactionItem
                                     key={t.id}

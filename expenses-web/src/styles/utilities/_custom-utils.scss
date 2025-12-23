@@ -1,0 +1,48 @@
+@use '../core/mixins' as *;
+
+.animate-slide-up {
+  @include slide-up
+}
+
+.animate-slide-down {
+  @include slide-down-fade;
+}
+
+.animate-select {
+  @include select-slide-down;
+}
+
+.animate-fade-in {
+  @include fade-in
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.hover-lift-sm:hover {
+  transform: translateY(-1px);
+  transition: transform 0.2s ease;
+}
+
+.hover-scale-105:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+.hover-scale-102:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+.hover-opacity-75:hover { opacity: 0.75 !important; }
+.hover-opacity-90:hover { opacity: 0.9 !important; }
+.hover-opacity-100:hover { opacity: 1 !important; }
+
+.cursor-pointer { cursor: pointer !important; }
+.cursor-default { cursor: default !important; }
+.cursor-not-allowed { cursor: not-allowed !important; }
+
+.transition-base { transition: var(--transition-base) !important; }
+.transition-smooth { transition: var(--transition-smooth) !important; }
+.transition-all { transition: all 0.2s ease !important; }

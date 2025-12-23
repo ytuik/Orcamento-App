@@ -1,0 +1,97 @@
+@use '../core/variables' as v;
+
+.widget-base {
+  background-color: v.$zinc-900;
+  border: 1px solid v.$zinc-800;
+  border-radius: v.$radius-lg;
+  padding: v.$spacing-6;
+  position: relative;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+      padding: v.$spacing-4 !important;
+  }
+}
+
+.widget-title {
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: v.$zinc-100 !important;
+  margin: 0 !important;
+}
+
+.widget-subtitle {
+  font-size: 0.85rem !important;
+  color: v.$zinc-500 !important;
+  display: block !important;
+  margin-top: 2px !important;
+}
+
+.widget-total-label {
+  display: block !important;
+  font-size: 0.75rem !important;
+  color: v.$zinc-400 !important;
+  text-align: right !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.widget-total-value {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.stat-card-base {
+  background-color: v.$zinc-900 !important;
+  border: 1px solid v.$zinc-700 !important;
+  border-radius: v.$radius-md !important;
+  width: 100% !important;
+  transition: all 0.2s ease-in-out !important;
+  will-change: transform !important;
+}
+
+.hover-stat-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important;
+  border-color: v.$zinc-600 ;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background-color: v.$zinc-800;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+@each $name, $color in v.$theme-colors {
+  .progress-bar-#{$name} {
+    background-color: $color !important;
+    box-shadow: 0 0 8px rgba($color, 0.4);
+  }
+
+  .border-left-#{$name} {
+    border-left: 4px solid $color !important;
+    &:hover {
+      border-left-color: darken($color, 10%) !important;
+    }
+  }
+}
+
+.icon-42 {
+  width: 42px !important;
+  height: 42px !important;
+
+  svg {
+    width: 42px !important;
+    height: 42px !important;
+  }
+}

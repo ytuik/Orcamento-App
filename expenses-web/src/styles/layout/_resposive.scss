@@ -1,0 +1,51 @@
+@use "../core/variables" as v;
+
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+@media (max-width: 768px) {
+
+
+  .widget-title {
+    font-size: 1rem !important;
+  }
+
+  .widget-total-value {
+    font-size: 1.25rem !important;
+  }
+
+  .stat-card-base {
+    padding: v.$spacing-3 !important;
+  }
+
+  .stat-value {
+    font-size: 1.5rem !important;
+  }
+
+  .scroll-container-md {
+    max-height: 350px !important;
+  }
+
+  .fs-095 {
+    font-size: 0.9rem !important;
+  }
+
+  .icon-42 {
+    width: 36px !important;
+    height: 36px !important;
+
+    svg {
+      width: 36px !important;
+      height: 36px !important;
+    }
+  }
+}

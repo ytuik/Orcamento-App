@@ -1,0 +1,74 @@
+@use 'core/variables' as v;
+@use 'core/mixins' as m;
+
+
+
+
+// 7. Text hover colors for theme colors
+@each $name, $color in v.$theme-colors {
+  .hover-text-#{$name}:hover {
+    color: $color !important;
+  }
+}
+
+// 8. Border hover colors for theme colors
+@each $name, $color in v.$theme-colors {
+  .hover-border-#{$name}:hover {
+    border-color: $color !important;
+  }
+}
+
+.bg-backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+@each $name, $color in v.$theme-colors {
+  .text-#{$name} {
+    color: $color !important;
+  }
+}
+
+.category-icon-md {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+}
+
+.empty-state-icon {
+  font-size: 2rem !important;
+  color: v.$zinc-600 !important;
+}
+
+.list-item-hover:hover {
+  background-color: rgba(v.$zinc-700, 0.4) !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.border-bottom-list {
+  border-bottom: 1px solid v.$zinc-700 !important;
+
+  &:last-child {
+    border-bottom: none !important;
+  }
+}
+
+.rounded-sm { border-radius: v.$radius-sm !important; }
+.rounded-md { border-radius: v.$radius-md !important; }
+.rounded-lg { border-radius: v.$radius-lg !important; }
+.rounded-full { border-radius: v.$radius-full !important; }
+
+.w-sidebar { width: v.$sidebar-width; }
+
+.z-fixed { z-index: var(--z-fixed) !important; }
+
+.border-end { border-right: 1px solid v.$border-color !important; }
+.border-start { border-left: 1px solid v.$border-color !important; }
+.border-transparent { border-color: transparent !important; }
+
+
+
+
+
+
+

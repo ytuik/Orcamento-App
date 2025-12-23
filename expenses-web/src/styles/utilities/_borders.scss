@@ -1,0 +1,17 @@
+.border-f {
+  border: 1px solid;
+
+  &-0 { border-width: 0; }
+  &-1 { border-width: 1px; }
+  &-2 { border-width: 2px; }
+  &-4 { border-width: 4px; }
+
+  &-solid { border-style: solid; }
+  &-dashed { border-style: dashed; }
+  &-dotted { border-style: dotted; }
+
+  &-t { border-top: 1px solid; }
+  &-r { border-right: 1px solid; }
+  &-b { border-bottom: 1px solid; }
+  &-l { border-left: 1px solid; }
+}

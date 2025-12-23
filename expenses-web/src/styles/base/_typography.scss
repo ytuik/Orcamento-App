@@ -1,0 +1,43 @@
+@use '../core/variables' as v;
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: v.$zinc-100;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: v.$zinc-100;
+  margin-bottom: 0.5rem;
+}
+
+h1 { font-size: 1.875rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+p {
+  color: v.$zinc-400;
+}
+
+.text-purple { color: v.$violet-600 !important; }
+.text-muted-custom { color: v.$zinc-400 !important; }
+
+.group-header-base {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: v.$zinc-500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.label-small {
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+}
+
+.fs-095 { font-size: 0.95rem !important; }
+.fs-08 { font-size: 0.8rem !important; }

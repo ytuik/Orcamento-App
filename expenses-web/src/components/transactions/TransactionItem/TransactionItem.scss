@@ -1,6 +1,6 @@
-@use "../../../styles/variables" as *;
+@use "../../../styles/core/variables" as *;
 @use "../../../styles/components" as *;
-@use "../../../styles/mixins" as *;
+@use "../../../styles/core/mixins" as *;
 @import "../../../../node_modules/bootstrap/scss/functions";
 @import "../../../../node_modules/bootstrap/scss/variables";
 @import "../../../../node_modules/bootstrap/scss/mixins";

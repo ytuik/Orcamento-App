@@ -1,0 +1,24 @@
+@use './resposive' as *;
+@use '../core/variables' as v;
+
+@include mobile {
+  .ms-sidebar {
+    margin-left: 0;
+  }
+
+  .w-calc-sidebar {
+    width: 100%;
+  }
+}
+
+body > [data-select-portal] {
+  position: absolute;
+  top: 0; left: 0; z-index: 9999;
+  pointer-events: none;
+  > * { pointer-events: auto; }
+}
+
+.bg-backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}

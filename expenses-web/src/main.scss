@@ -1,33 +1,44 @@
-@use 'styles/variables' as *;
-@use 'styles/typography' as *;
-@use 'styles/mixins' as *;
-
-$primary: $violet-600;
-$body-bg: $zinc-900;
-$body-color: $zinc-100;
-$border-color: $zinc-700;
-$input-bg: $zinc-800;
-$input-border-color: $zinc-700;
-$input-color: $zinc-100;
-$input-focus-border-color: $violet-600;
+@import 'styles/core/variables';
+@import 'styles/core/mixins';
 
 @import "bootstrap/scss/bootstrap";
 
-$theme-colors: (
-        'purple': $violet-600,
-        'red': $red-401,
-        'green': $emerald-600,
-        'pink': #ec4899,
-        'yellow': $amber-400,
-        'blue': $blue-400,
-        'gray': $zinc-500
-);
+@import 'styles/base/typography';
+@import 'styles/base/animations';
+
+@import 'styles/layout/sidebar';
+@import 'styles/layout/resposive';
+
+@import "styles/components/widgets";
+@import "styles/components/misc-components";
+@import "styles/components/forms";
+@import "styles/components/cards";
+@import "styles/components/buttons";
+
+@import 'styles/utilities';
+@import 'styles/utilities/borders';
+@import 'styles/utilities/custom-utils';
+@import 'styles/utilities/theme-colors';
+@import 'styles/utilities/sizing';
+@import 'styles/utilities/spacing';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: $body-bg !important;
+}
+
+.form-control {
+  @include custom-scrollbar;
+}
 
 .category-icon-wrapper {
   border-radius: $radius-md;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
   transition: all 0.2s ease;
 
@@ -40,8 +51,8 @@ $theme-colors: (
   }
 
   &.category-icon-md {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     svg { width: 20px; height: 20px; }
   }
 
@@ -55,32 +66,19 @@ $theme-colors: (
     &--#{$name} {
       background-color: rgba($color, 0.15);
       color: $color;
-
-       border: 1px solid rgba($color, 0.2);
+      border: 1px solid rgba($color, 0.2);
     }
   }
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.sidebar-nav-active {
+  background-color: rgba($violet-600, 0.1) !important;
+  color: $violet-600 !important;
+  border-color: rgba($violet-600, 0.2) !important;
+  font-weight: 500 !important;
 }
 
-html, body {
-  height: 100%;
-  background-color: $zinc-900;
-}
-
-.form-control {
-  background-color: $zinc-800;
-  border-color: $zinc-700;
-  color: $zinc-100;
-
-  &:focus {
-    background-color: $zinc-800;
-    border-color: $violet-600;
-    color: $zinc-100;
-    box-shadow: 0 0 0 0.25rem rgba($violet-600, 0.25);
-  }
+.nav-link-hover:hover {
+  background-color: $zinc-800 !important;
+  color: $zinc-100 !important;
 }

@@ -10,9 +10,8 @@ import { AccountsCarousel } from "./components/AccountsCarousel/AccountsCarrouse
 import { TransactionList } from "./components/TransactionList/TransactionList.tsx";
 import { MonthlySpendingSummary } from "./components/MonthlySpendingSummary/MonthlySpendingSummary.tsx";
 
-// Hooks e Styles
+// Hooks
 import { useDashboardData } from "./hooks/useDashboardData";
-import './DashboardPage.scss';
 
 function DashboardPage() {
     const dateRange = useMemo(() => {
@@ -27,7 +26,7 @@ function DashboardPage() {
 
     if (isLoading) {
         return (
-            <div className="d-flex justify-content-center align-items-center vh-100 bg-zinc-900">
+            <div className="d-flex justify-content-center align-items-center min-vh-100 bg-zinc-900">
                 <LoadingSpinner />
             </div>
         );
@@ -35,7 +34,7 @@ function DashboardPage() {
 
     if (isError || !data) {
         return (
-            <div className="d-flex justify-content-center align-items-center vh-100 bg-zinc-900">
+            <div className="d-flex justify-content-center align-items-center min-vh-100 bg-zinc-900">
                 <div className="text-center">
                     <h2 className="text-zinc-100 text-xl mb-2">Ops! Algo deu errado.</h2>
                     <p className="text-zinc-400 mb-4">Não conseguimos carregar os dados do dashboard.</p>
@@ -52,7 +51,7 @@ function DashboardPage() {
     }
 
     return (
-        <div className="dashboard-container py-4">
+        <div className="dashboard-container min-vh-100 py-4 pb-20 bg-zinc-950">
             <div className="container">
                 <DashboardHeader/>
 

@@ -11,7 +11,6 @@ import { Modal } from "../../ui/Modal/Modal.tsx";
 import { useAccounts } from "../../../hooks/useAccounts.ts";
 import { useTransactionMutations } from "../../../hooks/useTransactionMutations.ts";
 
-import './TransactionFormModal.scss';
 import {useCategoryData} from "../../../hooks/useCategoryData.ts";
 import type {TransactionDto} from "../../../types/transactionDto";
 import {format, parseISO} from "date-fns";
@@ -109,42 +108,49 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
 
     return (
         <Modal
+            size="lg"
             isOpen={isOpen}
             onClose={onClose}
             title={isEditing? 'Editar Transacao' :'Nova Transação'}>
             <form onSubmit={handleSubmit(onSubmit, onError)} className={'form-transaction'}>
                 <div className={'d-flex gap-3 mb-4'}>
-                    <button type={'button'} className={clsx('btn-type income',
-                        {active: selectedType === TransactionType.INCOME})}
-                            onClick={() => setValue('type', TransactionType.INCOME)}
+                    <button
+                        type={'button'}
+                        className={clsx(
+                            'btn-type-base d-flex align-items-md-center justify-content-center',
+                            {'btn-active-success': selectedType === TransactionType.INCOME},
+                        )}
+                        onClick={() => setValue('type', TransactionType.INCOME)}
                     >
                         Receita
                     </button>
-                    <button type={'button'} className={clsx('btn-type expense',
-                        {active: selectedType === TransactionType.EXPENSE})}
+                    <button type={'button'} className={clsx('btn-type-base d-flex align-items-md-center justify-content-center',
+                        {'btn-active-danger': selectedType === TransactionType.EXPENSE})}
                             onClick={() => setValue('type', TransactionType.EXPENSE)}
                     >
                         Despesa
                     </button>
                 </div>
                 <div className="form-group mb-3">
-                    <label>Descrição</label>
+                    <label className="text-zinc-400 mb-1 text-sm">Descrição</label>
                     <input
                         {...register('description')}
-                        className={clsx("form-control", { "is-invalid": errors.description })}
+                        className={clsx("form-control", {"is-invalid": errors.description})}
                         placeholder="Ex: Aluguel, Salário, Mercado"
                     />
-                    {errors.description && <span className="text-error">{errors.description.message}</span>}
+                    {errors.description && (
+                        <span className="text-red text-xs mt-1 d-block">{errors.description.message}</span>
+                    )}
                 </div>
 
                 <div className="form-group mb-3">
-                    <label>Valor</label>
+                    <label className="text-zinc-400 mb-1 text-sm">Valor</label>
                     <input
                         type="number"
                         step="0.01"
 
-                        {...register('amount', { valueAsNumber: true })}
-                        className={clsx("form-control", { "is-invalid": errors.amount })}
+                        {...register('amount', {valueAsNumber: true})}
+                        className={clsx("form-control", {"is-invalid": errors.amount})}
                         placeholder="0,00"
                     />
                     {errors.amount && <span className="text-error">{errors.amount.message}</span>}
@@ -152,10 +158,10 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
 
                 <div className="row">
                     <div className="col-6 mb-3">
-                        <label>Categoria</label>
+                        <label className="text-zinc-400 mb-1 text-sm">Categoria</label>
                         <select
-                            {...register('categoryId', { valueAsNumber: true })}
-                            className={clsx("form-control", { "is-invalid": errors.categoryId })}
+                            {...register('categoryId', {valueAsNumber: true})}
+                            className={clsx("form-control", {"is-invalid": errors.categoryId})}
                         >
 
                             <option value={99}>Selecione</option>
@@ -174,10 +180,10 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
                     </div>
 
                     <div className="col-6 mb-3">
-                        <label>Conta</label>
+                        <label className="text-zinc-400 mb-1 text-sm">Conta</label>
                         <select
-                            {...register('accountId', { valueAsNumber: true })}
-                            className={clsx("form-control", { "is-invalid": errors.accountId })}
+                            {...register('accountId', {valueAsNumber: true})}
+                            className={clsx("form-control", {"is-invalid": errors.accountId})}
                         >
                             <option value="">Selecione</option>
                             {accounts?.map(acc => (
@@ -189,7 +195,7 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
                 </div>
 
                 <div className="form-group mb-4">
-                    <label>Data</label>
+                    <label className="text-zinc-400 mb-1 text-sm">Data</label>
                     <input
                         type="date"
                         {...register('transactionDate')}
@@ -201,11 +207,12 @@ export const TransactionFormModal = ({ isOpen, onClose , transactionToEdit}: New
                 <button
                     type="submit"
                     disabled={isSubmitting || createTransaction.isPending || updateTransaction.isPending}
-                    className={clsx("btn btn-primary w-100 py-2 fw-bold",
-                        { 'btn-btn-submit--expense': selectedType === TransactionType.EXPENSE},
-                        { 'btn-btn-submit--income': selectedType === TransactionType.INCOME}
+                    className={clsx(
+                        "btn w-100 py-2 fw-bold",
+                        selectedType === TransactionType.EXPENSE
+                            ? 'btn-submit-danger'
+                            : 'btn-submit-success'
                     )}
-                    style={{ backgroundColor: selectedType === TransactionType.EXPENSE ? '#f87171' : '#059669', border: 'none' }}
                 >
                     {createTransaction.isPending || updateTransaction.isPending ? 'Salvando...'
                         : (isEditing ? 'Salvar Alterações' : 'Cadastrar')}

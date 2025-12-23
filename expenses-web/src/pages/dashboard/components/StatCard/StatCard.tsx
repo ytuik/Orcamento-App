@@ -1,9 +1,8 @@
 import React from "react";
 import clsx from "clsx";
 import { formatCurrency } from '../../../../utils/formatCurrency.ts';
-import './StatCard.scss';
 
-type ColorVariant = 'purple' | 'green' | 'red';
+type ColorVariant = 'purple' | 'green' | 'red' | 'blue' | 'yellow' | 'pink' | 'gray';
 
 interface StatCardProps {
     title: string;
@@ -11,7 +10,7 @@ interface StatCardProps {
     icon: React.ReactNode;
     colorVariant: ColorVariant;
     description: string;
-    className: string;
+    className?: string;
 }
 
 export const StatCard = ({
@@ -25,25 +24,28 @@ export const StatCard = ({
 
     return (
         <div className={clsx(
-            "stat-card h-100 p-4",
-            `variant-${colorVariant}`,
+            "stat-card-base h-100 p-4 border-left-transparent",
+            `border-left-${colorVariant}`,
+            "hover-stat-card",
             className
         )}>
             <div className="d-flex align-items-end justify-content-between mb-3">
                 <div className="content">
-                    <span className="card-title text-muted-custom">{title}</span>
-                    <div className={clsx("card-value my-2", `text-${colorVariant}`)}>
+                    <span className="stat-title">{title}</span>
+                    <div className={clsx("stat-value my-2", `text-${colorVariant}`)}>
                         {formatCurrency(value)}
                     </div>
                 </div>
-                <div className={clsx("card-icon", `icon-${colorVariant}`, "ps-1")}>
+                <div className={clsx(
+                    "d-flex align-items-md-center justify-content-center icon-42 icon-opacity-90 ps-1",
+                    `text-${colorVariant}`
+                )}>
                     {icon}
                 </div>
             </div>
-            <div className="card-description text-white-50">
+            <div className="stat-description">
                 {description}
             </div>
         </div>
-
     );
 };
