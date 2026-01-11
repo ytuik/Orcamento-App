@@ -1,0 +1,91 @@
+🚀 Nível 1: O Essencial (Seu MVP Personalizado)
+
+Estas são as features que respondem diretamente às suas necessidades de "visão do todo" e ao problema do parcelamento.
+
+1. Lançamento de Transações (Sem mudanças)
+
+    Descrição, Valor, Data, Tipo (Receita/Despesa).
+
+2. Gerenciamento de Contas (Sem mudanças)
+
+    Contas (Carteira, Conta Corrente) com saldos que se atualizam.
+
+3. Categorização (Sem mudanças)
+
+    A base da "consciência". Permite saber "gastei X com iFood".
+
+4. Gerenciamento de Cartão de Crédito (MUDANÇA: Prioridade Alta)
+
+    Esta é a sua maior dor. Ela sobe do Nível 2 para o Nível 1.
+
+    Feature Essencial: Lançamento de Compras Parceladas.
+
+        Quando você lançar uma despesa no cartão (ex: "Celular Novo", R$ 2.000,00), o app deve perguntar: "É parcelado?".
+
+        Se sim, deve perguntar: "Em quantas vezes?" (ex: 10).
+
+        O app deve então, automaticamente, lançar R$ 200,00 na sua fatura atual (Mês 1) e criar "pré-lançamentos" de R$ 200,00 para as próximas 9 faturas.
+
+    Visão de Fatura: Você precisa de uma tela que mostre não só a fatura aberta deste mês, mas que permita navegar para ver as faturas futuras (Mês+1, Mês+2...) e ver o quanto elas já estão comprometidas com parcelas.
+
+5. Dashboard / Visão Geral (REFINAMENTO)
+
+    Como você é um "Monitorador", seu dashboard precisa mostrar:
+
+        Saldo total (soma das contas).
+
+        Contas Fixas do Mês: Um total de quanto você já pagou de contas essenciais.
+
+        Visão do Cartão: Um box mostrando "Fatura Atual" e "Próxima Fatura" (para você nunca ser pego de surpresa pelo parcelamento).
+
+        Balanço do Mês: Receitas vs. Despesas.
+
+📈 Nível 2: O Núcleo do Controle (Foco na Consciência e Hábito)
+
+Com o Nível 1, você registra. Com o Nível 2, você age e cria o hábito.
+
+6. Limites de Gastos (REFINAMENTO: "Orçamento" vira "Limite")
+
+    O que é: Baseado na sua resposta (2B), você não quer "envelopes", quer "limites".
+
+    Como fazer: Em vez de orçar cada categoria, você talvez queira apenas um grande "Limite de Gastos Variáveis" (ex: R$ 1.500,00 para Lazer, iFood, Compras) ou limites para categorias específicas (ex: "Não passar de R$ 400 em iFood").
+
+    Essencial: O app deve ter um lugar visível (no Dashboard ou em Relatórios) que mostre "Gastos com Lazer: R$ 150,00 de R$ 400,00" com uma barra de progresso.
+
+7. Relatórios Visuais (Sem mudanças)
+
+    O gráfico de pizza ("Com o que gastei?") é a resposta direta à sua busca por "consciência" (4B) e "visão do todo" (1).
+
+8. Lembretes de Lançamento (NOVA FEATURE)
+
+    O que é: Baseado na sua resposta (3B/3C), esta feature é o "empurrão" que você quer para criar o hábito diário.
+
+    Como fazer: Uma notificação push simples (ou no app) que, às 20h (ou horário configurável), pergunte: "E aí, algum gasto para lançar hoje?".
+
+9. Transações Recorrentes (Contas a Pagar)
+
+    Perfeito para o seu perfil (2B), que "paga todas as contas importantes no começo do mês".
+
+    Você cadastra "Aluguel", "Luz", "Internet" uma vez, e o app as lança automaticamente todo mês (ou apenas te lembra de pagá-las e confirmar).
+
+🌟 Nível 3: O App "Feito para Mim" (Metas e Extras)
+
+Aqui entram as features que dão "personalidade" ao app e resolvem seus problemas específicos de longo prazo.
+
+10. Metas de Economia (Longo Prazo)
+
+    O que é: Responde ao seu objetivo (4C).
+
+    Como fazer: Uma tela onde você cadastra "Viagem Japão - R$ 20.000,00" e "deposita" dinheiro nela (virtualmente ou transferindo para uma conta poupança real), acompanhando o progresso.
+
+11. Controle de "Empréstimos" / Contas a Receber (NOVA FEATURE)
+
+    O que é: O "Controle do Fiado", como você mencionou.
+
+    Como fazer: Uma área simples de "Contas a Receber".
+
+        "Emprestei R$ 50,00 para o João" (Data X).
+
+        Quando ele pagar, você marca como "Recebido" e essa receita entra na sua conta.
+
+        Isso tira esse controle do seu cérebro (ou do bloco de notas) e o coloca no app, garantindo que você não esqueça.

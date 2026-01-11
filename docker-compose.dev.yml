@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: expenses-db-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-admin}
+      POSTGRES_DB: ${DB_NAME:-expenses_dev}
+    ports:
+        - "5433:5432"
+    volumes:
+        - postgres_data_dev:/var/lib/postgresql/data
+        - ./docker/development/postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - expenses-network-dev
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: expenses-pgadmin-dev
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+        - "5050:80"
+    depends_on:
+        - db
+    networks:
+        - expenses-network-dev
+
+
+  backend:
+    build:
+      context: ./expenses-back
+      dockerfile: Dockerfile.dev
+    container_name: expenses-backend-dev
+    ports:
+        - "8000:8000"
+        - "5005:5005"  # For remote debugging
+    environment:
+        SPRING_PROFILES_ACTIVE: dev
+        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/expenses_dev
+        SPRING_DATASOURCE_USERNAME: ${DB_USER:-admin}
+        SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
+        LOGGING_LEVEL_ROOT: DEBUG
+    volumes:
+        - ./expenses-back:/app
+        - ~/.m2:/root/.m2
+    networks:
+        - expenses-network-dev
+    depends_on:
+        - db
+    develop:
+      watch:
+        - action: sync
+          path: ./expenses-back/src
+          target: /app/src
+        - action: rebuild
+          path: ./expenses-back/pom.xml
+
+  frontend:
+    build:
+        context: ./expenses-web
+        dockerfile: Dockerfile.dev
+    container_name: expenses-frontend-dev
+    ports:
+        - "3000:3000"
+    environment:
+        REACT_APP_API_URL: http://localhost:8000 # Trocar para o ip da maquina se for acessar de outro dispositivo
+        REACT_APP_ENVIRONMENT: development
+    volumes:
+        - ./expenses-web:/app
+        - /app/node_modules
+    networks:
+        - expenses-network-dev
+    depends_on:
+        - backend
+    develop:
+        watch:
+            - action: sync
+              path: ./expenses-web/src
+              target: /app/src
+            - action: rebuild
+              path: ./expenses-web/package.json
+
+volumes:
+  postgres_data_dev:
+
+networks:
+    expenses-network-dev:
+        driver: bridge

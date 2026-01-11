@@ -1,4 +1,7 @@
-FROM ubuntu:latest
-LABEL authors="Bruno"
-
-ENTRYPOINT ["top", "-b"]
+FROM maven:3.9.6-eclipse-temurin-17-alpine
+WORKDIR /app
+COPY pom.xml . #Nao temos pom.xml ver como passar o build.gradle
+RUN mvn dependency:go-offline -B
+COPY src ./src
+EXPOSE 8080 5005
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.profiles=dev","-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]

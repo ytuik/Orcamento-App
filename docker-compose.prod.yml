@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: expenses-db-prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-admin}
+      POSTGRES_DB: ${DB_NAME:-expenses_prod}
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+    ports:
+        - "5444:5432"
+    volumes:
+        - postgres_data_prod:/var/lib/postgresql/data
+        - ./docker/production/postgres-backup:/backups
+      #  - ./docker/production/postgres-conf:/etc/postgresql/postgresql.conf
+    # command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    networks:
+      - expenses-network-prod
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  backend:
+    build:
+      context: ./expenses-back
+      dockerfile: Dockerfile.prod
+    container_name: expenses-backend-prod
+    environment:
+        SPRING_PROFILES_ACTIVE: prod
+        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME:-expenses_prod}
+        SPRING_DATASOURCE_USERNAME: ${DB_USER:-admin}
+        SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
+        SERVER_PORT: 8080
+        LOGGING_LEVEL_ROOT: INFO
+        JAVA_OPTS: "-Xms512m -Xmx1024m"
+    networks:
+        - expenses-network-prod
+    depends_on:
+        - db
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 512M
+      # replicas: 1
+      # update_config:
+      #   parallelism: 1
+      #   delay: 10s
+
+  frontend:
+    build:
+        context: ./expenses-web
+        dockerfile: Dockerfile.prod
+    container_name: expenses-frontend-prod
+    ports:
+        - "80:80"
+       # - "443:443" # Habilite apenas quando tiver configurado os certificados SSL no Nginx
+    networks:
+        - expenses-network-prod
+    depends_on:
+        - backend
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+volumes:
+  postgres_data_prod:
+
+networks:
+    expenses-network-prod:
+        driver: bridge
