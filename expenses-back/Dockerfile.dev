@@ -1,7 +1,13 @@
-FROM maven:3.9.6-eclipse-temurin-17-alpine
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
-COPY pom.xml . #Nao temos pom.xml ver como passar o build.gradle
-RUN mvn dependency:go-offline -B
+
+COPY gradle gradle
+COPY gradlew build.gradle.kts settings.gradle.kts ./
+
+RUN chmod +x gradlew && ./gradlew dependencies --no-daemon
+
 COPY src ./src
+
 EXPOSE 8080 5005
-CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.profiles=dev","-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
+
+CMD ["./gradlew", "bootRun", "--args='--spring.profiles.active=dev --spring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"]

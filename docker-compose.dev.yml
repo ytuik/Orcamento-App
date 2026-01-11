@@ -59,7 +59,7 @@ services:
           path: ./expenses-back/src
           target: /app/src
         - action: rebuild
-          path: ./expenses-back/pom.xml
+          path: ./expenses-back/build.gradle.kts
 
   frontend:
     build:
