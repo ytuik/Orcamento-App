@@ -1,5 +1,5 @@
 import {apiRequest} from "../lib/apiClient.ts";
-import type {TransactionDto, CreateTransactionDto} from "../types/transactionDto";
+import type {TransactionDto, CreateTransactionDto} from "@/types/transactionDto";
 import type {TransactionTypeString} from "../types/transactionDto/transactionType.ts";
 
 const API_URL = '/api/transaction';

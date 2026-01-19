@@ -1,5 +1,5 @@
-import {apiRequest} from "../lib/apiClient.ts";
-import type {AccountDto, CreateAccountDto} from "../types/accountDto";
+import {apiRequest} from "@/lib/apiClient.ts";
+import type {AccountDto, CreateAccountDto} from "@/types/accountDto";
 
 const API_URL = '/api/account';
 

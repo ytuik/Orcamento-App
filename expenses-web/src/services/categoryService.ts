@@ -1,6 +1,6 @@
 import {apiRequest} from "../lib/apiClient.ts";
-import type {TransactionTypeString} from "../types/transactionDto/transactionType.ts";
-import type {CategoryDto, CreateCategoryDto} from "../types/categoryDto";
+import type {TransactionTypeString} from "@/types/transactionDto/transactionType.ts";
+import type {CategoryDto, CreateCategoryDto} from "@/types/categoryDto";
 
 const API_URL = '/api/category';
 
