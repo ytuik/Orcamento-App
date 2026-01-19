@@ -1,13 +1,15 @@
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
+
+RUN apk add --no-cache dos2unix
 
 COPY gradle gradle
 COPY gradlew build.gradle.kts settings.gradle.kts ./
 
-RUN chmod +x gradlew && ./gradlew dependencies --no-daemon
+RUN dos2unix gradlew && chmod +x gradlew && ./gradlew dependencies --no-daemon
 
 COPY src ./src
 
 EXPOSE 8080 5005
 
-CMD ["./gradlew", "bootRun", "--args='--spring.profiles.active=dev --spring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"]
+CMD ["./gradlew", "bootRun", "-PmyJvmArgs=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "--args=--spring.profiles.active=dev"]

@@ -1,4 +1,4 @@
-version: '3.8'
+name: expenses-dev
 
 services:
   db:
@@ -38,7 +38,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: expenses-backend-dev
     ports:
-        - "8000:8000"
+        - "8000:8080"
         - "5005:5005"  # For remote debugging
     environment:
         SPRING_PROFILES_ACTIVE: dev
@@ -47,7 +47,8 @@ services:
         SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
         LOGGING_LEVEL_ROOT: DEBUG
     volumes:
-        - ./expenses-back:/app
+        - ./expenses-back/src:/app/src
+        - ./expenses-back/build.gradle.kts:/app/build.gradle.kts
         - ~/.m2:/root/.m2
     networks:
         - expenses-network-dev
