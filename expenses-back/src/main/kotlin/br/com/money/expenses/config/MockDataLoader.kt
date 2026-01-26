@@ -21,9 +21,10 @@
 //        // Create mock accounts
 //
 //        val accounts = listOf(
-//            Account(name = "Checking", initialBalance = 1000.0),
-//            Account(name = "Savings", initialBalance = 5000.0)
-//        )
+//            Account(name = "Checking", initialBalance = 1000.0, color="green"),
+//            Account(name = "Savings", initialBalance = 5000.0, color="purple"),
+//            Account(name = "Poupancudos", initialBalance = 3200.0, color="red"),
+//            )
 //
 //        accountRepository.saveAll(accounts)
 //

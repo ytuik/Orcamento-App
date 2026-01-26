@@ -20,6 +20,8 @@ data class Account(
     @Column(name = "is_active", nullable = false)
     val isActive: Boolean = true,
 
+    val color: String,
+
     @Column(name = "created_at", nullable = false)
     val createdAt: Instant = Instant.now(),
     val updatedAt: Instant? = null,

@@ -26,7 +26,14 @@ class AccountController (
         request.validate()
         return accountService.createAccount(
             request.name,
-            request.balance
+            request.balance,
+            request.color.let {
+                if (it.isNullOrBlank()) {
+                    "green"
+                } else {
+                    it
+                }
+            }
         )
     }
 

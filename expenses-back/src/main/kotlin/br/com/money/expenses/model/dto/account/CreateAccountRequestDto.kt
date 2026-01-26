@@ -6,7 +6,9 @@ data class CreateAccountRequestDto (
     @get:JsonProperty("name")
     val name: String,
     @get:JsonProperty("balance")
-    val balance: Double
+    val balance: Double,
+    @get:JsonProperty("color")
+    val color: String?
 ) {
     companion object {
         fun CreateAccountRequestDto.validate() {

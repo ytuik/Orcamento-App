@@ -39,11 +39,12 @@ class AccountServiceImpl (
         return AccountDto.fromModel(account, currentBalance)
     }
 
-    override fun createAccount(name: String, balance: Double) : AccountDto {
+    override fun createAccount(name: String, balance: Double, color: String) : AccountDto {
         val newAccount =  accountRepository.save(Account(
             name = name,
             initialBalance = balance,
             isActive = true,
+            color = color
             )
         )
         return AccountDto.fromModel(newAccount, newAccount.initialBalance)

@@ -9,7 +9,8 @@ interface AccountService {
 
    fun createAccount(
       name: String,
-      balance: Double
+      balance: Double,
+      color: String
    ): AccountDto
 
    fun deactivateAccount(id: Long) : AccountDto
