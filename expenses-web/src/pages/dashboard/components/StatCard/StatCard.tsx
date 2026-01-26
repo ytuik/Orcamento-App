@@ -31,7 +31,7 @@ export const StatCard = ({
         )}>
             <div className="d-flex align-items-end justify-content-between mb-3">
                 <div className="content">
-                    <span className="stat-title">{title}</span>
+                    <h1 className="stat-title">{title}</h1>
                     <div className={clsx("stat-value my-2", `text-${colorVariant}`)}>
                         {formatCurrency(value)}
                     </div>

@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from 'react';
 
-import { transactionService } from "../../../services/transactionService";
-import { categoryService } from "../../../services/categoryService";
-import { useAccounts } from "../../../hooks/useAccounts";
-import type { TransactionDto } from "../../../types/transactionDto";
-import type {CategoryColorTypeString} from "../../../types/categoryDto/categoryColorType.ts";
+import { transactionService } from "@/services/transactionService.ts";
+import { categoryService } from "@/services/categoryService.ts";
+import { useAccounts } from "@/hooks/useAccounts.ts";
+import type { TransactionDto } from "@/types/transactionDto";
+import type {AvailableColorsTypeString} from "@/types/common/AvailableColorsType.ts";
 
 export interface CategoryExpenseSummary {
     categoryId: number;
     name: string;
-    color: CategoryColorTypeString;
+    color: AvailableColorsTypeString;
     iconKey: string;
     amount: number;
     count: number;

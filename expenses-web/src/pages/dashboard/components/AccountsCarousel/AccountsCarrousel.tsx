@@ -1,5 +1,5 @@
-import type { AccountDto } from "../../../../types/accountDto";
-import { AccountCard } from "../AccountCard.tsx";
+import type { AccountDto } from "@/types/accountDto";
+import { AccountCard } from "@/components/accounts/AccountCard/AccountCard.tsx";
 
 interface AccountsCarouselProps {
     accounts: AccountDto[];

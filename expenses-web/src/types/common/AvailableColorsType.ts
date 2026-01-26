@@ -1,5 +1,5 @@
 // @ts-ignore
-export enum CategoryColorType {
+export enum AvailableColorsType {
     RED = "red",
     BLUE = "blue",
     GREEN = "green",
@@ -11,4 +11,4 @@ export enum CategoryColorType {
     BLACK = "dark"
 }
 
-export type CategoryColorTypeString = `${CategoryColorType}`;
+export type AvailableColorsTypeString = `${AvailableColorsType}`;

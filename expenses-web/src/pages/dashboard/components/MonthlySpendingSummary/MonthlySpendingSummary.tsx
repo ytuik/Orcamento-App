@@ -1,7 +1,7 @@
 // MonthlySpendingSummary.tsx
 import { motion } from "framer-motion";
-import { getIconByKey } from "../../../../utils/iconUtils.tsx";
-import type {CategoryExpenseSummary} from "../../hooks/useDashboardData.ts";
+import { getIconByKey } from "@/utils/iconUtils.tsx";
+import type {CategoryExpenseSummary} from "@/pages/dashboard/hooks/useDashboardData.ts";
 import {format} from "date-fns";
 import {useNavigate} from "react-router-dom";
 import clsx from "clsx";

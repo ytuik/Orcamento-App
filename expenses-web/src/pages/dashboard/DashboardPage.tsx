@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { endOfMonth, format, startOfMonth } from "date-fns";
-import { TrendingDownIcon, TrendingUpIcon, WalletIcon } from "../../components/icons";
+import { TrendingDownIcon, TrendingUpIcon, WalletIcon } from "@/components/icons";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner/LoadingSpinner";
 
 // Components
