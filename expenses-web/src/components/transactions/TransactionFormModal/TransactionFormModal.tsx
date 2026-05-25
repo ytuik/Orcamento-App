@@ -3,16 +3,16 @@ import clsx from "clsx";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import type { TransactionFormData } from "../../../lib/validators/transactionSchema.ts";
-import { transactionFormSchema } from "../../../lib/validators/transactionSchema.ts";
+import type { TransactionFormData } from "@/lib/validators/transactionSchema.ts";
+import { transactionFormSchema } from "@/lib/validators/transactionSchema.ts";
 
-import { TransactionType } from "../../../types/transactionDto/transactionType.ts";
+import { TransactionType } from "@/types/transactionDto/transactionType.ts";
 import { Modal } from "../../ui/Modal/Modal.tsx";
-import { useAccounts } from "../../../hooks/useAccounts.ts";
-import { useTransactionMutations } from "../../../hooks/useTransactionMutations.ts";
+import { useAccounts } from "@/hooks/useAccounts.ts";
+import { useTransactionMutations } from "@/hooks/useTransactionMutations.ts";
 
-import {useCategoryData} from "../../../hooks/useCategoryData.ts";
-import type {TransactionDto} from "../../../types/transactionDto";
+import {useCategoryData} from "@/hooks/useCategoryData.ts";
+import type {TransactionDto} from "@/types/transactionDto";
 import {format, parseISO} from "date-fns";
 
 interface NewTransactionModalProps {

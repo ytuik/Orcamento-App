@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {TransactionType} from "../../types/transactionDto/transactionType";
+import {TransactionType} from "@/types/transactionDto/transactionType.ts";
 
 
 export const transactionFormSchema = z.object({
