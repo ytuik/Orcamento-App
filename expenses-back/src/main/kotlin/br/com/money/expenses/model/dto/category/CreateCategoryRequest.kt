@@ -13,6 +13,10 @@ data class CreateCategoryRequest (
     @get:JsonProperty("type")
     val type: TransactionType,
     @get:JsonProperty("isActive")
+    val isActive: Boolean = true,
+    @get:JsonProperty("isSystem")
+    val isSystem: Boolean = false,
+    @get:JsonProperty("budgetLimit")
     val budgetLimit: Double?
 ) {
     companion object {

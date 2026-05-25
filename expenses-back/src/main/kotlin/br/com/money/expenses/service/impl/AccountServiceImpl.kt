@@ -65,6 +65,36 @@ class AccountServiceImpl (
         return AccountDto.fromModel(deactivatedAccount, calculateCurrentBalance(deactivatedAccount))
     }
 
+    override fun updateAccount(id: Long, name: String, color: String): AccountDto {
+        val account = accountRepository.findById(id).orElseThrow {
+            AccountNotFoundException(id)
+        }
+
+        val updatedAccount = accountRepository.save(
+            account.copy(
+                name = name,
+                color = color,
+                updatedAt = Instant.now()
+            )
+        )
+        return AccountDto.fromModel(updatedAccount, calculateCurrentBalance(updatedAccount))
+    }
+
+    override fun updateBaseAmount(id: Long, newBaseAmount: Double): AccountDto {
+        val account = accountRepository.findById(id).orElseThrow {
+            AccountNotFoundException(id)
+        }
+
+        val updatedAccount = accountRepository.save(
+            account.copy(
+                initialBalance = newBaseAmount,
+                updatedAt = Instant.now()
+            )
+        )
+        return AccountDto.fromModel(updatedAccount, calculateCurrentBalance(updatedAccount))
+
+    }
+
     private fun calculateCurrentBalance(account: Account): Double {
         val balance = transactionRepository.getChangeInBalanceByAccountId(account.id) ?: 0.0
         return account.initialBalance + balance

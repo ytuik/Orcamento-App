@@ -64,6 +64,34 @@ class AccountController (
         return accountService.deactivateAccount(id)
     }
 
+    @PatchMapping("/{id}/edit")
+    fun editAccount(
+        @PathVariable id: Long,
+        @RequestBody request: AccountDto
+    ) : AccountDto {
+        if (id <= 0L) {
+            throw IllegalArgumentException("Invalid account ID: $id")
+        }
+
+        return accountService.updateAccount(id, request.name, request.color)
+    }
+
+    @PatchMapping("/{id}/balance")
+    fun updateBaseAmount(
+        @PathVariable id: Long,
+        @RequestBody newBalance : Double
+    ) : AccountDto {
+        if (id <= 0L) {
+            throw IllegalArgumentException("Invalid account ID: $id")
+        }
+
+        if (newBalance < 0.0) {
+            throw IllegalArgumentException("Balance cannot be negative: ${newBalance}")
+        }
+
+        return accountService.updateBaseAmount(id, newBalance)
+    }
+
     @GetMapping("/health")
     fun healthCheck(): String {
         return "Account Service is up and running!"

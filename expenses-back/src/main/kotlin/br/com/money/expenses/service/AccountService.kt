@@ -14,4 +14,15 @@ interface AccountService {
    ): AccountDto
 
    fun deactivateAccount(id: Long) : AccountDto
+
+   fun updateAccount(
+      id: Long,
+      name: String,
+      color: String
+   ) : AccountDto
+
+   fun updateBaseAmount(
+      id: Long,
+      newBaseAmount: Double
+   ) : AccountDto
 }
