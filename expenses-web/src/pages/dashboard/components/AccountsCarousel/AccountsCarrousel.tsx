@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { AccountDto } from "@/types/accountDto";
 import { AccountCard } from "@/components/accounts/AccountCard/AccountCard.tsx";
 
@@ -6,6 +7,7 @@ interface AccountsCarouselProps {
 }
 
 export const AccountsCarousel = ({ accounts }: AccountsCarouselProps) => {
+    const navigate = useNavigate();
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -32,7 +34,7 @@ export const AccountsCarousel = ({ accounts }: AccountsCarouselProps) => {
                     name="Adicione uma conta"
                     balance={0}
                     className="me-3 scroll-snap-start"
-                    onClick={() => console.log('Adicionar Conta')}
+                    onClick={() => navigate('/accounts')}
                 />
             </div>
         </div>

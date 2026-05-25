@@ -19,6 +19,22 @@ const deactivateAccount = (id: number): Promise<AccountDto> => {
     return apiRequest<AccountDto>(`${API_URL}/${id}/deactivate`, 'PATCH');
 }
 
+const updateAccount = (id: number, accountData: Partial<AccountDto>): Promise<AccountDto> => {
+    return apiRequest<AccountDto>(
+        `${API_URL}/${id}/edit`,
+        'PATCH',
+        accountData
+    );
+}
+
+const updateBalance = (id: number, newBalance: number): Promise<AccountDto> => {
+    return apiRequest<AccountDto>(
+        `${API_URL}/${id}/balance`,
+        'PATCH',
+        newBalance
+    );
+}
+
 const healthCheck = (): Promise<string> => {
     return apiRequest<string>(`${API_URL}/health`, 'GET');
 }
@@ -28,5 +44,7 @@ export const accountService = {
     getAccountById,
     createAccount,
     deactivateAccount,
+    updateAccount,
+    updateBalance,
     healthCheck
 }
