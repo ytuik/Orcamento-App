@@ -49,7 +49,7 @@ services:
     volumes:
         - ./expenses-back/src:/app/src
         - ./expenses-back/build.gradle.kts:/app/build.gradle.kts
-        - ~/.m2:/root/.m2
+        - ~/.gradle:/root/.gradle
     networks:
         - expenses-network-dev
     depends_on:

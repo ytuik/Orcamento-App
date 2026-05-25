@@ -1,4 +1,4 @@
-version: '3.8'
+name: expenses-prod
 
 services:
   db:
@@ -10,8 +10,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-admin}
       POSTGRES_DB: ${DB_NAME:-expenses_prod}
       POSTGRES_INITDB_ARGS: "--data-checksums"
-    ports:
-        - "5444:5432"
     volumes:
         - postgres_data_prod:/var/lib/postgresql/data
         - ./docker/production/postgres-backup:/backups
