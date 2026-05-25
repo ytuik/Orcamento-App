@@ -20,9 +20,9 @@ interface MonthlySpendingSummaryProps {
 
 export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlySpendingSummaryProps) => {
     const navigate = useNavigate()
-    const searchByCategory = (categoryId: number) => {
+    const searchByCategory = (categoryId: number, month:Date) => {
         const params = new URLSearchParams()
-        const initialDate = format(new Date(), 'yyyy-MM-dd');
+        const initialDate = format(month, 'yyyy-MM-dd');
         params.append('dateFilterType', 'MONTH')
         params.append('initialDate', initialDate)
         params.append('categoryId', categoryId.toString())
@@ -53,12 +53,13 @@ export const MonthlySpendingSummary = ({ expensesByCategory, summary }: MonthlyS
                     const catColor = item.color || 'gray';
                     const catIconKey = item.iconKey || 'OTHER';
                     const catId = item.categoryId || 0;
+                    const catMonth = item.month || new Date();
 
                     return (
                         <div
                             key={catId}
                             className="d-flex flex-column gap-3 cursor-pointer"
-                            onClick={() => searchByCategory(catId)}
+                            onClick={() => searchByCategory(catId, catMonth)}
                         >
                             <div className="d-flex justify-content-between align-items-center">
                                 <div className="d-flex align-items-start gap-3">

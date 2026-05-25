@@ -12,7 +12,7 @@ import {Doughnut} from "react-chartjs-2";
 
 interface MonthlySpendingChartProps {
     data: CategoryExpenseSummary[];
-    searchByCategory: (categoryId: number) => void;
+    searchByCategory: (categoryId: number, month: Date) => void;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -53,7 +53,8 @@ export const MonthlySpendingChart = ({data, searchByCategory} : MonthlySpendingC
         if(elements.length > 0) {
             const index = elements[0].index;
             const categoryId = data[index].categoryId;
-            searchByCategory(categoryId)
+            const month = data[index].month || new Date();
+            searchByCategory(categoryId,month)
         }
     }
 

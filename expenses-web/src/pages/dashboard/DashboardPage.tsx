@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { endOfMonth, format, startOfMonth } from "date-fns";
+import { useMemo, useState} from "react";
+import {addMonths, endOfMonth, format, startOfMonth, subMonths} from "date-fns";
 import { TrendingDownIcon, TrendingUpIcon, WalletIcon } from "@/components/icons";
 import { LoadingSpinner } from "../../components/ui/LoadingSpinner/LoadingSpinner";
 
@@ -11,17 +11,30 @@ import { TransactionList } from "./components/TransactionList/TransactionList.ts
 import { MonthlySpendingSummary } from "./components/MonthlySpendingSummary/MonthlySpendingSummary.tsx";
 
 import { useDashboardData } from "./hooks/useDashboardData";
+import {capitalizeFirstLetter} from "@/utils/stringUtils.ts";
+import {ptBR} from "date-fns/locale";
 
 function DashboardPage() {
+    const [currentDate, setCurrentDate] = useState(new Date())
+
     const dateRange = useMemo(() => {
-        const now = new Date();
         return {
-            start: format(startOfMonth(now), 'yyyy-MM-dd'),
-            end: format(endOfMonth(now), 'yyyy-MM-dd')
+            start: format(startOfMonth(currentDate), 'yyyy-MM-dd'),
+            end: format(endOfMonth(currentDate), 'yyyy-MM-dd')
         };
-    }, []);
+    }, [currentDate]);
 
     const { isLoading, isError, data, refetch } = useDashboardData(dateRange.start, dateRange.end);
+
+    const handleMonthChange = (direction: 'previous' | 'next') => {
+        setCurrentDate(prevDate => {
+    if(direction == 'previous'){
+        return subMonths(prevDate, 1)
+    } else {
+        return addMonths(prevDate, 1)
+    }
+        });
+    }
 
     if (isLoading) {
         return (
@@ -52,6 +65,25 @@ function DashboardPage() {
         <div className="dashboard-container min-vh-100 bg-zinc-950">
             <div className="container">
                 <DashboardHeader/>
+                <div className="d-flex align-items-center justify-content-between my-4">
+                    <button
+                        onClick={() => handleMonthChange('previous')}
+                        className="btn btn-outline-secondary btn-sm"
+                    >
+                        ← Mês Anterior
+                    </button>
+
+                    <span className="text-zinc-100 fw-bold text-capitalize fs-5">
+                <p className={"text-white-50"}>{capitalizeFirstLetter(format(currentDate, "MMMM y", {locale:ptBR, }))}</p>
+                    </span>
+
+                    <button
+                        onClick={() => handleMonthChange('next')}
+                        className="btn btn-outline-secondary btn-sm"
+                    >
+                        Próximo Mês →
+                    </button>
+                </div>
 
                 <div className="row g-4 my-4">
                     <div className="col-12 col-md-4">

@@ -6,6 +6,7 @@ import { categoryService } from "@/services/categoryService.ts";
 import { useAccounts } from "@/hooks/useAccounts.ts";
 import type { TransactionDto } from "@/types/transactionDto";
 import type {AvailableColorsTypeString} from "@/types/common/AvailableColorsType.ts";
+import {addDays, parse} from "date-fns";
 
 export interface CategoryExpenseSummary {
     categoryId: number;
@@ -15,6 +16,7 @@ export interface CategoryExpenseSummary {
     amount: number;
     count: number;
     percentage: number;
+    month?: Date;
 }
 
 export const useDashboardData = (startDate: string, endDate: string) => {
@@ -67,7 +69,8 @@ export const useDashboardData = (startDate: string, endDate: string) => {
                     iconKey: catDetails?.iconKey || 'OTHER',
                     amount: 0,
                     count: 0,
-                    percentage: 0
+                    percentage: 0,
+                    month: undefined
                 });
             }
 
@@ -77,12 +80,15 @@ export const useDashboardData = (startDate: string, endDate: string) => {
             current.count += 1;
         });
 
+        const currentViewDate = parse(startDate, 'yyyy-MM-dd', new Date());
+
         const expensesByCategory = Array.from(groupedExpenses.values())
             .map(item => ({
                 ...item,
                 percentage: monthTotalExpense > 0
                     ? (item.amount / monthTotalExpense) * 100
-                    : 0
+                    : 0,
+                month: addDays(currentViewDate, 1)
             }))
             .sort((a, b) => b.amount - a.amount);
 
@@ -102,7 +108,8 @@ export const useDashboardData = (startDate: string, endDate: string) => {
     }, [
         accountsQuery.allAccounts,
         currentMonthTransactionsQuery.data,
-        categoriesQuery.data
+        categoriesQuery.data,
+        startDate
     ]);
 
     return {
