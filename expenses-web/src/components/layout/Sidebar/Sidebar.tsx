@@ -11,7 +11,7 @@ export const Sidebar = ({ onOpenNewTransaction }: SidebarProps) => {
         { path: '/', label: 'Dashboard', icon: <i className="bi bi-house-fill" /> },
         { path: '/transactions', label: 'Transações', icon: <i className="bi bi-receipt" /> },
         { path: '/accounts', label: 'Contas', icon: <i className="bi bi-wallet2" /> },
-        { path: '/settings', label: 'Configurações', icon: <i className="bi bi-gear-fill" /> }
+        { path: '/categories', label: 'Categorias', icon: <i className="bi bi-tags-fill" /> },
     ];
 
     return (
