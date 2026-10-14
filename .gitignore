@@ -1,0 +1,14 @@
+# Diretórios de agentes e memória importada
+.agents/
+memory/
+AGENTS.md
+GEMINI.md
+
+# Configurações de IDE / Editor
+.idea/
+*.iml
+.vscode/
+
+# Logs e arquivos temporários
+*.log
+.DS_Store
